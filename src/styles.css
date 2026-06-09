@@ -1,122 +1,137 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Outlet,
-  Link,
-  createRootRouteWithContext,
-  useRouter,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
 
-import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
-import { SiteHeader } from "../components/site-header";
-import { SiteFooter } from "../components/site-footer";
-import { StickyCtas } from "../components/sticky-ctas";
+@custom-variant dark (&:is(.dark *));
 
-function NotFoundComponent() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-earth px-4">
-      <div className="max-w-md text-center">
-        <h1 className="font-serif text-7xl text-forest">404</h1>
-        <h2 className="mt-4 font-serif italic text-2xl text-forest">Path not found in the garden</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          This page has not yet taken root. Return to the home of ibo.garden.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-full bg-forest px-6 py-3 text-xs font-semibold uppercase tracking-widest text-earth hover:bg-moss transition-colors"
-          >
-            Return home
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand tokens */
+  --color-forest: var(--forest);
+  --color-moss: var(--moss);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-earth: var(--earth);
+  --color-bone: var(--bone);
+  --color-clay: var(--clay);
+
+  --font-serif: "Crimson Pro", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
-  const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
+:root {
+  --radius: 0.75rem;
 
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-earth px-4">
-      <div className="max-w-md text-center">
-        <h1 className="font-serif text-2xl text-forest italic">Something disturbed the soil</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          We could not load this page. Try again, or return home.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => { router.invalidate(); reset(); }}
-            className="rounded-full bg-forest px-6 py-3 text-xs font-semibold uppercase tracking-widest text-earth hover:bg-moss transition-colors"
-          >
-            Try again
-          </button>
-          <a
-            href="/"
-            className="rounded-full border border-forest/20 px-6 py-3 text-xs font-semibold uppercase tracking-widest text-forest hover:bg-forest hover:text-earth transition-colors"
-          >
-            Go home
-          </a>
-        </div>
-      </div>
-    </div>
-  );
+  /* Brand palette */
+  --forest: #0a2418;
+  --moss: #2d4a22;
+  --gold: #c5a059;
+  --gold-deep: #8a6e35;
+  --earth: #fdfaf3;
+  --bone: #f4eedd;
+  --clay: #b66a3e;
+
+  /* Shadcn mapped to brand */
+  --background: var(--earth);
+  --foreground: var(--forest);
+  --card: #ffffff;
+  --card-foreground: var(--forest);
+  --popover: #ffffff;
+  --popover-foreground: var(--forest);
+  --primary: var(--forest);
+  --primary-foreground: var(--earth);
+  --secondary: var(--bone);
+  --secondary-foreground: var(--forest);
+  --muted: var(--bone);
+  --muted-foreground: #5a6a55;
+  --accent: var(--gold);
+  --accent-foreground: var(--forest);
+  --destructive: #a33a2a;
+  --destructive-foreground: var(--earth);
+  --border: rgba(10, 36, 24, 0.12);
+  --input: rgba(10, 36, 24, 0.15);
+  --ring: var(--gold);
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ibo.garden — Heal the Planet. Root in Vitality." },
-      { name: "description", content: "Network-rooted Iboga ecosystem: facilitator directory, ethical sourcing, GAINE token, and Gabon impact." },
-      { property: "og:title", content: "ibo.garden — Iboga ecosystem rooted in Gabon" },
-      { property: "og:description", content: "Find facilitators, source ethically, buy GAINE, and fund care. A community gateway to Tabernanthe iboga." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "stylesheet", href: appCss }],
-  }),
-  shellComponent: RootShell,
-  component: RootComponent,
-  notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
-});
-
-function RootShell({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
+.dark {
+  --background: var(--forest);
+  --foreground: var(--earth);
+  --card: var(--moss);
+  --card-foreground: var(--earth);
+  --popover: var(--moss);
+  --popover-foreground: var(--earth);
+  --primary: var(--gold);
+  --primary-foreground: var(--forest);
+  --secondary: #1a3322;
+  --secondary-foreground: var(--earth);
+  --muted: #1a3322;
+  --muted-foreground: #b8c0a8;
+  --accent: var(--gold);
+  --accent-foreground: var(--forest);
+  --border: rgba(244, 238, 221, 0.12);
+  --input: rgba(244, 238, 221, 0.15);
 }
 
-function RootComponent() {
-  const { queryClient } = Route.useRouteContext();
+@layer base {
+  @font-face {
+    font-family: "Crimson Pro";
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url("https://fonts.gstatic.com/s/crimsonpro/v24/q5uDsoa5M_tv7IihmnkabC5XiXCAlXGks1WZzm18OJE_VNWoyQ.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Crimson Pro";
+    font-style: italic;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url("https://fonts.gstatic.com/s/crimsonpro/v24/q5uSsoa5M_tv7IihmnkabC5XiXCAlXGks1WZTm9zMJU_VNWoyQ.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2") format("woff2");
+  }
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen flex flex-col bg-earth text-forest">
-        <SiteHeader />
-        <main className="flex-1 pb-32 md:pb-12">
-          <Outlet />
-        </main>
-        <SiteFooter />
-        <StickyCtas />
-      </div>
-    </QueryClientProvider>
-  );
+  * { border-color: var(--color-border); }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    background-color: var(--color-earth);
+    color: var(--color-forest);
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4 { font-family: var(--font-serif); }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
 }
