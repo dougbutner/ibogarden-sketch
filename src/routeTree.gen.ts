@@ -9,8 +9,74 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SourceRouteImport } from './routes/source'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as NominateRouteImport } from './routes/nominate'
+import { Route as NetworkRouteImport } from './routes/network'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as ImpactRouteImport } from './routes/impact'
+import { Route as GaineRouteImport } from './routes/gaine'
+import { Route as FindRouteImport } from './routes/find'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SourceRoute = SourceRouteImport.update({
+  id: '/source',
+  path: '/source',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NominateRoute = NominateRouteImport.update({
+  id: '/nominate',
+  path: '/nominate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NetworkRoute = NetworkRouteImport.update({
+  id: '/network',
+  path: '/network',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpactRoute = ImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GaineRoute = GaineRouteImport.update({
+  id: '/gaine',
+  path: '/gaine',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindRoute = FindRouteImport.update({
+  id: '/find',
+  path: '/find',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +85,186 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
+  '/find': typeof FindRoute
+  '/gaine': typeof GaineRoute
+  '/impact': typeof ImpactRoute
+  '/learn': typeof LearnRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/network': typeof NetworkRoute
+  '/nominate': typeof NominateRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/source': typeof SourceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
+  '/find': typeof FindRoute
+  '/gaine': typeof GaineRoute
+  '/impact': typeof ImpactRoute
+  '/learn': typeof LearnRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/network': typeof NetworkRoute
+  '/nominate': typeof NominateRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/source': typeof SourceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/community': typeof CommunityRoute
+  '/find': typeof FindRoute
+  '/gaine': typeof GaineRoute
+  '/impact': typeof ImpactRoute
+  '/learn': typeof LearnRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/network': typeof NetworkRoute
+  '/nominate': typeof NominateRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/source': typeof SourceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/community'
+    | '/find'
+    | '/gaine'
+    | '/impact'
+    | '/learn'
+    | '/marketplace'
+    | '/network'
+    | '/nominate'
+    | '/sitemap.xml'
+    | '/source'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/community'
+    | '/find'
+    | '/gaine'
+    | '/impact'
+    | '/learn'
+    | '/marketplace'
+    | '/network'
+    | '/nominate'
+    | '/sitemap.xml'
+    | '/source'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/community'
+    | '/find'
+    | '/gaine'
+    | '/impact'
+    | '/learn'
+    | '/marketplace'
+    | '/network'
+    | '/nominate'
+    | '/sitemap.xml'
+    | '/source'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  CommunityRoute: typeof CommunityRoute
+  FindRoute: typeof FindRoute
+  GaineRoute: typeof GaineRoute
+  ImpactRoute: typeof ImpactRoute
+  LearnRoute: typeof LearnRoute
+  MarketplaceRoute: typeof MarketplaceRoute
+  NetworkRoute: typeof NetworkRoute
+  NominateRoute: typeof NominateRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  SourceRoute: typeof SourceRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/source': {
+      id: '/source'
+      path: '/source'
+      fullPath: '/source'
+      preLoaderRoute: typeof SourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nominate': {
+      id: '/nominate'
+      path: '/nominate'
+      fullPath: '/nominate'
+      preLoaderRoute: typeof NominateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/network': {
+      id: '/network'
+      path: '/network'
+      fullPath: '/network'
+      preLoaderRoute: typeof NetworkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/impact': {
+      id: '/impact'
+      path: '/impact'
+      fullPath: '/impact'
+      preLoaderRoute: typeof ImpactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gaine': {
+      id: '/gaine'
+      path: '/gaine'
+      fullPath: '/gaine'
+      preLoaderRoute: typeof GaineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/find': {
+      id: '/find'
+      path: '/find'
+      fullPath: '/find'
+      preLoaderRoute: typeof FindRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +277,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  CommunityRoute: CommunityRoute,
+  FindRoute: FindRoute,
+  GaineRoute: GaineRoute,
+  ImpactRoute: ImpactRoute,
+  LearnRoute: LearnRoute,
+  MarketplaceRoute: MarketplaceRoute,
+  NetworkRoute: NetworkRoute,
+  NominateRoute: NominateRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  SourceRoute: SourceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
