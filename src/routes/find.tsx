@@ -18,10 +18,10 @@ type Cat = "All" | "Clinical" | "Traditional" | "Retreat";
 
 const FACILITATORS = [
   { name: "The Vitality Center", cat: "Clinical", loc: "Costa Rica", lang: "EN/ES", certs: ["GAINE Certified", "Nagoya"], desc: "Rapid opioid detox with 24/7 medical supervision and integration coaching." },
-  { name: "Ebando Association", cat: "Traditional", loc: "Libreville, Gabon", lang: "FR", certs: ["Bwiti Standard"], desc: "Authentic Bwiti initiation led by recognized traditional ngangas." },
+  { name: "Ebando Association", cat: "Traditional", loc: "Libreville, Gabon", lang: "FR", certs: ["Decree 0239"], desc: "Authentic Bwiti initiation led by recognized traditional ngangas." },
   { name: "Rooted Horizon", cat: "Retreat", loc: "Alentejo, Portugal", lang: "EN/PT", certs: ["GAINE Certified"], desc: "Group retreats focused on emotional processing and holistic integration." },
   { name: "Iboga House Mexico", cat: "Clinical", loc: "Tijuana, Mexico", lang: "EN/ES", certs: ["GAINE Certified", "Nagoya"], desc: "Licensed clinical addiction protocol with medical staff on site." },
-  { name: "Maison Ngonde", cat: "Traditional", loc: "Lambaréné, Gabon", lang: "FR", certs: ["Bwiti Standard", "Nagoya"], desc: "Lineage-rooted ceremonial work and ancestral healing." },
+  { name: "Maison Ngonde", cat: "Traditional", loc: "Lambaréné, Gabon", lang: "FR", certs: ["Decree 0239", "Nagoya"], desc: "Lineage-rooted ceremonial work and ancestral healing." },
   { name: "Wild Path Retreats", cat: "Retreat", loc: "Costa Rica", lang: "EN", certs: ["Pending"], desc: "Small-group rites of passage with preparation and integration." },
 ] as const;
 
@@ -34,7 +34,7 @@ function Find() {
       <PageHeader
         eyebrow="Find a Facilitator"
         title="Verified care, traditional and clinical."
-        lead={<>A directory of certified facilities, Bwiti practitioners, and retreat centers. Bwiti Standard, Nagoya-compliant, <span className="gaine-word gaine-word-sm">GAINE</span> Certified.</>}
+        lead={<>A directory of certified facilities, Bwiti practitioners, and retreat centers. Decree 0239-aligned, Nagoya-compliant, <span className="gaine-word gaine-word-sm">GAINE</span> Certified.</>}
       />
 
       <section className="px-6 max-w-7xl mx-auto pb-24">

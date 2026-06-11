@@ -3,15 +3,8 @@ import { useState } from "react";
 import { Logo } from "@/components/logo";
 
 const NAV = [
-  { to: "/about", label: "About" },
-  { to: "/learn", label: "Learn" },
-  { to: "/find", label: "Find" },
   { to: "/marketplace", label: "Marketplace" },
-  { to: "/network", label: "Network" },
   { to: "/gaine", label: "GAINE" },
-  { to: "/nominate", label: "Nominate" },
-  { to: "/impact", label: "Impact" },
-  { to: "/community", label: "Community" },
 ] as const;
 
 export function SiteHeader() {

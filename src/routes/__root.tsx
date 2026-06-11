@@ -12,7 +12,6 @@ import type { ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
-import { StickyCtas } from "../components/sticky-ctas";
 
 function NotFoundComponent() {
   return (
@@ -71,14 +70,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ibo.garden — Heal the Planet. Root in Vitality." },
-      { name: "description", content: "Network-rooted Iboga ecosystem: facilitator directory, ethical sourcing, GAINE token, and Gabon impact." },
-      { property: "og:title", content: "ibo.garden — Heal the Planet. Root in Vitality." },
-      { property: "og:description", content: "Network-rooted Iboga ecosystem: facilitator directory, ethical sourcing, GAINE token, and Gabon impact." },
+      { title: "ibo.garden — GAINE Token & Ethical Iboga Marketplace" },
+      { name: "description", content: "GAINE SPL token and commodity marketplace for ethically sourced Iboga under Gabon Decree 0239. Nagoya Protocol-aligned sourcing, forward tree contracts, and on-chain traceability." },
+      { property: "og:title", content: "ibo.garden — GAINE Token & Ethical Iboga Marketplace" },
+      { property: "og:description", content: "GAINE SPL token and commodity marketplace for ethically sourced Iboga under Gabon Decree 0239. Nagoya Protocol-aligned sourcing, forward tree contracts, and on-chain traceability." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "ibo.garden — Heal the Planet. Root in Vitality." },
-      { name: "twitter:description", content: "Network-rooted Iboga ecosystem: facilitator directory, ethical sourcing, GAINE token, and Gabon impact." },
+      { name: "twitter:title", content: "ibo.garden — GAINE Token & Ethical Iboga Marketplace" },
+      { name: "twitter:description", content: "GAINE SPL token and commodity marketplace for ethically sourced Iboga under Gabon Decree 0239. Nagoya Protocol-aligned sourcing, forward tree contracts, and on-chain traceability." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -113,11 +112,10 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen flex flex-col bg-earth text-forest">
         <SiteHeader />
-        <main className="flex-1 pb-32 md:pb-12">
+        <main className="flex-1 pb-12">
           <Outlet />
         </main>
         <SiteFooter />
-        <StickyCtas />
       </div>
     </QueryClientProvider>
   );

@@ -5,19 +5,19 @@ import { PageHeader } from "@/components/page-header";
 export const Route = createFileRoute("/gaine")({
   head: () => ({
     meta: [
-      { title: "GAINE Ecosystem — ibo.garden" },
-      { name: "description", content: "GAINE SPL token on Solana. 2% transfer tax converted to USDC and directed by holders to sourcing, tradition, or clinical projects." },
-      { property: "og:title", content: "GAINE — the ethical Iboga economy" },
-      { property: "og:description", content: "SPL on Solana · 2% reflection redirected to Gabon." },
+      { title: "GAINE Token — ibo.garden" },
+      { name: "description", content: "GAINE SPL token — the settlement layer for ethically sourced Iboga under Gabon Decree 0239. 2% reflection directed to sourcing, conservation, and Gabon communities." },
+      { property: "og:title", content: "GAINE — Iboga Marketplace Token on Solana" },
+      { property: "og:description", content: "SPL on Solana · 2% reflection redirected to Gabon sourcing and conservation." },
     ],
   }),
   component: Gaine,
 });
 
 const DIRECTIONS = [
-  { key: "Sourcing", desc: "Ethical farms, Gabon plantations, traceability." },
-  { key: "Tradition", desc: "Bwiti community, cultural preservation, healers." },
-  { key: "Clinical", desc: "Research, treatment access, education programs." },
+  { key: "Sourcing", desc: "Ethical farms, Gabon plantations, supply chain traceability." },
+  { key: "Conservation", desc: "Reforestation, forward tree contracts, farmer working capital." },
+  { key: "Gabon Communities", desc: "Benefit-sharing with traditional communities under Decree 0239." },
   { key: "Specific Project", desc: "USDC sent directly to an approved project wallet." },
 ];
 
@@ -26,9 +26,9 @@ function Gaine() {
   return (
     <>
       <PageHeader
-        eyebrow={<><span className="gaine-word gaine-word-sm">GAINE</span> Ecosystem</>}
-        title="Tokenize reciprocity."
-        lead={<><span className="gaine-word gaine-word-sm">GAINE</span> is a Solana SPL token with 100% liquidity on Orca, paired with trusted stablecoins (~$1 USD). A 2% transfer tax becomes USDC, and you choose where it goes.</>}
+        eyebrow={<><span className="gaine-word gaine-word-sm">GAINE</span> Token</>}
+        title="The marketplace settlement token."
+        lead={<>Under Gabon Decree 0239, <span className="gaine-word gaine-word-sm">GAINE</span> is a Solana SPL token with 100% liquidity on Orca, paired with trusted stablecoins (~$1 USD). A 2% transfer tax becomes USDC, and you choose where it goes.</>}
       />
 
       <section className="px-6 max-w-7xl mx-auto pb-16 grid lg:grid-cols-2 gap-12">
@@ -83,8 +83,8 @@ function Gaine() {
           <div className="grid md:grid-cols-3 gap-5">
             {[
               { t: "Organization", p: "20%", d: "Platform operations, audits, infrastructure." },
-              { t: "Economic Participants", p: "30%", d: "Certified partners, farms, holders." },
-              { t: "Philanthropy", p: "50%", d: "Gabon communities, addiction healing, education." },
+              { t: "Economic Participants", p: "30%", d: "Certified farms, suppliers, holders." },
+              { t: "Conservation & Gabon", p: "50%", d: "Reforestation, farmer working capital, benefit-sharing." },
             ].map((c) => (
               <div key={c.t} className="bg-white p-8 rounded-3xl border border-forest/10">
                 <div className="font-serif text-5xl text-gold-deep mb-4">{c.p}</div>
@@ -100,12 +100,12 @@ function Gaine() {
         <h2 className="font-serif text-3xl italic text-forest mb-8">Token Utility</h2>
         <div className="grid md:grid-cols-2 gap-5">
           <div className="bg-white border border-forest/10 rounded-3xl p-7">
-            <h3 className="font-semibold text-forest mb-2">Gated Knowledge</h3>
-            <p className="text-sm text-forest/65">Advanced healing curriculum and exclusive practitioner sections unlock with <span className="gaine-word gaine-word-sm">GAINE</span>.</p>
+            <h3 className="font-semibold text-forest mb-2">Marketplace Settlement</h3>
+            <p className="text-sm text-forest/65">Use <span className="gaine-word gaine-word-sm">GAINE</span> to purchase root bark, forward contracts, and verified listings on the commodity marketplace.</p>
           </div>
           <div className="bg-white border border-forest/10 rounded-3xl p-7">
-            <h3 className="font-semibold text-forest mb-2">Partner Rewards</h3>
-            <p className="text-sm text-forest/65">Certified farms and facilitators earn <span className="gaine-word gaine-word-sm">GAINE</span> rewards for verified activity.</p>
+            <h3 className="font-semibold text-forest mb-2">Supplier Rewards</h3>
+            <p className="text-sm text-forest/65">Certified farms and suppliers earn <span className="gaine-word gaine-word-sm">GAINE</span> rewards for verified sourcing activity.</p>
           </div>
         </div>
       </section>

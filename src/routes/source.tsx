@@ -5,8 +5,8 @@ export const Route = createFileRoute("/source")({
   head: () => ({
     meta: [
       { title: "Direct Sourcing Consultation — ibo.garden" },
-      { name: "description", content: "Direct sourcing consultation with Benny Friedman, $250 USD. Ethical, Gabon-rooted Iboga procurement guidance." },
-      { property: "og:title", content: "Source Iboga — Consultation with Benny Friedman" },
+      { name: "description", content: "Direct sourcing consultation with Benny Friedmann, $250 USD. Ethical, Gabon-rooted Iboga procurement guidance." },
+      { property: "og:title", content: "Source Iboga — Consultation with Benny Friedmann" },
       { property: "og:description", content: "$250 consultation for ethical Gabonese sourcing." },
     ],
   }),
@@ -19,7 +19,7 @@ function Source() {
       <PageHeader
         eyebrow="Source Iboga"
         title="Direct sourcing, with respect."
-        lead="A one-on-one consultation with Benny Friedman — sourcing relationships built directly with Gabonese growers, Nagoya-aligned, no intermediaries."
+        lead="A one-on-one consultation with Benny Friedmann — sourcing relationships built directly with Gabonese growers, Nagoya-aligned, no intermediaries."
       />
       <section className="px-6 pb-24 max-w-3xl mx-auto">
         <div className="bg-white border border-forest/10 rounded-3xl p-10 shadow-sm">
@@ -44,7 +44,7 @@ function Source() {
             ))}
           </ul>
           <button className="w-full bg-forest text-earth py-4 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-moss transition-colors">
-            Book with Benny
+            Book with Benny Friedmann
           </button>
           <p className="mt-4 text-center text-xs text-forest/50">
             Or <Link to="/network" className="text-gold underline">register your facility</Link> for ongoing sourcing partnerships.

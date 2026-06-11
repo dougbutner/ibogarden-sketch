@@ -17,7 +17,7 @@ export const Route = createFileRoute("/about")({
 
 const TEAM = [
   { name: "Douglas Butner", role: "Tech Lead", bio: "Architects the on-chain infrastructure of the GAINE economy and ibo.garden protocols." },
-  { name: "Benny Friedman", role: "Sourcing Consultant", bio: "Direct relationships with Gabonese farms. Offers $250 sourcing consultations." },
+  { name: "Benny Friedmann", role: "Sourcing Consultant", bio: "Direct relationships with Gabonese farms. Offers $250 sourcing consultations." },
   { name: "Amaka Zazzy, RN", role: "Plant Alchemist & Clinical Integration", bio: "Bridges clinical safety and traditional preparation for facilitators worldwide." },
   { name: "Gabonese Advisors", role: "Bwiti Practitioner Council", bio: "Elders and ngangas guiding cultural respect and benefit-sharing." },
 ];

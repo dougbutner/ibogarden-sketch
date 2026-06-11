@@ -26,7 +26,7 @@ const SECTIONS = [
     title: "Research",
     items: [
       ["Ongoing Clinical Studies", "PTSD, opioid dependency, depression"],
-      ["Bwiti Standard", "Certification criteria · Nagoya-aligned"],
+      ["Decree 0239 Alignment", "Sourcing criteria · Nagoya-aligned"],
       ["Sourcing Transparency", "Quarterly reports · on-chain proofs"],
       ["Quarterly Impact Report", "PDF · published every March, June, Sept, Dec"],
     ],

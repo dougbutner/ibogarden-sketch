@@ -6,7 +6,7 @@ export const Route = createFileRoute("/network")({
   head: () => ({
     meta: [
       { title: "Partners Network — ibo.garden" },
-      { name: "description", content: "Register your facility, practice, or farm. Bwiti Standard and GAINE Certified partners earn visibility, training, and funding access." },
+      { name: "description", content: "Register your facility, practice, or farm. Decree 0239-aligned and GAINE Certified partners earn visibility and marketplace access." },
       { property: "og:title", content: "Join the ibo.garden Partners Network" },
       { property: "og:description", content: "Facilities, Practitioners, Farms — register for marketplace access." },
     ],

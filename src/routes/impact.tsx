@@ -78,11 +78,14 @@ function Impact() {
 
       <section className="px-6 py-20 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-center">
         <div>
-          <h2 className="font-serif text-4xl italic text-forest mb-5">Stories from Partners</h2>
-          <figure className="bg-bone p-7 rounded-3xl border border-forest/10 mb-4">
-            <blockquote className="font-serif italic text-xl text-forest leading-snug">"The first time the medicine traveled out, it carried our names with it. Now, the names return as schools, as wells, as trees."</blockquote>
-            <figcaption className="mt-4 text-xs uppercase tracking-widest text-gold-deep font-semibold">— Bwiti elder, Lambaréné</figcaption>
-          </figure>
+          <h2 className="font-serif text-4xl italic text-forest mb-5">Partner Farms</h2>
+          <p className="text-forest/75 leading-relaxed mb-6">
+            Fourteen partner farms across Estuaire and Ogooué-Maritime. Plot coordinates recorded, quarterly drone
+            surveys, and on-ground audits verify every tree planted under Gabon Decree 0239.
+          </p>
+          <p className="text-sm text-forest/60">
+            Partner stories and field reports will be published as verified partnerships are established.
+          </p>
         </div>
         <img src={seedling} alt="Iboga seedling held in hands" loading="lazy" className="rounded-3xl w-full aspect-[4/3] object-cover" />
       </section>
