@@ -77,6 +77,8 @@
   --border: rgba(10, 36, 24, 0.12);
   --input: rgba(10, 36, 24, 0.15);
   --ring: var(--gold);
+
+  --gaine-token-icon: url("/gaine-token.png");
 }
 
 .dark {
@@ -134,4 +136,38 @@
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { scrollbar-width: none; }
+
+  .gaine-word {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+  }
+
+  .gaine-word::before {
+    content: "";
+    flex-shrink: 0;
+    width: 0.72em;
+    height: 0.88em;
+    background: var(--gaine-token-icon) center / contain no-repeat;
+  }
+
+  .gaine-word-sm::before {
+    width: 0.62em;
+    height: 0.76em;
+  }
+
+  .btn-gaine {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+  }
+
+  .btn-gaine::before {
+    content: "";
+    flex-shrink: 0;
+    width: 0.9em;
+    height: 1.05em;
+    background: var(--gaine-token-icon) center / contain no-repeat;
+  }
 }

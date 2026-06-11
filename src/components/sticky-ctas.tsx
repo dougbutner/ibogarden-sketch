@@ -7,7 +7,7 @@ export function StickyCtas() {
         <Link to="/find" className="flex-1 md:flex-none text-center py-2.5 px-3 md:px-5 text-[10px] md:text-[11px] font-semibold uppercase tracking-widest text-gold border border-gold/30 rounded-xl hover:bg-gold/10 transition-colors">
           Find Facilitator
         </Link>
-        <Link to="/gaine" className="flex-1 md:flex-none text-center py-2.5 px-3 md:px-5 text-[10px] md:text-[11px] font-semibold uppercase tracking-widest bg-gold text-forest rounded-xl hover:bg-gold/90 transition-colors">
+        <Link to="/gaine" className="btn-gaine flex-1 md:flex-none text-center py-2.5 px-3 md:px-5 text-[10px] md:text-[11px] font-semibold uppercase tracking-widest bg-gold text-forest rounded-xl hover:bg-gold/90 transition-colors">
           Buy GAINE
         </Link>
         <Link to="/network" className="flex-1 md:flex-none text-center py-2.5 px-3 md:px-5 text-[10px] md:text-[11px] font-semibold uppercase tracking-widest text-earth/80 border border-earth/15 rounded-xl hover:bg-earth/5 transition-colors">

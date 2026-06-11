@@ -20,7 +20,7 @@ export function SiteFooter() {
               <li><Link to="/about" className="hover:text-gold">About Iboga</Link></li>
               <li><Link to="/find" className="hover:text-gold">Find a Facilitator</Link></li>
               <li><Link to="/marketplace" className="hover:text-gold">Marketplace</Link></li>
-              <li><Link to="/gaine" className="hover:text-gold">GAINE Token</Link></li>
+              <li><Link to="/gaine" className="hover:text-gold"><span className="gaine-word gaine-word-sm">GAINE</span> Token</Link></li>
               <li><Link to="/impact" className="hover:text-gold">Impact in Gabon</Link></li>
             </ul>
           </div>

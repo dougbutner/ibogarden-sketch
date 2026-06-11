@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export function PageHeader({ eyebrow, title, lead, children }: { eyebrow?: string; title: string; lead?: string; children?: ReactNode }) {
+export function PageHeader({ eyebrow, title, lead, children }: { eyebrow?: ReactNode; title: string; lead?: ReactNode; children?: ReactNode }) {
   return (
     <section className="px-6 pt-20 pb-16 max-w-7xl mx-auto">
       <div className="max-w-3xl">

@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { Logo } from "@/components/logo";
 
 const NAV = [
   { to: "/about", label: "About" },
@@ -18,16 +19,19 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 w-full bg-earth/85 backdrop-blur-md border-b border-forest/10">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="font-serif text-2xl italic text-forest tracking-tight">
-          ibo<span className="text-gold">.</span>garden
+        <Link to="/" className="flex items-center gap-2.5">
+          <Logo size={36} alt="" />
+          <span className="font-serif text-2xl italic text-forest tracking-tight">
+            ibo<span className="text-gold">.</span>garden
+          </span>
         </Link>
         <nav className="hidden lg:flex items-center gap-7 text-[11px] font-medium uppercase tracking-[0.18em] text-forest/70">
           {NAV.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className="hover:text-gold transition-colors"
-              activeProps={{ className: "text-gold" }}
+              className={`hover:text-gold transition-colors${item.to === "/gaine" ? " gaine-word gaine-word-sm" : ""}`}
+              activeProps={{ className: item.to === "/gaine" ? "text-gold gaine-word gaine-word-sm" : "text-gold" }}
             >
               {item.label}
             </Link>
@@ -48,8 +52,8 @@ export function SiteHeader() {
               key={item.to}
               to={item.to}
               onClick={() => setOpen(false)}
-              className="py-2 hover:text-gold"
-              activeProps={{ className: "text-gold" }}
+              className={`py-2 hover:text-gold${item.to === "/gaine" ? " gaine-word gaine-word-sm" : ""}`}
+              activeProps={{ className: item.to === "/gaine" ? "text-gold gaine-word gaine-word-sm" : "text-gold" }}
             >
               {item.label}
             </Link>

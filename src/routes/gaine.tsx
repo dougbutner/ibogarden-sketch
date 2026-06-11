@@ -26,9 +26,9 @@ function Gaine() {
   return (
     <>
       <PageHeader
-        eyebrow="GAINE Ecosystem"
+        eyebrow={<><span className="gaine-word gaine-word-sm">GAINE</span> Ecosystem</>}
         title="Tokenize reciprocity."
-        lead="GAINE is a Solana SPL token with 100% liquidity on Orca, paired with trusted stablecoins (~$1 USD). A 2% transfer tax becomes USDC, and you choose where it goes."
+        lead={<><span className="gaine-word gaine-word-sm">GAINE</span> is a Solana SPL token with 100% liquidity on Orca, paired with trusted stablecoins (~$1 USD). A 2% transfer tax becomes USDC, and you choose where it goes.</>}
       />
 
       <section className="px-6 max-w-7xl mx-auto pb-16 grid lg:grid-cols-2 gap-12">
@@ -49,7 +49,7 @@ function Gaine() {
               </div>
             ))}
           </dl>
-          <button className="mt-8 w-full bg-gold text-forest py-4 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-gold/90 transition-colors">
+          <button className="btn-gaine mt-8 w-full bg-gold text-forest py-4 rounded-2xl font-bold uppercase tracking-widest text-xs hover:bg-gold/90 transition-colors">
             Connect Wallet & Buy on Orca
           </button>
         </div>
@@ -101,11 +101,11 @@ function Gaine() {
         <div className="grid md:grid-cols-2 gap-5">
           <div className="bg-white border border-forest/10 rounded-3xl p-7">
             <h3 className="font-semibold text-forest mb-2">Gated Knowledge</h3>
-            <p className="text-sm text-forest/65">Advanced healing curriculum and exclusive practitioner sections unlock with GAINE.</p>
+            <p className="text-sm text-forest/65">Advanced healing curriculum and exclusive practitioner sections unlock with <span className="gaine-word gaine-word-sm">GAINE</span>.</p>
           </div>
           <div className="bg-white border border-forest/10 rounded-3xl p-7">
             <h3 className="font-semibold text-forest mb-2">Partner Rewards</h3>
-            <p className="text-sm text-forest/65">Certified farms and facilitators earn GAINE rewards for verified activity.</p>
+            <p className="text-sm text-forest/65">Certified farms and facilitators earn <span className="gaine-word gaine-word-sm">GAINE</span> rewards for verified activity.</p>
           </div>
         </div>
       </section>

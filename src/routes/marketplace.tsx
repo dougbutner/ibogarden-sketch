@@ -16,7 +16,7 @@ export const Route = createFileRoute("/marketplace")({
 const CATEGORIES = [
   { title: "Treatments", desc: "Clinical programs · nominate funds at checkout", icon: "✦" },
   { title: "Ceremonies", desc: "Traditional Bwiti · in-person and virtual", icon: "◉" },
-  { title: "Training", desc: "Facilitation, certification, GAINE-gated", icon: "❋" },
+  { title: "Training", desc: <>Facilitation, certification, <span className="gaine-word gaine-word-sm">GAINE</span>-gated</>, icon: "❋" },
   { title: "Products", desc: "Root bark, extracts, tools, courses", icon: "◈" },
   { title: "Donations", desc: "General, project-specific, recurring", icon: "♢" },
   { title: "Sponsorship", desc: "Sponsor a Treatment · Support a Farm", icon: "✤" },
@@ -65,7 +65,9 @@ function Marketplace() {
             <article key={l.title} className="bg-white border border-forest/10 rounded-2xl p-6 hover:border-gold/40 transition-colors">
               <div className="flex justify-between items-start mb-4">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-gold-deep">{l.cat}</span>
-                <span className="text-[10px] px-2 py-0.5 bg-bone rounded text-forest/70 font-semibold uppercase tracking-wider">{l.cert}</span>
+                <span className="text-[10px] px-2 py-0.5 bg-bone rounded text-forest/70 font-semibold uppercase tracking-wider">
+                  {l.cert === "GAINE" ? <span className="gaine-word gaine-word-sm">GAINE</span> : l.cert}
+                </span>
               </div>
               <h3 className="font-serif text-xl italic text-forest mb-2 leading-snug">{l.title}</h3>
               <p className="text-[11px] text-forest/50 uppercase tracking-wider mb-5">{l.loc}</p>

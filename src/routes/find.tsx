@@ -34,7 +34,7 @@ function Find() {
       <PageHeader
         eyebrow="Find a Facilitator"
         title="Verified care, traditional and clinical."
-        lead="A directory of certified facilities, Bwiti practitioners, and retreat centers. Bwiti Standard, Nagoya-compliant, GAINE Certified."
+        lead={<>A directory of certified facilities, Bwiti practitioners, and retreat centers. Bwiti Standard, Nagoya-compliant, <span className="gaine-word gaine-word-sm">GAINE</span> Certified.</>}
       />
 
       <section className="px-6 max-w-7xl mx-auto pb-24">
@@ -62,7 +62,9 @@ function Find() {
               <p className="text-sm text-forest/65 mb-6 flex-1">{f.desc}</p>
               <div className="flex flex-wrap gap-2 mb-6">
                 {f.certs.map((c) => (
-                  <span key={c} className="text-[10px] px-2 py-1 bg-bone rounded font-semibold text-forest/70 uppercase tracking-wider">{c}</span>
+                  <span key={c} className="text-[10px] px-2 py-1 bg-bone rounded font-semibold text-forest/70 uppercase tracking-wider">
+                    {c.startsWith("GAINE") ? <><span className="gaine-word gaine-word-sm">GAINE</span>{c.slice(5)}</> : c}
+                  </span>
                 ))}
                 <span className="text-[10px] px-2 py-1 bg-bone rounded font-semibold text-forest/70 uppercase tracking-wider">{f.lang}</span>
               </div>

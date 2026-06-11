@@ -4,6 +4,7 @@ import ibogaRoot from "@/assets/iboga-root.jpg";
 import gabonPlantation from "@/assets/gabon-plantation.jpg";
 import ceremonySpace from "@/assets/ceremony-space.jpg";
 import seedling from "@/assets/seedling.jpg";
+import { useHoverParallax, useParallax } from "@/hooks/useParallax";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -19,13 +20,74 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+function MarketplaceCard({
+  title,
+  desc,
+  to,
+  img,
+  badge,
+}: {
+  title: string;
+  desc: string;
+  to: string;
+  img: string;
+  badge: string;
+}) {
+  const hoverParallax = useHoverParallax(0.12);
+
+  return (
+    <Link to={to} className="group block">
+      <div
+        className="relative aspect-[4/5] rounded-3xl overflow-hidden"
+        onMouseMove={hoverParallax.onMouseMove}
+        onMouseLeave={hoverParallax.onMouseLeave}
+      >
+        <div
+          ref={hoverParallax.imageRef}
+          style={hoverParallax.imageStyle}
+          data-parallax-speed={hoverParallax["data-parallax-speed"]}
+          className="absolute inset-0"
+        >
+          <img
+            src={img}
+            alt={title}
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/30 to-transparent pointer-events-none" />
+        <div className="absolute top-4 left-4 pointer-events-none">
+          <span className="px-3 py-1 bg-gold text-forest text-[10px] font-bold uppercase tracking-widest rounded-full">{badge}</span>
+        </div>
+        <div className="absolute bottom-6 left-6 right-6 text-earth pointer-events-none">
+          <h3 className="font-serif text-2xl italic mb-2">{title}</h3>
+          <p className="text-sm text-earth/80">{desc}</p>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 function Home() {
+  const heroParallax = useParallax(0.4);
+  const sacredParallax = useParallax(0.5);
+  const impactParallax = useParallax(0.35);
+
   return (
     <>
       {/* HERO */}
       <section className="relative min-h-[92vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img src={heroForest} alt="Misty Gabon rainforest at golden hour" width={1920} height={1280} className="w-full h-full object-cover" />
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <img
+            src={heroForest}
+            alt="Misty Gabon rainforest at golden hour"
+            width={1920}
+            height={1280}
+            ref={heroParallax.ref}
+            style={heroParallax.style}
+            data-parallax-speed={heroParallax["data-parallax-speed"]}
+            className="w-full h-[120%] -top-[10%] absolute object-cover"
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-forest/70 via-forest/55 to-forest/85" />
         </div>
         <div className="relative z-10 max-w-4xl text-earth">
@@ -38,11 +100,11 @@ function Home() {
             <span className="text-gold italic">Root in Vitality.</span>
           </h1>
           <p className="text-base md:text-xl text-earth/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Network-rooted Iboga ecosystem · Facilitator Directory · Direct Sourcing Consultation · GAINE Token · Marketplace
+            Network-rooted Iboga ecosystem · Facilitator Directory · Direct Sourcing Consultation · <span className="gaine-word gaine-word-sm">GAINE</span> Token · Marketplace
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link to="/find" className="bg-gold text-forest px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/90 transition-colors">Find a Facilitator</Link>
-            <Link to="/gaine" className="border border-gold/40 text-gold px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/10 transition-colors">Buy GAINE</Link>
+            <Link to="/gaine" className="btn-gaine border border-gold/40 text-gold px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/10 transition-colors">Buy GAINE</Link>
             <Link to="/network" className="border border-earth/30 text-earth px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-earth/10 transition-colors">Register</Link>
             <Link to="/nominate" className="border border-earth/30 text-earth px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-earth/10 transition-colors">Donate</Link>
           </div>
@@ -70,7 +132,19 @@ function Home() {
             </Link>
           </div>
           <div className="relative">
-            <img src={ibogaRoot} alt="Iboga root bark in a wooden bowl" width={800} height={1000} loading="lazy" className="aspect-[4/5] w-full object-cover rounded-3xl shadow-2xl" />
+            <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+              <img
+                src={ibogaRoot}
+                alt="Iboga root bark in a wooden bowl"
+                width={800}
+                height={1000}
+                loading="lazy"
+                ref={sacredParallax.ref}
+                style={sacredParallax.style}
+                data-parallax-speed={sacredParallax["data-parallax-speed"]}
+                className="aspect-[4/5] w-full object-cover scale-105"
+              />
+            </div>
             <div className="absolute -bottom-6 -right-6 bg-forest p-8 rounded-2xl text-earth max-w-xs shadow-xl">
               <p className="font-serif italic text-xl mb-2">"Iboga is the wood that speaks."</p>
               <p className="text-xs uppercase tracking-widest text-gold">Gabonese Proverb</p>
@@ -168,13 +242,13 @@ function Home() {
           <div className="grid md:grid-cols-2 gap-14 items-start">
             <div>
               <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Financial Regeneration</span>
-              <h2 className="font-serif text-4xl md:text-5xl mt-4 italic text-forest leading-tight">The GAINE Advantage</h2>
+              <h2 className="font-serif text-4xl md:text-5xl mt-4 italic text-forest leading-tight">The <span className="gaine-word">GAINE</span> Advantage</h2>
               <p className="text-forest/75 mt-6 leading-relaxed">
                 Our SPL token on Solana powers ethical sourcing. A 2% reflection on every transaction is converted to USDC and directed — by you — to Gabon reforestation, traditional communities, or clinical research.
               </p>
               <ul className="mt-8 space-y-5">
                 {[
-                  ["Certified", "GAINE Certified farms and facilitators are audited and badged."],
+                  ["Certified", <><span className="gaine-word gaine-word-sm">GAINE</span> Certified farms and facilitators are audited and badged.</>],
                   ["Ethical Source", "Direct relationships with Gabonese growers. Nagoya-compliant."],
                   ["Legal Pathways", "Jurisdiction-aware referrals into licensed clinical access."],
                   ["Philanthropy", "Holders redirect their reflection — never receive their own."],
@@ -189,7 +263,7 @@ function Home() {
                 ))}
               </ul>
               <div className="mt-10 flex flex-wrap gap-3">
-                <Link to="/gaine" className="bg-forest text-earth px-8 py-3.5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-moss transition-colors">Buy GAINE</Link>
+                <Link to="/gaine" className="btn-gaine bg-forest text-earth px-8 py-3.5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-moss transition-colors">Buy GAINE</Link>
                 <Link to="/gaine" className="border border-forest/20 text-forest px-8 py-3.5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-forest hover:text-earth transition-colors">Redirect Your Yield</Link>
               </div>
             </div>
@@ -247,19 +321,7 @@ function Home() {
             { title: "Support a Farm", desc: "Direct Gabonese growers. Reforestation tracked on-chain.", to: "/impact", img: gabonPlantation, badge: "Sourcing" },
             { title: "Sponsor a Treatment", desc: "Nominate a person. Fund their access to care.", to: "/nominate", img: seedling, badge: "Care" },
           ].map((c) => (
-            <Link key={c.title} to={c.to} className="group block">
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
-                <img src={c.img} alt={c.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/30 to-transparent" />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-gold text-forest text-[10px] font-bold uppercase tracking-widest rounded-full">{c.badge}</span>
-                </div>
-                <div className="absolute bottom-6 left-6 right-6 text-earth">
-                  <h3 className="font-serif text-2xl italic mb-2">{c.title}</h3>
-                  <p className="text-sm text-earth/80">{c.desc}</p>
-                </div>
-              </div>
-            </Link>
+            <MarketplaceCard key={c.title} {...c} />
           ))}
         </div>
         <div className="mt-12 text-center text-sm text-forest/60 italic">
@@ -288,7 +350,17 @@ function Home() {
             ))}
           </div>
           <div className="grid md:grid-cols-2 gap-10 items-center">
-            <img src={gabonPlantation} alt="Iboga plantation in Gabon" loading="lazy" className="rounded-3xl aspect-[4/3] object-cover w-full" />
+            <div className="overflow-hidden rounded-3xl">
+              <img
+                src={gabonPlantation}
+                alt="Iboga plantation in Gabon"
+                loading="lazy"
+                ref={impactParallax.ref}
+                style={impactParallax.style}
+                data-parallax-speed={impactParallax["data-parallax-speed"]}
+                className="rounded-3xl aspect-[4/3] object-cover w-full scale-105"
+              />
+            </div>
             <div>
               <p className="font-serif text-2xl italic mb-6 text-earth/90 leading-relaxed">
                 "When the forest is honored, the medicine returns. When the medicine returns, our children return."
