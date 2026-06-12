@@ -18,6 +18,176 @@ export type ArticleCategory = {
   articles: KnowledgeLink[];
 };
 
+export type NodeShape = "circle" | "hexagon" | "diamond" | "rect" | "gaine";
+
+export type TopicLeaf = {
+  id: string;
+  label: string;
+  href: string;
+  description: string;
+  shape: NodeShape;
+};
+
+export type TopicTrunk = {
+  id: string;
+  label: string;
+  tagline: string;
+  description: string;
+  /** Exchange trunk uses the GAINE coin as its hub symbol */
+  useGaineIcon?: boolean;
+  leaves: TopicLeaf[];
+};
+
+export type TopicMapSelection =
+  | { kind: "root" }
+  | { kind: "trunk"; trunk: TopicTrunk }
+  | { kind: "leaf"; leaf: TopicLeaf; trunk: TopicTrunk };
+
+export const TOPIC_ROOT = {
+  label: "Iboga",
+  tagline: "The root at the center of everything here.",
+  description:
+    "Tabernanthe iboga — plant, rite, molecule, and commodity. Four ways humans hold it: lineage, land, medicine, and exchange.",
+};
+
+/** Hierarchical topic map — four trunks, human-readable grouping */
+export const TOPIC_MAP: TopicTrunk[] = [
+  {
+    id: "lineage",
+    label: "Lineage",
+    tagline: "Where the rite began",
+    description:
+      "The Babongo, Bwiti initiation, and the story passed down long before Western science named the alkaloid.",
+    leaves: [
+      {
+        id: "history",
+        label: "History",
+        href: "https://en.wikipedia.org/wiki/Ibogaine",
+        description:
+          "From 19th-century documentation to 1901 isolation, the Lambarène stimulant era, and the addiction discovery — the whole arc in one node.",
+        shape: "circle",
+      },
+      {
+        id: "history-bwiti",
+        label: "Bwiti Origins",
+        href: "https://journals.co.za/doi/10.10520/ejc-jiss_v2_n1_a1",
+        description:
+          "A scholarly account of Bwiti as possibly humanity's oldest religion, pioneered by the Babongo and formalized by the Mitsogo.",
+        shape: "circle",
+      },
+      {
+        id: "tradition",
+        label: "Bwiti Tradition",
+        href: "https://www.roothealing.com/missoko-bwiti",
+        description:
+          "The Missoko branch said to preserve Bwiti as it was before French and Christian influence, told by people initiated into it.",
+        shape: "circle",
+      },
+    ],
+  },
+  {
+    id: "land",
+    label: "Land",
+    tagline: "Where the plant lives",
+    description:
+      "The Congo Basin — wild iboga, conservation pressure, and why a keystone species can vanish quietly.",
+    leaves: [
+      {
+        id: "geography",
+        label: "Geography",
+        href: "https://www.iceers.org/en/basic-info/iboga-basic-info/",
+        description:
+          "Where the shrub actually grows across the Congo Basin, and why communities historically never had to cultivate it.",
+        shape: "hexagon",
+      },
+      {
+        id: "ecology",
+        label: "Ecology",
+        href: "https://chacruna.net/iboga_conservation/",
+        description:
+          "Why a plant the IUCN calls least concern may quietly be in trouble, given how little real biological data on it exists.",
+        shape: "hexagon",
+      },
+    ],
+  },
+  {
+    id: "medicine",
+    label: "Medicine",
+    tagline: "What it does in the body",
+    description:
+      "Pharmacology, cardiac risk, and the flagship trials moving ibogaine from underground anecdote toward evidence.",
+    leaves: [
+      {
+        id: "pharmacology",
+        label: "Pharmacology",
+        href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11102648/",
+        description:
+          "What the molecule does once inside you, and why individual metabolism makes one dose safe for some and dangerous for others.",
+        shape: "diamond",
+      },
+      {
+        id: "research",
+        label: "Flagship Research",
+        href: "https://www.nature.com/articles/s41591-023-02705-w",
+        description:
+          "The Stanford study that put ibogaine on the map: 30 veterans with brain injuries, large drops in PTSD, depression and disability, no serious cardiac events with magnesium.",
+        shape: "diamond",
+      },
+    ],
+  },
+  {
+    id: "exchange",
+    label: "Exchange",
+    tagline: "Trade, law & reciprocity",
+    description:
+      "Markets, clinics, Nagoya benefit-sharing, and the GAINE economy — who profits and who is owed.",
+    useGaineIcon: true,
+    leaves: [
+      {
+        id: "market-ng",
+        label: "Market & Trade",
+        href: "https://www.nationalgeographic.com/animals/article/ibogaine-pschedelic-drug-root-fair-trade-gabon",
+        description:
+          "The story of the first legal, Nagoya-compliant iboga export and the global scramble to profit from a root that could ease the opioid crisis.",
+        shape: "gaine",
+      },
+      {
+        id: "market-academic",
+        label: "Provider Economy",
+        href: "https://link.springer.com/article/10.1057/s41285-025-00220-1",
+        description:
+          "How a worldwide network of off-shore clinics built its own safety governance through trial and error — and how investment capital is now reshaping it.",
+        shape: "gaine",
+      },
+      {
+        id: "reg-nagoya",
+        label: "Nagoya Protocol",
+        href: "https://www.law.georgetown.edu/international-law-journal/blog/the-promise-of-nagoya-indigenous-reciprocity-in-the-psychedelic-renaissance/",
+        description:
+          "Why the Nagoya Protocol could force the psychedelic industry to share profits with the Gabonese communities that have stewarded iboga for millennia.",
+        shape: "rect",
+      },
+      {
+        id: "reg-gabon",
+        label: "Gabon Law",
+        href: "https://jonathandickinson.substack.com/p/gabon-to-restructure-iboga-and-ibogaine",
+        description:
+          "Gabon moving to extend its national treasure protection to ibogaine itself, days after the U.S. made ibogaine research a priority.",
+        shape: "rect",
+      },
+      {
+        id: "reg-texas",
+        label: "US / Texas",
+        href: "https://www.texastribune.org/2026/03/31/texas-ibogaine-research-clinical-trials-psychedelics/",
+        description:
+          "Texas launching its own $50M ibogaine trials after no drug company would meet its terms — a snapshot of how hard commercialization really is.",
+        shape: "rect",
+      },
+    ],
+  },
+];
+
+/** @deprecated — use TOPIC_MAP */
 export type TopicNode = {
   id: string;
   label: string;
@@ -25,6 +195,17 @@ export type TopicNode = {
   description: string;
   group: "history" | "geography" | "market" | "regulations" | "ecology" | "body" | "tradition" | "research";
 };
+
+/** @deprecated — use TOPIC_MAP */
+export const TOPIC_NODES: TopicNode[] = TOPIC_MAP.flatMap((t) =>
+  t.leaves.map((l) => ({
+    ...l,
+    group: t.id === "lineage" ? "history" : t.id === "land" ? "geography" : t.id === "medicine" ? "body" : "market",
+  })) as TopicNode[],
+);
+
+/** @deprecated */
+export const TOPIC_EDGES: [string, string][] = [];
 
 export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
   {
@@ -133,122 +314,6 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
       },
     ],
   },
-];
-
-export const TOPIC_NODES: TopicNode[] = [
-  {
-    id: "history",
-    label: "History",
-    href: "https://en.wikipedia.org/wiki/Ibogaine",
-    description:
-      "From 19th-century documentation to 1901 isolation, the Lambarène stimulant era, and the addiction discovery — the whole arc in one node.",
-    group: "history",
-  },
-  {
-    id: "history-bwiti",
-    label: "Bwiti Origins",
-    href: "https://journals.co.za/doi/10.10520/ejc-jiss_v2_n1_a1",
-    description:
-      "A scholarly account of Bwiti as possibly humanity's oldest religion, pioneered by the Babongo and formalized by the Mitsogo.",
-    group: "history",
-  },
-  {
-    id: "geography",
-    label: "Geography",
-    href: "https://www.iceers.org/en/basic-info/iboga-basic-info/",
-    description:
-      "Where the shrub actually grows across the Congo Basin, and why communities historically never had to cultivate it.",
-    group: "geography",
-  },
-  {
-    id: "market-ng",
-    label: "Market & Trade",
-    href: "https://www.nationalgeographic.com/animals/article/ibogaine-pschedelic-drug-root-fair-trade-gabon",
-    description:
-      "The story of the first legal, Nagoya-compliant iboga export and the global scramble to profit from a root that could ease the opioid crisis.",
-    group: "market",
-  },
-  {
-    id: "market-academic",
-    label: "Provider Economy",
-    href: "https://link.springer.com/article/10.1057/s41285-025-00220-1",
-    description:
-      "How a worldwide network of off-shore clinics built its own safety governance through trial and error — and how investment capital is now reshaping it.",
-    group: "market",
-  },
-  {
-    id: "reg-nagoya",
-    label: "Nagoya Protocol",
-    href: "https://www.law.georgetown.edu/international-law-journal/blog/the-promise-of-nagoya-indigenous-reciprocity-in-the-psychedelic-renaissance/",
-    description:
-      "Why the Nagoya Protocol could force the psychedelic industry to share profits with the Gabonese communities that have stewarded iboga for millennia.",
-    group: "regulations",
-  },
-  {
-    id: "reg-gabon",
-    label: "Gabon Law (2026)",
-    href: "https://jonathandickinson.substack.com/p/gabon-to-restructure-iboga-and-ibogaine",
-    description:
-      "Gabon moving to extend its national treasure protection to ibogaine itself, days after the U.S. made ibogaine research a priority.",
-    group: "regulations",
-  },
-  {
-    id: "reg-texas",
-    label: "US / Texas Trials",
-    href: "https://www.texastribune.org/2026/03/31/texas-ibogaine-research-clinical-trials-psychedelics/",
-    description:
-      "Texas launching its own $50M ibogaine trials after no drug company would meet its terms — a snapshot of how hard commercialization really is.",
-    group: "regulations",
-  },
-  {
-    id: "ecology",
-    label: "Ecology",
-    href: "https://chacruna.net/iboga_conservation/",
-    description:
-      "Why a plant the IUCN calls least concern may quietly be in trouble, given how little real biological data on it exists.",
-    group: "ecology",
-  },
-  {
-    id: "pharmacology",
-    label: "Pharmacology",
-    href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11102648/",
-    description:
-      "What the molecule does once inside you, and why individual metabolism makes one dose safe for some and dangerous for others.",
-    group: "body",
-  },
-  {
-    id: "tradition",
-    label: "Bwiti Tradition",
-    href: "https://www.roothealing.com/missoko-bwiti",
-    description:
-      "The Missoko branch said to preserve Bwiti as it was before French and Christian influence, told by people initiated into it.",
-    group: "tradition",
-  },
-  {
-    id: "research",
-    label: "Flagship Research",
-    href: "https://www.nature.com/articles/s41591-023-02705-w",
-    description:
-      "The Stanford study that put ibogaine on the map: 30 veterans with brain injuries, large drops in PTSD, depression and disability, no serious cardiac events with magnesium.",
-    group: "research",
-  },
-];
-
-export const TOPIC_EDGES: [string, string][] = [
-  ["history", "history-bwiti"],
-  ["history-bwiti", "tradition"],
-  ["geography", "ecology"],
-  ["geography", "market-ng"],
-  ["market-ng", "market-academic"],
-  ["market-academic", "reg-nagoya"],
-  ["reg-nagoya", "reg-gabon"],
-  ["reg-gabon", "reg-texas"],
-  ["ecology", "reg-nagoya"],
-  ["tradition", "history-bwiti"],
-  ["pharmacology", "research"],
-  ["research", "reg-texas"],
-  ["history", "geography"],
-  ["market-ng", "ecology"],
 ];
 
 export const ARTICLE_CATEGORIES: ArticleCategory[] = [
@@ -913,13 +978,12 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
   },
 ];
 
-export const GROUP_COLORS: Record<TopicNode["group"], string> = {
-  history: "#8a6e35",
-  geography: "#2d4a22",
-  market: "#b66a3e",
-  regulations: "#c5a059",
-  ecology: "#2d4a22",
-  body: "#0a2418",
-  tradition: "#8a6e35",
-  research: "#c5a059",
+/** Trunk fill colors for the hierarchical map */
+export const TRUNK_COLORS: Record<string, { fill: string; stroke: string; leaf: string }> = {
+  lineage: { fill: "#8a6e35", stroke: "#5c4a24", leaf: "#c5a059" },
+  land: { fill: "#2d4a22", stroke: "#0a2418", leaf: "#3d6a32" },
+  medicine: { fill: "#0a2418", stroke: "#2d4a22", leaf: "#1a3828" },
+  exchange: { fill: "#b66a3e", stroke: "#8a4a28", leaf: "#c5a059" },
 };
+
+export const GAINE_ICON = "/gaine-token.png";
