@@ -18,6 +18,7 @@ import { Route as LearnRouteImport } from './routes/learn'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as GaineRouteImport } from './routes/gaine'
 import { Route as FindRouteImport } from './routes/find'
+import { Route as DecreeRouteImport } from './routes/decree'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -67,6 +68,11 @@ const FindRoute = FindRouteImport.update({
   path: '/find',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DecreeRoute = DecreeRouteImport.update({
+  id: '/decree',
+  path: '/decree',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CommunityRoute = CommunityRouteImport.update({
   id: '/community',
   path: '/community',
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/community': typeof CommunityRoute
+  '/decree': typeof DecreeRoute
   '/find': typeof FindRoute
   '/gaine': typeof GaineRoute
   '/impact': typeof ImpactRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/community': typeof CommunityRoute
+  '/decree': typeof DecreeRoute
   '/find': typeof FindRoute
   '/gaine': typeof GaineRoute
   '/impact': typeof ImpactRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/community': typeof CommunityRoute
+  '/decree': typeof DecreeRoute
   '/find': typeof FindRoute
   '/gaine': typeof GaineRoute
   '/impact': typeof ImpactRoute
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/community'
+    | '/decree'
     | '/find'
     | '/gaine'
     | '/impact'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/community'
+    | '/decree'
     | '/find'
     | '/gaine'
     | '/impact'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/community'
+    | '/decree'
     | '/find'
     | '/gaine'
     | '/impact'
@@ -175,6 +187,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   CommunityRoute: typeof CommunityRoute
+  DecreeRoute: typeof DecreeRoute
   FindRoute: typeof FindRoute
   GaineRoute: typeof GaineRoute
   ImpactRoute: typeof ImpactRoute
@@ -251,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FindRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/decree': {
+      id: '/decree'
+      path: '/decree'
+      fullPath: '/decree'
+      preLoaderRoute: typeof DecreeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/community': {
       id: '/community'
       path: '/community'
@@ -279,6 +299,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   CommunityRoute: CommunityRoute,
+  DecreeRoute: DecreeRoute,
   FindRoute: FindRoute,
   GaineRoute: GaineRoute,
   ImpactRoute: ImpactRoute,

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHeader } from "@/components/page-header";
 
@@ -28,7 +28,7 @@ function Gaine() {
       <PageHeader
         eyebrow={<><span className="gaine-word gaine-word-sm">GAINE</span> Token</>}
         title="The marketplace settlement token."
-        lead={<>Under Gabon Decree 0239, <span className="gaine-word gaine-word-sm">GAINE</span> is a Solana SPL token with 100% liquidity on Orca, paired with trusted stablecoins (~$1 USD). A 2% transfer tax becomes USDC, and you choose where it goes.</>}
+        lead={<>Under Gabon Decree 0239 (22 May 2026), <span className="gaine-word gaine-word-sm">GAINE</span> is the marketplace settlement token — a Solana SPL with 100% liquidity on Orca, paired with trusted stablecoins (~$1 USD). A 2% transfer tax becomes USDC, and you choose where it goes: sourcing, conservation, Gabon communities, or a specific project.</>}
       />
 
       <section className="px-6 max-w-7xl mx-auto pb-16 grid lg:grid-cols-2 gap-12">
@@ -96,16 +96,34 @@ function Gaine() {
         </div>
       </section>
 
-      <section className="px-6 py-20 max-w-7xl mx-auto">
-        <h2 className="font-serif text-3xl italic text-forest mb-8">Token Utility</h2>
-        <div className="grid md:grid-cols-2 gap-5">
-          <div className="bg-white border border-forest/10 rounded-3xl p-7">
-            <h3 className="font-semibold text-forest mb-2">Marketplace Settlement</h3>
-            <p className="text-sm text-forest/65">Use <span className="gaine-word gaine-word-sm">GAINE</span> to purchase products, treatments, and verified listings on the marketplace.</p>
+      <section className="px-6 py-20 max-w-7xl mx-auto space-y-12">
+        <div className="bg-bone border border-forest/10 rounded-3xl p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h2 className="font-serif text-2xl italic text-forest mb-2">Legal framework</h2>
+            <p className="text-sm text-forest/70 leading-relaxed max-w-xl">
+              GAINE operates under Gabon Decree 0239 — supporting traceability, community benefit-sharing, and
+              certified export from legal plantations.
+            </p>
           </div>
-          <div className="bg-white border border-forest/10 rounded-3xl p-7">
-            <h3 className="font-semibold text-forest mb-2">Supplier Rewards</h3>
-            <p className="text-sm text-forest/65">Certified farms and suppliers earn <span className="gaine-word gaine-word-sm">GAINE</span> rewards for verified sourcing activity.</p>
+          <Link
+            to="/decree"
+            className="shrink-0 border border-forest/20 text-forest px-6 py-3 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-forest hover:text-earth transition-colors text-center"
+          >
+            Read Decree 0239 →
+          </Link>
+        </div>
+
+        <div>
+          <h2 className="font-serif text-3xl italic text-forest mb-8">Token Utility</h2>
+          <div className="grid md:grid-cols-2 gap-5">
+            <div className="bg-white border border-forest/10 rounded-3xl p-7">
+              <h3 className="font-semibold text-forest mb-2">Marketplace Settlement</h3>
+              <p className="text-sm text-forest/65">Use <span className="gaine-word gaine-word-sm">GAINE</span> to purchase products, treatments, and verified listings on the marketplace.</p>
+            </div>
+            <div className="bg-white border border-forest/10 rounded-3xl p-7">
+              <h3 className="font-semibold text-forest mb-2">Supplier Rewards</h3>
+              <p className="text-sm text-forest/65">Certified farms and suppliers earn <span className="gaine-word gaine-word-sm">GAINE</span> rewards for verified sourcing activity.</p>
+            </div>
           </div>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHeader } from "@/components/page-header";
 import ibogaRoot from "@/assets/iboga-root.jpg";
 
@@ -47,10 +47,16 @@ function About() {
             </ul>
           </div>
           <div className="bg-bone p-6 rounded-2xl border border-forest/10">
-            <h3 className="font-serif text-xl italic text-forest mb-2">Nagoya Protocol & Bwiti respect</h3>
-            <p className="text-sm text-forest/70 leading-relaxed">
-              We operate in alignment with the Nagoya Protocol on Access and Benefit-sharing, and under the guidance of a Bwiti Practitioner Council. Cultural attribution and equitable benefit-sharing are non-negotiable.
+            <h3 className="font-serif text-xl italic text-forest mb-2">Gabon Decree 0239 & Nagoya Protocol</h3>
+            <p className="text-sm text-forest/70 leading-relaxed mb-4">
+              Gabon's Presidential Decree 0239 (22 May 2026) establishes sovereign control over Iboga, its
+              derivatives, and associated traditional knowledge — requiring prior authorization, community
+              consultation, traceable export from certified plantations, and fair benefit-sharing. We operate
+              within this framework and the Nagoya Protocol, under guidance from a Bwiti Practitioner Council.
             </p>
+            <Link to="/decree" className="text-xs font-semibold uppercase tracking-widest text-gold hover:text-gold-deep">
+              Read the decree summary →
+            </Link>
           </div>
         </div>
       </section>

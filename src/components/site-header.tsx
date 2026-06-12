@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Logo } from "@/components/logo";
 
 const NAV = [
-  { to: "/learn", label: "Learn" },
+  { to: "/learn", label: "Knowledge" },
   { to: "/marketplace", label: "Marketplace" },
   { to: "/gaine", label: "GAINE" },
   { to: "/source", label: "Source Bulk" },

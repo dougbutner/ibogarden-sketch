@@ -8,7 +8,7 @@ const LAUNCH_LINKS = [
 
 const MORE_LINKS = [
   { to: "/about", label: "About" },
-  { to: "/learn", label: "Learn" },
+  { to: "/learn", label: "Knowledge" },
   { to: "/find", label: "Find" },
   { to: "/network", label: "Network" },
   { to: "/impact", label: "Impact" },
@@ -78,7 +78,7 @@ export function SiteFooter() {
 
         <div className="pt-8 border-t border-earth/10 mb-8">
           <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-earth/60 mb-6">
-            <a href="#" className="hover:text-gold">Gabon Decree 0239</a>
+            <Link to="/decree" className="hover:text-gold">Gabon Decree 0239</Link>
             <a href="https://www.cbd.int/abs/" target="_blank" rel="noopener noreferrer" className="hover:text-gold">
               Nagoya Protocol
             </a>

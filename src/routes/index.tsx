@@ -202,7 +202,7 @@ function Home() {
             { n: "01", t: "Research", d: "Open clinical studies on PTSD, addiction, and neuroplasticity." },
             { n: "02", t: "Free Access", d: "Pathways into clinical and traditional care, regardless of means." },
             { n: "03", t: "Free Education", d: "Preparation and integration guides as public goods." },
-            { n: "04", t: "Certification", d: "Decree 0239-aligned certification for farms and care facilities, verified." },
+            { n: "04", t: "Certification", d: "Decree 0239-aligned authorization, traceability, and benefit-sharing for farms and care facilities." },
           ].map((c) => (
             <div key={c.n} className="bg-earth p-8 flex flex-col gap-5">
               <span className="text-gold font-serif text-2xl">{c.n}</span>
@@ -359,9 +359,16 @@ function Home() {
             <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Live Impact</span>
             <h2 className="font-serif text-4xl md:text-5xl mt-4 italic">Rooted in Gabon</h2>
             <p className="text-earth/60 mt-6 max-w-2xl mx-auto leading-relaxed">
-              Committed to advancing implementation of Gabon Decree 0239 (May 22, 2026). Every transaction supports
-              reforestation and benefit-sharing with Gabonese communities.
+              Committed to Gabon Presidential Decree 0239 (22 May 2026) — sovereign regulation of Iboga access,
+              export certification, community benefit-sharing, and traditional knowledge protection. Every
+              transaction supports reforestation and fair returns to Gabonese communities.
             </p>
+            <Link
+              to="/decree"
+              className="inline-flex items-center mt-6 text-gold text-sm font-semibold uppercase tracking-widest border-b border-gold/40 pb-1 hover:text-gold/80"
+            >
+              Read the decree summary →
+            </Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
             {[

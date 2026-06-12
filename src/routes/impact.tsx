@@ -81,7 +81,8 @@ function Impact() {
           <h2 className="font-serif text-4xl italic text-forest mb-5">Partner Farms</h2>
           <p className="text-forest/75 leading-relaxed mb-6">
             Fourteen partner farms across Estuaire and Ogooué-Maritime. Plot coordinates recorded, quarterly drone
-            surveys, and on-ground audits verify every tree planted under Gabon Decree 0239.
+            surveys, and on-ground audits verify every tree planted under Decree 0239 — which requires legal
+            plantation certification, traceability, and benefit-sharing with Gabonese communities.
           </p>
           <p className="text-sm text-forest/60">
             Partner stories and field reports will be published as verified partnerships are established.
