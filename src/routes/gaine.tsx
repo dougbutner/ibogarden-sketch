@@ -16,7 +16,7 @@ export const Route = createFileRoute("/gaine")({
 
 const DIRECTIONS = [
   { key: "Sourcing", desc: "Ethical farms, Gabon plantations, supply chain traceability." },
-  { key: "Conservation", desc: "Reforestation, forward tree contracts, farmer working capital." },
+  { key: "Conservation", desc: "Reforestation, farmer working capital, Gabon smallholder support." },
   { key: "Gabon Communities", desc: "Benefit-sharing with traditional communities under Decree 0239." },
   { key: "Specific Project", desc: "USDC sent directly to an approved project wallet." },
 ];
@@ -101,7 +101,7 @@ function Gaine() {
         <div className="grid md:grid-cols-2 gap-5">
           <div className="bg-white border border-forest/10 rounded-3xl p-7">
             <h3 className="font-semibold text-forest mb-2">Marketplace Settlement</h3>
-            <p className="text-sm text-forest/65">Use <span className="gaine-word gaine-word-sm">GAINE</span> to purchase root bark, forward contracts, and verified listings on the commodity marketplace.</p>
+            <p className="text-sm text-forest/65">Use <span className="gaine-word gaine-word-sm">GAINE</span> to purchase products, treatments, and verified listings on the marketplace.</p>
           </div>
           <div className="bg-white border border-forest/10 rounded-3xl p-7">
             <h3 className="font-semibold text-forest mb-2">Supplier Rewards</h3>

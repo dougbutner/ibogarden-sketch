@@ -14,7 +14,7 @@ export const Route = createFileRoute("/network")({
   component: Network,
 });
 
-const STEPS = ["Basic info", "Category & credentials", "Ethics alignment", "Wallet (USDC payouts)", "Submit"];
+const STEPS = ["Basic info", "Category & credentials", "Gabon-first alignment", "Wallet (USDC payouts)", "Submit"];
 
 function Network() {
   const [step, setStep] = useState(0);
@@ -69,8 +69,11 @@ function Network() {
             )}
             {step === 2 && (
               <>
-                <Field label="How does your practice honor Bwiti tradition?" textarea />
-                <Field label="Benefit-sharing approach (Nagoya alignment)" textarea />
+                <p className="text-sm text-forest/65 -mt-2 mb-2">
+                  ibo.garden partners with Gabon-first compliant iboga sourcing options operating in Southeast Africa.
+                </p>
+                <YesNoField label="Do you offer Gabon-first compliant iboga sourcing?" />
+                <YesNoField label="Do you operate in Southeast Africa?" />
               </>
             )}
             {step === 3 && (
@@ -108,5 +111,35 @@ function Field({ label, type = "text", placeholder, textarea }: { label: string;
         <input type={type} placeholder={placeholder} className="w-full bg-white border border-forest/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-gold" />
       )}
     </label>
+  );
+}
+
+function YesNoField({ label }: { label: string }) {
+  const [value, setValue] = useState<"yes" | "no" | null>(null);
+  const id = label.replace(/\W+/g, "-").toLowerCase();
+  return (
+    <fieldset className="block">
+      <legend className="text-[11px] font-semibold uppercase tracking-widest text-forest/60 block mb-3">{label}</legend>
+      <div className="flex gap-3">
+        {(["yes", "no"] as const).map((option) => (
+          <label
+            key={option}
+            htmlFor={`${id}-${option}`}
+            className={`flex-1 flex items-center justify-center gap-2 cursor-pointer rounded-xl border px-4 py-3 text-sm font-medium transition-colors ${
+              value === option ? "border-gold bg-gold/10 text-forest" : "border-forest/15 bg-white text-forest/70 hover:border-forest/30"
+            }`}
+          >
+            <input
+              id={`${id}-${option}`}
+              type="checkbox"
+              checked={value === option}
+              onChange={() => setValue(option)}
+              className="size-4 rounded border-forest/30 accent-gold focus:ring-gold"
+            />
+            {option === "yes" ? "Yes" : "No"}
+          </label>
+        ))}
+      </div>
+    </fieldset>
   );
 }

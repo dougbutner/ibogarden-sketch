@@ -1,17 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroForest from "@/assets/hero-forest.jpg";
+import ibogaRoot from "@/assets/iboga-root.jpg";
 import gabonPlantation from "@/assets/gabon-plantation.jpg";
 import seedling from "@/assets/seedling.jpg";
-import ibogaRoot from "@/assets/iboga-root.jpg";
+import ceremonySpace from "@/assets/ceremony-space.jpg";
 import { useHoverParallax, useParallax } from "@/hooks/useParallax";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "ibo.garden — GAINE Token & Ethical Iboga Marketplace" },
-      { name: "description", content: "GAINE SPL token and commodity marketplace for ethically sourced Iboga under Gabon Decree 0239. Nagoya Protocol-aligned sourcing, forward tree contracts, and on-chain traceability." },
+      { name: "description", content: "GAINE SPL token and marketplace for ethically sourced Iboga. Nagoya Protocol-aligned sourcing, network-verified listings, and on-chain traceability." },
       { property: "og:title", content: "ibo.garden — GAINE Token & Ethical Iboga Marketplace" },
-      { property: "og:description", content: "GAINE SPL token and commodity marketplace for ethically sourced Iboga under Gabon Decree 0239. Nagoya Protocol-aligned sourcing, forward tree contracts, and on-chain traceability." },
+      { property: "og:description", content: "GAINE SPL token and marketplace for ethically sourced Iboga. Nagoya Protocol-aligned sourcing, network-verified listings, and on-chain traceability." },
       { property: "og:image", content: heroForest },
       { name: "twitter:image", content: heroForest },
     ],
@@ -25,88 +26,51 @@ function MarketplaceCard({
   to,
   img,
   badge,
-  hash,
 }: {
   title: string;
   desc: string;
   to: string;
   img: string;
   badge: string;
-  hash?: string;
 }) {
   const hoverParallax = useHoverParallax(0.12);
-  const href = hash ? `${to}#${hash}` : to;
-
-  const inner = (
-    <div
-      className="relative aspect-[4/5] rounded-3xl overflow-hidden"
-      onMouseMove={hoverParallax.onMouseMove}
-      onMouseLeave={hoverParallax.onMouseLeave}
-    >
-      <div
-        ref={hoverParallax.imageRef}
-        style={hoverParallax.imageStyle}
-        data-parallax-speed={hoverParallax["data-parallax-speed"]}
-        className="absolute inset-0"
-      >
-        <img
-          src={img}
-          alt={title}
-          loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/30 to-transparent pointer-events-none" />
-      <div className="absolute top-4 left-4 pointer-events-none">
-        <span className="px-3 py-1 bg-gold text-forest text-[10px] font-bold uppercase tracking-widest rounded-full">{badge}</span>
-      </div>
-      <div className="absolute bottom-6 left-6 right-6 text-earth pointer-events-none">
-        <h3 className="font-serif text-2xl italic mb-2">{title}</h3>
-        <p className="text-sm text-earth/80">{desc}</p>
-      </div>
-    </div>
-  );
-
-  if (hash) {
-    return (
-      <a href={href} className="group block">
-        {inner}
-      </a>
-    );
-  }
 
   return (
     <Link to={to} className="group block">
-      {inner}
+      <div
+        className="relative aspect-[4/5] rounded-3xl overflow-hidden"
+        onMouseMove={hoverParallax.onMouseMove}
+        onMouseLeave={hoverParallax.onMouseLeave}
+      >
+        <div
+          ref={hoverParallax.imageRef}
+          style={hoverParallax.imageStyle}
+          data-parallax-speed={hoverParallax["data-parallax-speed"]}
+          className="absolute inset-0"
+        >
+          <img
+            src={img}
+            alt={title}
+            loading="lazy"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/30 to-transparent pointer-events-none" />
+        <div className="absolute top-4 left-4 pointer-events-none">
+          <span className="px-3 py-1 bg-gold text-forest text-[10px] font-bold uppercase tracking-widest rounded-full">{badge}</span>
+        </div>
+        <div className="absolute bottom-6 left-6 right-6 text-earth pointer-events-none">
+          <h3 className="font-serif text-2xl italic mb-2">{title}</h3>
+          <p className="text-sm text-earth/80">{desc}</p>
+        </div>
+      </div>
     </Link>
   );
 }
 
-const ECONOMIC_HIGHLIGHTS = [
-  {
-    theme: "Supply Scarcity",
-    copy: "Up to 85% of wild iboga has already disappeared from its natural environment. Good quality iboga is becoming more rare and expensive by the year.",
-    source: "Conservation estimates",
-  },
-  {
-    theme: "Smart Money",
-    copy: "Catalyst4 — the vehicle funded by Sergey Brin's Tesla stake sale — committed $15M to ibogaine clinical trials in 2024.",
-    source: "Catalyst4 · 2024",
-  },
-  {
-    theme: "Policy Tailwinds",
-    copy: "The Texas legislature signed a $50M grant for ibogaine drug development, increased to $100M this year. FDA Breakthrough Therapy Designation and a Trump executive order signal accelerating regulatory interest.",
-    source: "Texas legislature · FDA · 2024–2026",
-  },
-  {
-    theme: "Neuroscience",
-    copy: "A 2024 Stanford TBI study showed an average reduction of 1.37 years in the biological age of brain tissue after a single treatment — in 40 combat veterans with TBI and PTSD.",
-    source: "Stanford · 2024",
-  },
-];
-
 function Home() {
   const heroParallax = useParallax(0.4);
+  const sacredParallax = useParallax(0.5);
   const impactParallax = useParallax(0.35);
 
   return (
@@ -128,15 +92,15 @@ function Home() {
         </div>
         <div className="relative z-10 max-w-4xl text-earth">
           <span className="inline-block px-4 py-1 mb-6 rounded-full border border-gold/40 bg-forest/40 backdrop-blur-sm text-gold text-[11px] font-medium tracking-[0.22em] uppercase">
-            Gabon Decree 0239 · Nagoya Protocol
+            Gabon First · Nagoya Protocol · Bwiti Respected
           </span>
           <h1 className="font-serif text-5xl md:text-7xl text-earth mb-6 leading-[1.05] italic text-balance">
             Ethically Sourced Iboga.<br />
             <span className="text-gold not-italic">Tokenized on Solana.</span>
           </h1>
           <p className="text-base md:text-xl text-earth/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Commodity marketplace and <span className="gaine-word gaine-word-sm">GAINE</span> token platform for
-            Decree 0239-aligned Iboga sourcing, forward tree contracts, and on-chain traceability.
+            Marketplace and <span className="gaine-word gaine-word-sm">GAINE</span> token platform for ethical Iboga
+            sourcing, network-verified listings, and on-chain traceability.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link to="/gaine" className="btn-gaine bg-gold text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/90 transition-colors">
@@ -152,52 +116,124 @@ function Home() {
         </div>
       </section>
 
-      {/* ECONOMIC HIGHLIGHTS */}
+      {/* SACRED ROOT */}
       <section className="py-24 px-6 max-w-7xl mx-auto">
-        <div className="max-w-3xl mb-14">
-          <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Why Now</span>
-          <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 italic leading-tight">The Iboga Supply Story</h2>
-          <p className="text-forest/70 mt-5 text-lg leading-relaxed">
-            Demand is accelerating. Supply is contracting. Policy and capital are converging on a commodity that grows
-            in one forest.
-          </p>
+        <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div>
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">The Sacred Root</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 mb-8 italic leading-tight">The Root That Remembers</h2>
+            <p className="text-lg leading-relaxed mb-6 text-forest/80">
+              Iboga is more than a medicine; it is a gateway to the self. Rooted in the Bwiti traditions of Gabon, it offers a profound reorganization of the human psyche — addressing the root causes of addiction, depression, and spiritual disconnection.
+            </p>
+            <p className="text-lg leading-relaxed mb-8 text-forest/80">
+              Our network ensures every gram of root bark and every ceremonial experience respects the Gabonese soil and the lineages that protected this wisdom for millennia.
+            </p>
+            <Link to="/learn" className="inline-flex items-center text-gold font-semibold tracking-wider uppercase text-sm group">
+              Learn the Full Story
+              <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+            </Link>
+          </div>
+          <div className="relative">
+            <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+              <img
+                src={ibogaRoot}
+                alt="Iboga root bark in a wooden bowl"
+                width={800}
+                height={1000}
+                loading="lazy"
+                ref={sacredParallax.ref}
+                style={sacredParallax.style}
+                data-parallax-speed={sacredParallax["data-parallax-speed"]}
+                className="aspect-[4/5] w-full object-cover scale-105"
+              />
+            </div>
+            <div className="absolute -bottom-6 -right-6 bg-forest p-8 rounded-2xl text-earth max-w-xs shadow-xl">
+              <p className="font-serif italic text-xl mb-2">"Iboga is the wood that speaks."</p>
+              <p className="text-xs uppercase tracking-widest text-gold">Gabonese Proverb</p>
+            </div>
+          </div>
         </div>
-        <div className="grid md:grid-cols-2 gap-px bg-forest/10 border border-forest/10 rounded-2xl overflow-hidden">
-          {ECONOMIC_HIGHLIGHTS.map((item) => (
-            <div key={item.theme} className="bg-earth p-8 flex flex-col gap-4">
-              <h3 className="font-serif text-xl italic text-forest">{item.theme}</h3>
-              <p className="text-sm text-forest/70 leading-relaxed">{item.copy}</p>
-              <p className="text-[10px] text-forest/40 uppercase tracking-widest mt-auto">{item.source}</p>
+      </section>
+
+      {/* VIDEO CAROUSEL */}
+      <section className="py-20 bg-forest text-earth overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 mb-10 flex justify-between items-end">
+          <div>
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Voices of the Garden</span>
+            <h3 className="font-serif text-3xl md:text-4xl italic mt-3">Sacred Broadcasts</h3>
+          </div>
+          <div className="hidden md:block text-xs text-earth/40 uppercase tracking-widest">Three playlists → swipe</div>
+        </div>
+        <div className="flex gap-6 overflow-x-auto px-6 pb-6 snap-x no-scrollbar">
+          {[
+            { tag: "Playlist 01", title: "About Iboga", desc: "Origins, science, and the Bwiti tradition.", img: heroForest },
+            { tag: "Playlist 02", title: "Iboga Facilitators", desc: "Practitioners in their own words.", img: ceremonySpace },
+            { tag: "Playlist 03", title: "Healing Stories", desc: "Recovery from addiction, depression, PTSD.", img: seedling },
+          ].map((p) => (
+            <div key={p.title} className="shrink-0 w-[85vw] md:w-[440px] snap-center group cursor-pointer">
+              <div className="relative aspect-[3/2] rounded-2xl overflow-hidden ring-1 ring-gold/20 mb-4">
+                <img src={p.img} alt={p.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/30 to-transparent" />
+                <div className="absolute top-4 right-4 size-12 rounded-full bg-gold/90 text-forest grid place-items-center">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                </div>
+                <div className="absolute bottom-5 left-5">
+                  <div className="text-[10px] font-semibold tracking-widest uppercase text-gold mb-1">{p.tag}</div>
+                  <div className="font-serif text-2xl italic">{p.title}</div>
+                </div>
+              </div>
+              <p className="text-sm text-earth/60">{p.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* FORWARD CONTRACTS */}
-      <section id="forward-contracts" className="py-24 px-6 bg-forest text-earth">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-          <div>
-            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Conservation</span>
-            <h2 className="font-serif text-4xl md:text-5xl mt-4 mb-8 italic leading-tight">Plant a Tree. Take Delivery Later.</h2>
-            <p className="text-lg leading-relaxed mb-6 text-earth/80">
-              Global buyers purchase a future iboga tree today, take delivery in six-plus years, and fund a Gabonese
-              farmer's working capital in the meantime.
+      {/* HEALING PLANETARY ADDICTION */}
+      <section className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="max-w-3xl mb-14">
+          <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Mission</span>
+          <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 italic leading-tight">Healing Planetary Addiction</h2>
+          <p className="text-forest/70 mt-5 text-lg leading-relaxed">
+            Addiction is not only substances. It is emotion, consumption, and the false stories we tell about ourselves. We work upstream — through research, free access, education, and certification of farms and care.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-4 gap-px bg-forest/10 border border-forest/10 rounded-2xl overflow-hidden">
+          {[
+            { n: "01", t: "Research", d: "Open clinical studies on PTSD, addiction, and neuroplasticity." },
+            { n: "02", t: "Free Access", d: "Pathways into clinical and traditional care, regardless of means." },
+            { n: "03", t: "Free Education", d: "Preparation and integration guides as public goods." },
+            { n: "04", t: "Certification", d: "Decree 0239-aligned certification for farms and care facilities, verified." },
+          ].map((c) => (
+            <div key={c.n} className="bg-earth p-8 flex flex-col gap-5">
+              <span className="text-gold font-serif text-2xl">{c.n}</span>
+              <h4 className="font-serif text-xl italic text-forest">{c.t}</h4>
+              <p className="text-sm text-forest/65 leading-relaxed">{c.d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* WHY IBOGA CHANGES EVERYTHING */}
+      <section className="py-24 px-6 bg-bone">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-12 gap-12 items-start">
+          <div className="md:col-span-5">
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Why It Matters</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 italic leading-tight">Why Iboga Changes Everything</h2>
+            <p className="text-forest/70 mt-5 leading-relaxed">
+              From opioid dependency to suicide ideation, the medicine meets people at the root of suffering. Used clinically for recovery, traditionally for initiation, and in community for celebration.
             </p>
-            <p className="text-earth/60 leading-relaxed mb-10">
-              Forward contracts tie conservation directly to commerce — replanting wild-harvested stock, financing
-              cultivation, and building traceable supply under Gabon Decree 0239.
-            </p>
-            <a href="/marketplace#forward-contracts" className="inline-flex items-center bg-gold text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/90 transition-colors">
-              Browse Forward Contracts →
-            </a>
           </div>
-          <div className="overflow-hidden rounded-3xl">
-            <img
-              src={seedling}
-              alt="Iboga seedling ready for planting in Gabon"
-              loading="lazy"
-              className="rounded-3xl aspect-[4/3] object-cover w-full"
-            />
+          <div className="md:col-span-7 space-y-4">
+            {[
+              { who: "A., 38 · Opioid recovery", q: "Five years of dependency lifted in a single ceremony. The integration since has been the real medicine." },
+              { who: "M., 45 · Depression", q: "I came back inside my own life. The forest stayed with me." },
+              { who: "S., 29 · PTSD", q: "I stopped running. I started living." },
+            ].map((s) => (
+              <figure key={s.who} className="bg-earth p-6 rounded-2xl border border-forest/10">
+                <blockquote className="font-serif italic text-xl text-forest leading-snug">"{s.q}"</blockquote>
+                <figcaption className="mt-3 text-xs uppercase tracking-widest text-gold-deep font-semibold">{s.who}</figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
@@ -207,22 +243,22 @@ function Home() {
         <div className="max-w-7xl mx-auto bg-gold/5 rounded-[2.5rem] p-10 md:p-16 border border-gold/15">
           <div className="grid md:grid-cols-2 gap-14 items-start">
             <div>
-              <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">The Token</span>
+              <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Financial Regeneration</span>
               <h2 className="font-serif text-4xl md:text-5xl mt-4 italic text-forest leading-tight">
-                Understand <span className="gaine-word">GAINE</span>
+                The <span className="gaine-word">GAINE</span> Advantage
               </h2>
               <p className="text-forest/75 mt-6 leading-relaxed">
-                <span className="gaine-word gaine-word-sm">GAINE</span> is the settlement token for this marketplace — an SPL
-                token on Solana with 100% liquidity on Orca. A 2% transfer tax converts to USDC and flows to sourcing,
-                conservation, and Gabon communities.
+                Our SPL token on Solana powers ethical sourcing. A 2% reflection on every transaction is converted to
+                USDC and directed — by you — to Gabon reforestation, traditional communities, or clinical research.
               </p>
               <ul className="mt-8 space-y-5">
                 {[
-                  ["Ethical Sourcing", "Direct relationships with Gabonese growers. Nagoya-compliant traceability."],
-                  ["Conservation", "Gabon reforestation and farmer working capital via forward contracts."],
-                  ["Decree 0239", "Benefit-sharing aligned with Gabon's regulatory framework (May 22, 2026)."],
+                  ["Certified", <><span className="gaine-word gaine-word-sm">GAINE</span> Certified farms and facilitators are audited and badged.</>],
+                  ["Ethical Source", "Direct relationships with Gabonese growers. Nagoya-compliant."],
+                  ["Legal Pathways", "Jurisdiction-aware referrals into licensed clinical access."],
+                  ["Philanthropy", "Holders redirect their reflection — never receive their own."],
                 ].map(([t, d]) => (
-                  <li key={t} className="flex gap-4">
+                  <li key={t as string} className="flex gap-4">
                     <div className="size-2 rounded-full bg-gold mt-2 shrink-0" />
                     <div>
                       <h4 className="font-semibold text-forest">{t}</h4>
@@ -236,20 +272,20 @@ function Home() {
                   Buy GAINE
                 </Link>
                 <Link to="/gaine" className="border border-forest/20 text-forest px-8 py-3.5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-forest hover:text-earth transition-colors">
-                  How GAINE Works
+                  Redirect Your Yield
                 </Link>
               </div>
             </div>
             <div className="bg-white rounded-3xl p-8 shadow-xl border border-gold/20">
               <div className="flex justify-between items-center mb-8">
-                <h4 className="font-semibold uppercase tracking-[0.2em] text-[10px] text-forest/40">Marketplace Activity</h4>
+                <h4 className="font-semibold uppercase tracking-[0.2em] text-[10px] text-forest/40">Live Impact Dashboard</h4>
                 <span className="text-[10px] font-mono text-gold flex items-center gap-1.5"><span className="size-1.5 rounded-full bg-gold animate-pulse" />LIVE</span>
               </div>
               <div className="space-y-7">
                 {[
                   ["Trees Planted (Gabon)", "14,202", 75],
-                  ["Forward Contracts Active", "38", 55],
-                  ["USDC to Gabon Farmers", "$84,200", 40],
+                  ["Funds to Traditional Healers", "$84,200 USDC", 40],
+                  ["Clinical Treatments Funded", "62", 55],
                 ].map(([l, v, p]) => (
                   <div key={l as string}>
                     <div className="flex justify-between text-sm mb-2 font-medium text-forest">
@@ -260,6 +296,19 @@ function Home() {
                     </div>
                   </div>
                 ))}
+                <div className="pt-6 border-t border-forest/5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-forest/40 uppercase tracking-widest">Active Nomination</span>
+                    <span className="text-[10px] font-bold text-moss uppercase">Care Fund Open</span>
+                  </div>
+                  <div className="mt-4 p-4 bg-earth rounded-xl">
+                    <p className="text-sm italic text-forest mb-3 leading-snug">"Treatment for Marcus — 10 years of opioid dependency."</p>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="font-bold text-forest">$3,200 / $5,000</span>
+                      <Link to="/nominate" className="text-xs font-bold text-gold uppercase tracking-wider">Contribute →</Link>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -277,35 +326,37 @@ function Home() {
         </div>
         <div className="grid md:grid-cols-3 gap-8">
           <MarketplaceCard
-            title="Root Bark & Extracts"
-            desc="Sustainably harvested, lab-tested, Decree 0239-aligned."
-            to="/marketplace"
-            img={ibogaRoot}
-            badge="Products"
+            title="Find a Facilitator"
+            desc="Clinical, traditional, retreat — verified globally."
+            to="/find"
+            img={ceremonySpace}
+            badge="Directory"
           />
           <MarketplaceCard
-            title="Forward Tree Contracts"
-            desc="Purchase today. Take delivery in 6+ years. Fund farmer working capital."
-            to="/marketplace"
-            img={seedling}
-            badge="Forward"
-            hash="forward-contracts"
-          />
-          <MarketplaceCard
-            title="GAINE-Verified Listings"
-            desc="Network-verified suppliers with on-chain traceability."
-            to="/marketplace"
+            title="Support a Farm"
+            desc="Direct Gabonese growers. Reforestation tracked on-chain."
+            to="/impact"
             img={gabonPlantation}
-            badge="Verified"
+            badge="Sourcing"
           />
+          <MarketplaceCard
+            title="Sponsor a Treatment"
+            desc="Nominate a person. Fund their access to care."
+            to="/nominate"
+            img={seedling}
+            badge="Care"
+          />
+        </div>
+        <div className="mt-12 text-center text-sm text-forest/60 italic">
+          Every transaction plants trees in Gabon. <span className="text-gold-deep font-semibold not-italic">Live impact counter →</span>
         </div>
       </section>
 
-      {/* CONSERVATION / GABON */}
+      {/* IMPACT IN GABON */}
       <section className="py-24 px-6 bg-forest text-earth">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Conservation</span>
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Live Impact</span>
             <h2 className="font-serif text-4xl md:text-5xl mt-4 italic">Rooted in Gabon</h2>
             <p className="text-earth/60 mt-6 max-w-2xl mx-auto leading-relaxed">
               Committed to advancing implementation of Gabon Decree 0239 (May 22, 2026). Every transaction supports
@@ -317,7 +368,7 @@ function Home() {
               ["14,202", "Trees Planted"],
               ["840", "Families Supported"],
               ["$284K", "USDC to Gabon"],
-              ["14", "Partner Farms"],
+              ["14", "Farms Certified"],
             ].map(([n, l]) => (
               <div key={l} className="text-center">
                 <div className="font-serif text-5xl md:text-6xl text-gold mb-3">{n}</div>
@@ -343,10 +394,30 @@ function Home() {
                 smallholders. Plot coordinates recorded. Verification open.
               </p>
               <Link to="/impact" className="inline-flex items-center text-gold font-semibold tracking-wider uppercase text-sm border-b border-gold/40 pb-1">
-                See conservation dashboard →
+                See the impact dashboard →
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* JOIN ON TELEGRAM */}
+      <section className="py-28 px-6 text-center">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="font-serif text-5xl md:text-7xl text-forest italic mb-6 leading-[0.95]">
+            Plant a Seed Today.
+          </h2>
+          <p className="text-lg text-forest/70 mb-10 max-w-xl mx-auto">
+            Join the Garden on Telegram. Quarterly impact reports, sourcing updates, and field stories from Gabon.
+          </p>
+          <a
+            href="https://t.me/flextokens"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center bg-forest text-earth px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-moss transition-colors"
+          >
+            Join on Telegram →
+          </a>
         </div>
       </section>
     </>

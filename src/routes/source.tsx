@@ -50,6 +50,19 @@ function Source() {
             Or <Link to="/network" className="text-gold underline">register your facility</Link> for ongoing sourcing partnerships.
           </p>
         </div>
+
+        <div className="mt-10 bg-bone border border-forest/10 rounded-3xl p-8 text-center">
+          <h3 className="font-serif text-2xl italic text-forest mb-3">Ready to buy?</h3>
+          <p className="text-sm text-forest/70 mb-6 leading-relaxed">
+            Browse the marketplace for bulk iboga root bark, extracts, and verified iboga products — or list your own supply.
+          </p>
+          <Link
+            to="/marketplace"
+            className="inline-flex items-center bg-gold text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/90 transition-colors"
+          >
+            Marketplace · Buy Bulk Iboga →
+          </Link>
+        </div>
       </section>
     </>
   );

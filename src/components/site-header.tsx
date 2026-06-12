@@ -3,8 +3,10 @@ import { useState } from "react";
 import { Logo } from "@/components/logo";
 
 const NAV = [
+  { to: "/learn", label: "Learn" },
   { to: "/marketplace", label: "Marketplace" },
   { to: "/gaine", label: "GAINE" },
+  { to: "/source", label: "Source Bulk" },
 ] as const;
 
 export function SiteHeader() {

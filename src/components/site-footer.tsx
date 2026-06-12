@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 const LAUNCH_LINKS = [
   { to: "/marketplace", label: "Marketplace" },
   { to: "/gaine", label: <>GAINE Token</>, gaine: true },
-  { to: "/marketplace#forward-contracts", label: "Forward Contracts", external: true },
   { to: "/source", label: "Source Consultation" },
 ] as const;
 
@@ -36,8 +35,8 @@ export function SiteFooter() {
               </p>
               <p>
                 You must be 18+ (or the legal age of majority in your jurisdiction). Users are solely responsible for
-                compliance with all applicable laws. All marketplace transactions and forward contracts are between
-                independent parties — we provide the platform only.
+                compliance with all applicable laws. All marketplace transactions are between independent parties —
+                we provide the platform only.
               </p>
             </div>
           </div>

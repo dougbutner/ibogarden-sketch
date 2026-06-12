@@ -5,28 +5,30 @@ export const Route = createFileRoute("/marketplace")({
   head: () => ({
     meta: [
       { title: "Marketplace — ibo.garden" },
-      { name: "description", content: "Commodity marketplace for ethically sourced Iboga under Gabon Decree 0239. Root bark, forward tree contracts, and GAINE-verified listings." },
-      { property: "og:title", content: "ibo.garden Marketplace — Ethical Iboga Commodities" },
-      { property: "og:description", content: "Root bark, forward contracts, and Decree 0239-aligned sourcing." },
+      { name: "description", content: "Treatments, ceremonies, training, products, sponsorships. Network-verified, GAINE-certified listings." },
+      { property: "og:title", content: "ibo.garden Marketplace" },
+      { property: "og:description", content: "Treatments, training, ceremonies, and care sponsorship." },
     ],
   }),
   component: Marketplace,
 });
 
 const CATEGORIES = [
-  { title: "Products", desc: "Root bark, extracts, lab-tested commodities", icon: "◈", id: undefined },
-  { title: "Forward Contracts", desc: "Purchase a tree today · delivery in 6+ years", icon: "🌱", id: "forward-contracts" },
-  { title: "Sourcing", desc: "Direct Gabon farms · Decree 0239-aligned", icon: "◉", id: undefined },
-  { title: "Training", desc: <>Supplier onboarding · <span className="gaine-word gaine-word-sm">GAINE</span>-verified</>, icon: "❋", id: undefined },
+  { title: "Treatments", desc: "Clinical programs · nominate funds at checkout", icon: "✦" },
+  { title: "Ceremonies", desc: "Traditional Bwiti · in-person and virtual", icon: "◉" },
+  { title: "Training", desc: <>Facilitation, certification, <span className="gaine-word gaine-word-sm">GAINE</span>-gated</>, icon: "❋" },
+  { title: "Products", desc: "Root bark, extracts, tools, courses", icon: "◈" },
+  { title: "Donations", desc: "General, project-specific, recurring", icon: "♢" },
+  { title: "Sponsorship", desc: "Sponsor a Treatment · Support a Farm", icon: "✤" },
 ];
 
 const LISTINGS = [
+  { title: "Clinical Iboga Protocol — 10 days", cat: "Treatment", price: "$8,400", loc: "Costa Rica", cert: "GAINE" },
+  { title: "Bwiti Initiation Ceremony", cat: "Ceremony", price: "By inquiry", loc: "Gabon", cert: "Decree 0239" },
+  { title: "Facilitator Training · Level 1", cat: "Training", price: "$1,200", loc: "Online", cert: "GAINE" },
   { title: "Sustainable Root Bark (50g)", cat: "Product", price: "$145", loc: "Direct · Gabon", cert: "Nagoya" },
-  { title: "Iboga Tree Forward Contract — 6yr", cat: "Forward Contract", price: "$420", loc: "Gabon · Smallholder", cert: "Decree 0239" },
-  { title: "Premium Root Bark (100g)", cat: "Product", price: "$280", loc: "Direct · Gabon", cert: "GAINE" },
-  { title: "Iboga Extract — Pharmaceutical Grade", cat: "Product", price: "$1,200", loc: "Lab-tested · Gabon", cert: "Nagoya" },
-  { title: "Farm Forward Contract — 8yr", cat: "Forward Contract", price: "$680", loc: "Gabon · Cooperative", cert: "Decree 0239" },
-  { title: "Bulk Root Bark (1kg)", cat: "Product", price: "$2,400", loc: "Direct · Gabon", cert: "GAINE" },
+  { title: "Sponsor Marcus' Recovery", cat: "Sponsorship", price: "$3,200 / $5,000", loc: "Mexico", cert: "Care Fund" },
+  { title: "Integration Coaching · 6 sessions", cat: "Treatment", price: "$680", loc: "Remote", cert: "GAINE" },
 ];
 
 function Marketplace() {
@@ -34,8 +36,8 @@ function Marketplace() {
     <>
       <PageHeader
         eyebrow="Marketplace"
-        title="Ethically sourced. Decree 0239-aligned."
-        lead="Commodity marketplace for Iboga root bark, forward tree contracts, and verified Gabonese sourcing. Every transaction supports conservation."
+        title="Network-verified, transparently sourced."
+        lead="Only Network-registered partners may list. Every transaction plants trees in Gabon."
       >
         <div className="mt-8 inline-flex items-center gap-3 text-sm text-forest/60 bg-bone px-4 py-2 rounded-full">
           <span className="size-2 rounded-full bg-gold animate-pulse" /> Impact this month: 1,240 trees · 38 families
@@ -43,7 +45,7 @@ function Marketplace() {
       </PageHeader>
 
       <section className="px-6 max-w-7xl mx-auto pb-16">
-        <div id="forward-contracts" className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12 scroll-mt-24">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-12">
           {CATEGORIES.map((c) => (
             <button key={c.title} className="bg-white border border-forest/10 rounded-2xl p-5 text-left hover:border-gold/40 transition-colors">
               <div className="text-gold text-2xl mb-3">{c.icon}</div>
@@ -80,7 +82,7 @@ function Marketplace() {
         <div className="mt-16 bg-forest text-earth rounded-3xl p-10 grid md:grid-cols-2 gap-8 items-center">
           <div>
             <h3 className="font-serif text-3xl italic mb-3">List on the Marketplace</h3>
-            <p className="text-earth/70">Register your farm or supplier in the Network. All listings are reviewed before publishing.</p>
+            <p className="text-earth/70">Register your facility, practice, or farm in the Network. All listings are reviewed before publishing.</p>
           </div>
           <div className="md:text-right">
             <Link to="/network" className="inline-block bg-gold text-forest px-7 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/90 transition-colors">Register in Network</Link>
