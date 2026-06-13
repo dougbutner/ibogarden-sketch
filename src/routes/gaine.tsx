@@ -1,45 +1,103 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHeader } from "@/components/page-header";
+import { GainePanels } from "@/components/gaine/gaine-panels";
+import { RotatingWord } from "@/components/gaine/rotating-word";
+import {
+  GAINE_INFO_PANELS,
+  GAINE_MAX_SUPPLY,
+  GAINE_METADATA_URL,
+  GAINE_ROTATING_WORDS,
+} from "@/data/gaine";
+import { formatGainePrice, useGainePrice } from "@/hooks/useGainePrice";
 
 export const Route = createFileRoute("/gaine")({
   head: () => ({
     meta: [
-      { title: "GAINE Token — ibo.garden" },
-      { name: "description", content: "GAINE SPL token — the settlement layer for ethically sourced Iboga under Gabon Decree 0239. 2% reflection directed to sourcing, conservation, and Gabon communities." },
-      { property: "og:title", content: "GAINE — Iboga Marketplace Token on Solana" },
-      { property: "og:description", content: "SPL on Solana · 2% reflection redirected to Gabon sourcing and conservation." },
+      { title: "GAINE Token on Solana — ibo.garden" },
+      {
+        name: "description",
+        content:
+          "GAINE is a Solana SPL token, 100% liquid-backed by trusted stablecoins. A 2% transfer tax becomes USDC — you choose where it goes.",
+      },
+      { property: "og:title", content: "GAINE Token on Solana" },
+      {
+        property: "og:description",
+        content: "Digitally empowered impact. Liquid-backed SPL on Solana with directed 2% reflection.",
+      },
     ],
   }),
   component: Gaine,
 });
 
 const DIRECTIONS = [
-  { key: "Sourcing", desc: "Ethical farms, Gabon plantations, supply chain traceability." },
+  { key: "Sourcing", desc: "Ethical farms, Gabon farms, supply chain traceability." },
   { key: "Conservation", desc: "Reforestation, farmer working capital, Gabon smallholder support." },
   { key: "Gabon Communities", desc: "Benefit-sharing with traditional communities under Decree 0239." },
   { key: "Specific Project", desc: "USDC sent directly to an approved project wallet." },
 ];
 
+function GaineStats() {
+  const { data: price, isLoading, isFetching } = useGainePrice();
+  const priceLabel = formatGainePrice(price, isLoading || isFetching);
+
+  return (
+    <dl className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl">
+      {[
+        ["Max Supply", `${GAINE_MAX_SUPPLY} GAINE`],
+        ["Initial Price", "$1.00 USD"],
+        ["Current Price", priceLabel],
+      ].map(([label, value]) => (
+        <div key={label} className="bg-bone/80 border border-forest/10 rounded-2xl px-5 py-4">
+          <dt className="text-[10px] font-semibold uppercase tracking-[0.2em] text-forest/45 mb-1">{label}</dt>
+          <dd className="font-serif text-xl italic text-forest">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 function Gaine() {
   const [pick, setPick] = useState("Sourcing");
+
   return (
     <>
       <PageHeader
-        eyebrow={<><span className="gaine-word gaine-word-sm">GAINE</span> Token</>}
-        title="The marketplace settlement token."
-        lead={<>Under Gabon Decree 0239 (22 May 2026), <span className="gaine-word gaine-word-sm">GAINE</span> is the marketplace settlement token — a Solana SPL with 100% liquidity on Orca, paired with trusted stablecoins (~$1 USD). A 2% transfer tax becomes USDC, and you choose where it goes: sourcing, conservation, Gabon communities, or a specific project.</>}
-      />
+        eyebrow="GAINE Token on Solana"
+        title={
+          <>
+            Digitally Empowered <RotatingWord words={GAINE_ROTATING_WORDS} />
+          </>
+        }
+        lead={
+          <>
+            <span className="gaine-word gaine-word-sm">GAINE</span> is a Solana SPL token 100% liquid-backed by
+            trusted stablecoins (~$1 USD). A 2% transfer tax is converted to USDC, and you choose where it goes.
+          </>
+        }
+      >
+        <GaineStats />
+        <p className="mt-6 text-xs text-forest/45">
+          <a
+            href={GAINE_METADATA_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 decoration-forest/20 hover:text-gold transition-colors"
+          >
+            On-chain token metadata →
+          </a>
+        </p>
+      </PageHeader>
 
       <section className="px-6 max-w-7xl mx-auto pb-16 grid lg:grid-cols-2 gap-12">
         <div className="bg-white border border-forest/10 rounded-3xl p-8 md:p-10">
-          <h2 className="font-serif text-3xl italic text-forest mb-6">Token Mechanics</h2>
+          <h2 className="font-serif text-3xl italic text-forest mb-6">Buy GAINE</h2>
           <dl className="space-y-5">
             {[
-              ["Network", "Solana · SPL standard"],
-              ["Liquidity", "100% on Orca, paired with trusted stablecoins"],
-              ["Target peg", "~$1 USD"],
-              ["Transfer tax", "2% (representative reflection)"],
+              ["Network", "Solana · SPL Token-2022"],
+              ["Backing", "100% liquid — paired with trusted stablecoins"],
+              ["Launch price", "~$1 USD"],
+              ["Transfer tax", "2% → USDC reflection"],
               ["Holder rule", "Cannot receive own reflection — must redirect"],
               ["Default", "No selection → balanced project split"],
             ].map(([k, v]) => (
@@ -77,6 +135,20 @@ function Gaine() {
         </div>
       </section>
 
+      <section className="px-6 pb-20 max-w-7xl mx-auto">
+        <div className="mb-8 md:mb-10">
+          <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">How GAINE is different</span>
+          <h2 className="font-serif text-3xl md:text-4xl italic text-forest mt-3">
+            Impact without giving up your principal
+          </h2>
+          <p className="text-forest/65 mt-4 max-w-2xl leading-relaxed">
+            Traditional impact funds ask you to donate or lock capital. GAINE keeps your dollars liquid and backed while
+            routing transfer fees to the causes you choose.
+          </p>
+        </div>
+        <GainePanels panels={GAINE_INFO_PANELS} />
+      </section>
+
       <section className="px-6 py-20 bg-bone">
         <div className="max-w-7xl mx-auto">
           <h2 className="font-serif text-4xl italic text-forest text-center mb-12">Fund Split Transparency</h2>
@@ -102,7 +174,7 @@ function Gaine() {
             <h2 className="font-serif text-2xl italic text-forest mb-2">Legal framework</h2>
             <p className="text-sm text-forest/70 leading-relaxed max-w-xl">
               GAINE operates under Gabon Decree 0239 — supporting traceability, community benefit-sharing, and
-              certified export from legal plantations.
+              certified export from legal farms.
             </p>
           </div>
           <Link
@@ -118,11 +190,17 @@ function Gaine() {
           <div className="grid md:grid-cols-2 gap-5">
             <div className="bg-white border border-forest/10 rounded-3xl p-7">
               <h3 className="font-semibold text-forest mb-2">Marketplace Settlement</h3>
-              <p className="text-sm text-forest/65">Use <span className="gaine-word gaine-word-sm">GAINE</span> to purchase products, treatments, and verified listings on the marketplace.</p>
+              <p className="text-sm text-forest/65">
+                Use <span className="gaine-word gaine-word-sm">GAINE</span> to purchase products, treatments, and
+                verified listings on the marketplace.
+              </p>
             </div>
             <div className="bg-white border border-forest/10 rounded-3xl p-7">
               <h3 className="font-semibold text-forest mb-2">Supplier Rewards</h3>
-              <p className="text-sm text-forest/65">Certified farms and suppliers earn <span className="gaine-word gaine-word-sm">GAINE</span> rewards for verified sourcing activity.</p>
+              <p className="text-sm text-forest/65">
+                Certified farms and suppliers earn <span className="gaine-word gaine-word-sm">GAINE</span> rewards for
+                verified sourcing activity.
+              </p>
             </div>
           </div>
         </div>

@@ -27,16 +27,20 @@ export function SiteFooter() {
             </p>
             <div className="text-sm text-earth/50 leading-relaxed max-w-lg space-y-3">
               <p>
-                <strong className="text-earth/70">Important:</strong> This is a commodity marketplace and{" "}
-                <span className="gaine-word gaine-word-sm">GAINE</span> token platform for ethically sourced Iboga.
-                Iboga and ibogaine carry serious health risks and are heavily regulated or prohibited in many
-                jurisdictions (including Schedule I in the US). Nothing on this site is medical, therapeutic, legal,
-                or investment advice.
+                <strong className="text-earth/70">Important:</strong>{" "}
+                <span className="gaine-word gaine-word-sm">GAINE</span> is a reciprocating utility token in a
+                networking platform designed to legally expand, not an investment opportunity. Iboga and ibogaine
+                carry serious health risks and may be illegal in many jurisdictions. Nothing here is medical, legal,
+                therapeutic, or investment advice.
               </p>
               <p>
-                You must be 18+ (or the legal age of majority in your jurisdiction). Users are solely responsible for
-                compliance with all applicable laws. All marketplace transactions are between independent parties —
-                we provide the platform only.
+                Some features may be experimental or nonfunctional as this platform is still being built, and we
+                assume no liability. This site does not imply approval, endorsement, or any contractual relationship
+                with governments or indigenous groups.
+              </p>
+              <p>
+                You must be 21+ to use. Users are responsible for complying with all laws. Marketplace transactions
+                are between independent parties; we provide the platform only.
               </p>
             </div>
           </div>

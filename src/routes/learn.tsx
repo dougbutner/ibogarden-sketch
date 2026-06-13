@@ -28,24 +28,13 @@ function Learn() {
   return (
     <>
       <PageHeader eyebrow="Knowledge" title="Iboga">
-        <p className="text-sm text-forest/55 italic mt-6 border-l-2 border-gold/40 pl-4 max-w-xl">
-          Note from the team.
+        <p className="text-lg md:text-xl text-forest/80 leading-relaxed font-serif italic mt-6 max-w-2xl">
+          Steeped in tradition, strong with the power of the forrest, Iboga stands poised and ready to enter the
+          western consciousness
         </p>
-        <div className="mt-8 space-y-2 max-w-2xl">
-          <p className="text-lg md:text-xl text-forest/80 leading-relaxed font-serif italic">
-            Understanding is the medicine.
-          </p>
-          <p className="text-lg md:text-xl text-forest/70 leading-relaxed">
-            The dreamlike reality awaits those who taste the root.
-          </p>
-          <p className="text-base md:text-lg text-forest/65 leading-relaxed">
-            If you are called to iboga, you may discover why in these videos.
-          </p>
-        </div>
       </PageHeader>
 
       <section className="px-6 max-w-7xl mx-auto pb-20">
-        <h2 className="font-serif text-3xl italic text-forest mb-8">Video Journeys</h2>
         <VideoJourneys playlists={VIDEO_PLAYLISTS} />
       </section>
 

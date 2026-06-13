@@ -142,7 +142,7 @@ function Decree() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4 text-forest/80 leading-relaxed">
               <p>
-                Decree 0239 establishes Gabon's sovereign framework for Iboga — from wild harvest and plantation
+                Decree 0239 establishes Gabon's sovereign framework for Iboga — from wild harvest and farm
                 cultivation to research, processing, domestic trade, and export. It applies to Iboga in all forms,
                 ibogaine and all related alkaloids, and any compound whose properties were first identified from
                 Iboga, regardless of where it is later produced.
@@ -249,7 +249,7 @@ function Decree() {
         <Section id="export" title="Export & certification">
           <div className="grid md:grid-cols-2 gap-8 items-start">
             <p className="text-forest/80 leading-relaxed">
-              Export of Iboga from legal, certified plantations is permitted under a national certification system
+              Export of Iboga from legal, certified farms is permitted under a national certification system
               guaranteeing traceability, environmental standards, and benefit-sharing (Article 10). Producers —
               individually, collectively, or supported by accredited operators — may access international markets
               directly, in compliance with this decree.
@@ -257,7 +257,7 @@ function Decree() {
             <div className="bg-gold/10 border border-gold/25 rounded-3xl p-8">
               <h3 className="font-serif text-xl italic text-forest mb-3">Certification requirements</h3>
               <ul className="space-y-2 text-sm text-forest/75">
-                <li>Legal, certified plantation origin</li>
+                <li>Legal, certified farm origin</li>
                 <li>National traceability system</li>
                 <li>Environmental compliance</li>
                 <li>Documented benefit-sharing with communities</li>
@@ -363,10 +363,10 @@ function Decree() {
             </p>
             <div className="grid md:grid-cols-2 gap-6 mb-10">
               {[
-                ["Traceability", "On-chain records for plantation origin, harvest batches, and export certification."],
+                ["Traceability", "On-chain records for farm origin, harvest batches, and export certification."],
                 ["Benefit-sharing", "GAINE reflection and fund splits direct value to Gabonese communities and the Sovereign Iboga Fund."],
                 ["Community consent", "Network partners work with indigenous and local communities as required stakeholders."],
-                ["Certified export", "Listings require Decree 0239-aligned certification for legal plantation-sourced Iboga."],
+                ["Certified export", "Listings require Decree 0239-aligned certification for legal farm-sourced Iboga."],
                 ["Traditional knowledge", "Commercial use of Bwiti-associated knowledge requires authorization and benefit-sharing agreements."],
                 ["Fair pricing", "Marketplace pricing respects the State's minimum indicative price framework."],
               ].map(([t, d]) => (

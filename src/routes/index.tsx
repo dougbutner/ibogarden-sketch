@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import heroForest from "@/assets/hero-forest.jpg";
 import ibogaRoot from "@/assets/iboga-root.jpg";
-import gabonPlantation from "@/assets/gabon-plantation.jpg";
+import gabonFarm from "@/assets/gabon-farm.jpg";
 import seedling from "@/assets/seedling.jpg";
 import ceremonySpace from "@/assets/ceremony-space.jpg";
 import { useHoverParallax, useParallax } from "@/hooks/useParallax";
@@ -336,7 +336,7 @@ function Home() {
             title="Support a Farm"
             desc="Direct Gabonese growers. Reforestation tracked on-chain."
             to="/impact"
-            img={gabonPlantation}
+            img={gabonFarm}
             badge="Sourcing"
           />
           <MarketplaceCard
@@ -348,7 +348,7 @@ function Home() {
           />
         </div>
         <div className="mt-12 text-center text-sm text-forest/60 italic">
-          Every transaction plants trees in Gabon. <span className="text-gold-deep font-semibold not-italic">Live impact counter →</span>
+          <span className="text-gold-deep font-semibold not-italic">Live impact counter →</span>
         </div>
       </section>
 
@@ -386,8 +386,8 @@ function Home() {
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div className="overflow-hidden rounded-3xl">
               <img
-                src={gabonPlantation}
-                alt="Iboga plantation in Gabon"
+                src={gabonFarm}
+                alt="Iboga farm in Gabon"
                 loading="lazy"
                 ref={impactParallax.ref}
                 style={impactParallax.style}

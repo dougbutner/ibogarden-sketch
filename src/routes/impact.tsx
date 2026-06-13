@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/page-header";
-import gabonPlantation from "@/assets/gabon-plantation.jpg";
+import gabonFarm from "@/assets/gabon-farm.jpg";
 import seedling from "@/assets/seedling.jpg";
 
 export const Route = createFileRoute("/impact")({
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/impact")({
       { name: "description", content: "Live impact dashboard. Trees planted, people helped, USDC to Gabon, certified farms. Photography and stories from partners." },
       { property: "og:title", content: "Impact in Gabon — ibo.garden" },
       { property: "og:description", content: "Live dashboard and reforestation tracking." },
-      { property: "og:image", content: gabonPlantation },
+      { property: "og:image", content: gabonFarm },
     ],
   }),
   component: Impact,
@@ -43,7 +43,7 @@ function Impact() {
       </section>
 
       <section className="px-6 py-16 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-center">
-        <img src={gabonPlantation} alt="Gabon iboga plantation" loading="lazy" className="rounded-3xl w-full aspect-[4/3] object-cover" />
+        <img src={gabonFarm} alt="Gabon iboga farm" loading="lazy" className="rounded-3xl w-full aspect-[4/3] object-cover" />
         <div>
           <h2 className="font-serif text-4xl italic text-forest mb-5">Reforestation Program</h2>
           <p className="text-forest/75 leading-relaxed mb-6">
@@ -82,7 +82,7 @@ function Impact() {
           <p className="text-forest/75 leading-relaxed mb-6">
             Fourteen partner farms across Estuaire and Ogooué-Maritime. Plot coordinates recorded, quarterly drone
             surveys, and on-ground audits verify every tree planted under Decree 0239 — which requires legal
-            plantation certification, traceability, and benefit-sharing with Gabonese communities.
+            farm certification, traceability, and benefit-sharing with Gabonese communities.
           </p>
           <p className="text-sm text-forest/60">
             Partner stories and field reports will be published as verified partnerships are established.

@@ -51,7 +51,7 @@ function About() {
             <p className="text-sm text-forest/70 leading-relaxed mb-4">
               Gabon's Presidential Decree 0239 (22 May 2026) establishes sovereign control over Iboga, its
               derivatives, and associated traditional knowledge — requiring prior authorization, community
-              consultation, traceable export from certified plantations, and fair benefit-sharing. We operate
+              consultation, traceable export from certified farms, and fair benefit-sharing. We operate
               within this framework and the Nagoya Protocol, under guidance from a Bwiti Practitioner Council.
             </p>
             <Link to="/decree" className="text-xs font-semibold uppercase tracking-widest text-gold hover:text-gold-deep">

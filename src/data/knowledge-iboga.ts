@@ -5,9 +5,16 @@ export type KnowledgeLink = {
   source?: string;
 };
 
+export type FeaturedPlaylist = {
+  title: string;
+  href: string;
+};
+
 export type VideoPlaylist = {
   id: string;
   title: string;
+  /** In-browser YouTube playlist shown at the top of the category */
+  featuredPlaylist?: FeaturedPlaylist;
   videos: KnowledgeLink[];
 };
 
@@ -211,12 +218,29 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
   {
     id: "about-iboga",
     title: "About Iboga",
+    featuredPlaylist: {
+      title: "About Iboga",
+      href: "https://www.youtube.com/playlist?list=UUQz_zD73FpfRbhvSXpljtZA",
+    },
     videos: [
       {
-        title: "Ibogaine: Rite of Passage (ICEERS excerpt)",
-        href: "https://www.youtube.com/watch?v=3s6xiDEqsjU",
+        title: "Ibogaine: Rite of Passage",
+        href: "https://www.youtube.com/watch?v=vt0E8N4FRFY",
         description:
           "Excerpt of ICEERS' documentary showing a traditional Bwiti ritual in Gabon — the clearest short window into where this medicine actually comes from.",
+        source: "YouTube",
+      },
+      {
+        title: "About Iboga",
+        href: "https://www.youtube.com/watch?v=GSs-BVy2MC0",
+        description: "An introduction to iboga — plant, tradition, and why it matters now.",
+        source: "YouTube",
+      },
+      {
+        title: "Iboga: Evolution of Culture",
+        href: "https://www.youtube.com/watch?v=rzj-Bp4fo9A",
+        description:
+          "A documentary on how iboga shaped Bwiti culture and continues to evolve as tradition meets a global audience.",
         source: "YouTube",
       },
       {
@@ -228,10 +252,10 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
       },
       {
         title: "Iboga / Bwiti School of Life",
-        href: "https://www.jameswjesso.com/iboga-bwiti-school-of-life/",
+        href: "https://www.youtube.com/watch?v=REofdD1cWFY",
         description:
           "A podcast and webinar series in which long-time Gabon resident Tatayo explains Bwiti not as a drug experience but as an entire way of understanding life learned from iboga.",
-        source: "ATTMind",
+        source: "YouTube",
       },
       {
         title: "Iboga basic info",
@@ -245,6 +269,10 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
   {
     id: "iboga-facilitators",
     title: "Iboga Facilitators",
+    featuredPlaylist: {
+      title: "Bwiti House",
+      href: "https://www.youtube.com/playlist?list=UUzBkWfmJtHFmTLaXzi-LlBw",
+    },
     videos: [
       {
         title: "GITA context-of-care guidelines",
@@ -260,18 +288,15 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
           "A practical, question-by-question guide to interviewing a clinic or facilitator before you commit, written to help you walk away from the wrong ones.",
         source: "InnerVision Ibogaine",
       },
-      {
-        title: "The Ibogaine Stories",
-        href: "https://theibogainestories.com/",
-        description:
-          "A film project gathering the voices of the people who built ibogaine treatment — researchers, Bwiti ngangas, and recovered patients — in their own words.",
-        source: "The Ibogaine Stories",
-      },
     ],
   },
   {
     id: "healing-stories",
     title: "Healing Stories",
+    featuredPlaylist: {
+      title: "Healing Journey",
+      href: "https://www.youtube.com/playlist?list=PLRRVgL5-YYRVyA1R_XzJXOZGf0_BhZh_k",
+    },
     videos: [
       {
         title: "In Waves and War",
@@ -279,13 +304,6 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
         description:
           "Home of the Netflix (2025) film following three U.S. veterans through ibogaine treatment and the limits of conventional care that drove them to seek it.",
         source: "Ambio Life Sciences",
-      },
-      {
-        title: "The Ibogaine Stories (patient testimony)",
-        href: "https://theibogainestories.com/",
-        description:
-          "Firsthand patient testimony, including the recurring account of fear of death simply lifting after a session.",
-        source: "The Ibogaine Stories",
       },
       {
         title: "We Are Bwitiful — documentary roundup",
@@ -302,7 +320,7 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
     videos: [
       {
         title: "Traditional Bwiti ritual (Gabon)",
-        href: "https://www.youtube.com/watch?v=3s6xiDEqsjU",
+        href: "https://www.youtube.com/watch?v=vt0E8N4FRFY",
         description: "Featured excerpt of a traditional Bwiti ritual filmed in Gabon.",
         source: "YouTube",
       },
