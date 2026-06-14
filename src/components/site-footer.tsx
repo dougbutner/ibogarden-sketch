@@ -9,6 +9,7 @@ const LAUNCH_LINKS = [
 const MORE_LINKS = [
   { to: "/about", label: "About" },
   { to: "/learn", label: "Knowledge" },
+  { to: "/share", label: "Share" },
   { to: "/find", label: "Find" },
   { to: "/network", label: "Network" },
   { to: "/impact", label: "Impact" },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import type { GainePanel } from "@/data/gaine";
 import gaineToken from "@/assets/gaine-token.png";
 import ibogaRoot from "@/assets/iboga-root.jpg";
@@ -14,16 +14,21 @@ const PANEL_IMAGES: Record<string, string> = {
 
 function PanelParagraph({ paragraph }: { paragraph: GainePanel["paragraphs"][number] }) {
   if (typeof paragraph === "string") {
-    return <p className="text-sm md:text-base text-earth/75 leading-relaxed">{paragraph}</p>;
+    return (
+      <p className="text-sm md:text-base leading-relaxed" style={{ color: "color-mix(in srgb, var(--gaine-text) 75%, transparent)" }}>
+        {paragraph}
+      </p>
+    );
   }
 
   return (
-    <p className="text-sm md:text-base text-earth/75 leading-relaxed">
+    <p className="text-sm md:text-base leading-relaxed" style={{ color: "color-mix(in srgb, var(--gaine-text) 75%, transparent)" }}>
       <a
         href={paragraph.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-gold underline underline-offset-4 decoration-gold/40 hover:text-gold/80 transition-colors"
+        className="underline underline-offset-4 transition-colors hover:opacity-80"
+        style={{ color: "var(--gaine-accent)" }}
       >
         {paragraph.text}
       </a>
@@ -45,9 +50,10 @@ function GainePanelCard({
 
   return (
     <div
-      className={`relative min-w-0 h-full overflow-hidden rounded-2xl ring-1 ring-gold/20 transition-[flex] duration-500 ease-[cubic-bezier(0.55,0,0.1,1)] ${
+      className={`relative min-w-0 h-full overflow-hidden rounded-2xl ring-1 transition-[flex] duration-500 ease-[cubic-bezier(0.55,0,0.1,1)] ${
         open ? "flex-[4]" : "flex-[0.55] cursor-pointer"
       }`}
+      style={{ "--tw-ring-color": "color-mix(in srgb, var(--gaine-accent) 35%, transparent)" } as CSSProperties}
     >
       <button
         type="button"
@@ -61,9 +67,12 @@ function GainePanelCard({
       <div className="absolute inset-0">
         <img src={image} alt="" className="size-full object-cover" />
         <div
-          className={`absolute inset-0 transition-colors duration-500 ${
-            open ? "bg-forest/92" : "bg-forest/78"
-          }`}
+          className="absolute inset-0 transition-colors duration-500"
+          style={{
+            background: open
+              ? "color-mix(in srgb, var(--gaine-bg) 92%, transparent)"
+              : "color-mix(in srgb, var(--gaine-bg) 78%, transparent)",
+          }}
         />
       </div>
 
@@ -72,16 +81,22 @@ function GainePanelCard({
           open ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
-        <div className="text-[10px] uppercase tracking-[0.25em] text-gold/80">GAINE</div>
+        <div className="text-[10px] uppercase tracking-[0.25em]" style={{ color: "var(--gaine-accent)" }}>
+          GAINE
+        </div>
         <div className="flex flex-1 items-center justify-center">
-          <div className="size-12 rounded-full bg-gold/90 text-forest grid place-items-center shadow-lg">
+          <div
+            className="size-12 rounded-full grid place-items-center shadow-lg"
+            style={{ background: "var(--gaine-accent)", color: "var(--gaine-bg)" }}
+          >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <path d="M8 5v14l11-7z" />
             </svg>
           </div>
         </div>
         <h3
-          className="font-serif italic text-earth text-lg md:text-xl leading-tight [writing-mode:vertical-rl] rotate-180 self-end max-h-[14rem]"
+          className="gaine-display text-lg md:text-xl leading-tight [writing-mode:vertical-rl] rotate-180 self-end max-h-[14rem]"
+          style={{ color: "var(--gaine-text)" }}
           aria-hidden
         >
           {panel.title}
@@ -93,9 +108,13 @@ function GainePanelCard({
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
-        <div className="shrink-0 border-b border-earth/10 px-5 py-4">
-          <div className="text-[10px] uppercase tracking-[0.25em] text-gold mb-1">GAINE</div>
-          <h3 className="font-serif italic text-2xl text-earth">{panel.title}</h3>
+        <div className="shrink-0 border-b px-5 py-4" style={{ borderColor: "var(--gaine-border)" }}>
+          <div className="text-[10px] uppercase tracking-[0.25em] mb-1" style={{ color: "var(--gaine-accent)" }}>
+            GAINE
+          </div>
+          <h3 className="gaine-display text-2xl" style={{ color: "var(--gaine-text)" }}>
+            {panel.title}
+          </h3>
         </div>
 
         <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 space-y-4">

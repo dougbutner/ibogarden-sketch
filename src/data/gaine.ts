@@ -1,11 +1,43 @@
 export const GAINE_METADATA_URL =
   "https://raw.githubusercontent.com/dougbutner/Bridged-EASY-Contracts/refs/heads/main/metadata-gaine-main.json";
 
-/** Set VITE_GAINE_MINT when the Solana mint is live for DexScreener price feeds. */
-export const GAINE_MINT = import.meta.env.VITE_GAINE_MINT as string | undefined;
+export const GAINE_TOKEN_IMAGE =
+  "https://raw.githubusercontent.com/dougbutner/Bridged-EASY-Contracts/refs/heads/main/GAINE-token.png";
+
+export const GAINE_WHITEPAPER_URL = GAINE_METADATA_URL;
+
+/** Paste your Solana mint here, or set VITE_GAINE_MINT in env. */
+export const GAINE_CONTRACT_ADDRESS =
+  (import.meta.env.VITE_GAINE_MINT as string | undefined) ?? "";
+
+export const GAINE_ORCA_URL = "https://www.orca.so";
 
 export const GAINE_MAX_SUPPLY = "999,369";
-export const GAINE_INITIAL_PRICE = 1;
+export const GAINE_LAUNCH_PRICE = "$1.00";
+export const GAINE_TRANSFER_FEE = "2%";
+export const GAINE_PROGRAM = "Token-2022";
+
+export const GAINE_REFLECTION_DIRECTIONS = [
+  {
+    key: "Sourcing",
+    desc: "Ethical Gabon farms & supply-chain traceability",
+  },
+  {
+    key: "Conservation",
+    desc: "Reforestation & smallholder working capital",
+  },
+  {
+    key: "Gabon Communities",
+    desc: "Benefit-sharing under Decree 0239",
+  },
+  {
+    key: "Specific Project",
+    desc: "USDC sent to an approved project wallet",
+  },
+] as const;
+
+export const GAINE_DISCLAIMER =
+  "GAINE is a reciprocating utility token, not an investment opportunity. Iboga and ibogaine carry serious health risks and may be illegal in many jurisdictions. Nothing here is medical, legal, therapeutic, or investment advice. You must be 21+ to use. Committed to Gabon Decree 0239 & Nagoya Protocol.";
 
 export const GAINE_ROTATING_WORDS = [
   "Iboga",

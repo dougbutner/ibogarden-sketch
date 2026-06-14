@@ -19,14 +19,14 @@ type EmbedTarget = {
   src: string;
 };
 
-const PLAYLIST_IMAGES: Record<string, string> = {
+export const PLAYLIST_IMAGES: Record<string, string> = {
   "about-iboga": heroForest,
   "iboga-facilitators": ceremonySpace,
   "healing-stories": seedling,
   "video-journeys": ibogaRoot,
 };
 
-function parseYouTubePlaylistEmbed(href: string): string | null {
+export function parseYouTubePlaylistEmbed(href: string): string | null {
   try {
     const url = new URL(href);
     if (url.hostname.includes("youtube.com")) {
@@ -41,7 +41,7 @@ function parseYouTubePlaylistEmbed(href: string): string | null {
   return null;
 }
 
-function PlaylistEmbedDialog({
+export function PlaylistEmbedDialog({
   embed,
   onClose,
 }: {

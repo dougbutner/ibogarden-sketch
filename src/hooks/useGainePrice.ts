@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { GAINE_INITIAL_PRICE, GAINE_MINT } from "@/data/gaine";
+import { GAINE_CONTRACT_ADDRESS, GAINE_LAUNCH_PRICE } from "@/data/gaine";
 
 type DexScreenerResponse = {
   pairs?: Array<{ priceUsd?: string; baseToken?: { symbol?: string } }>;
 };
 
 async function fetchGainePrice(): Promise<number | null> {
-  if (!GAINE_MINT) return null;
+  if (!GAINE_CONTRACT_ADDRESS) return null;
 
-  const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${GAINE_MINT}`);
+  const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${GAINE_CONTRACT_ADDRESS}`);
   if (!res.ok) throw new Error("Price feed unavailable");
 
   const data = (await res.json()) as DexScreenerResponse;
@@ -20,9 +20,9 @@ async function fetchGainePrice(): Promise<number | null> {
 
 export function useGainePrice() {
   return useQuery({
-    queryKey: ["gaine-price", GAINE_MINT],
+    queryKey: ["gaine-price", GAINE_CONTRACT_ADDRESS],
     queryFn: fetchGainePrice,
-    enabled: Boolean(GAINE_MINT),
+    enabled: Boolean(GAINE_CONTRACT_ADDRESS),
     refetchInterval: 60_000,
     staleTime: 30_000,
     retry: 2,
@@ -31,6 +31,6 @@ export function useGainePrice() {
 
 export function formatGainePrice(price: number | null | undefined, loading: boolean) {
   if (loading) return "…";
-  if (price == null) return `$${GAINE_INITIAL_PRICE.toFixed(2)}`;
+  if (price == null) return GAINE_LAUNCH_PRICE;
   return `$${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
 }

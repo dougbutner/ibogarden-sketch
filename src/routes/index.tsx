@@ -5,6 +5,8 @@ import gabonFarm from "@/assets/gabon-farm.jpg";
 import seedling from "@/assets/seedling.jpg";
 import ceremonySpace from "@/assets/ceremony-space.jpg";
 import { useHoverParallax, useParallax } from "@/hooks/useParallax";
+import { SacredBroadcastsCarousel } from "@/components/knowledge/sacred-broadcasts-carousel";
+import { VIDEO_PLAYLISTS } from "@/data/knowledge-iboga";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -70,7 +72,6 @@ function MarketplaceCard({
 
 function Home() {
   const heroParallax = useParallax(0.4);
-  const sacredParallax = useParallax(0.5);
   const impactParallax = useParallax(0.35);
 
   return (
@@ -120,13 +121,23 @@ function Home() {
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
-            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">The Sacred Root</span>
-            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 mb-8 italic leading-tight">The Root That Remembers</h2>
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">The Root of Connection</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 mb-8 italic leading-tight">Iboga Tabernanthe</h2>
             <p className="text-lg leading-relaxed mb-6 text-forest/80">
-              Iboga is more than a medicine; it is a gateway to the self. Rooted in the Bwiti traditions of Gabon, it offers a profound reorganization of the human psyche — addressing the root causes of addiction, depression, and spiritual disconnection.
+              Eating pure Tabernanthe Iboga root cleans and prepares the neural network to grow new connections, allowing addicts to heal and become healthy loving family members who uplift their community.
+            </p>
+            <p className="text-lg leading-relaxed mb-6 text-forest/80">
+              There&apos;s a fast layer of receptor binding that lasts hours, and a slow layer of gene-expression and structural change, quieting the circuits worn thin by trauma and habits, flooding pathways that have gone dark.
+            </p>
+            <p className="text-lg leading-relaxed mb-6 text-forest/80">
+              Bringing the Holy Wood to the world is the will of the root according to Mougahenda Mikala, 10th-generation Bwiti Shaman.
             </p>
             <p className="text-lg leading-relaxed mb-8 text-forest/80">
-              Our network ensures every gram of root bark and every ceremonial experience respects the Gabonese soil and the lineages that protected this wisdom for millennia.
+              Designed by renowned coder{' '}
+              <a href="https://github.com/dougbutner/web-4" target="_blank" rel="noopener noreferrer" className="text-gold underline hover:text-gold/80">
+                Gudasol
+              </a>
+              , GAINE flows reciprocal rewards back to the people. Ibogarden funnels the world&apos;s attention to the plant, materializing organic interest with rapidly materializing supply chains to heal a planet for a new, more connected age of humanity.
             </p>
             <Link to="/learn" className="inline-flex items-center text-gold font-semibold tracking-wider uppercase text-sm group">
               Learn the Full Story
@@ -134,22 +145,19 @@ function Home() {
             </Link>
           </div>
           <div className="relative">
-            <div className="relative overflow-hidden rounded-3xl shadow-2xl">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl">
               <img
                 src={ibogaRoot}
                 alt="Iboga root bark in a wooden bowl"
                 width={800}
                 height={1000}
                 loading="lazy"
-                ref={sacredParallax.ref}
-                style={sacredParallax.style}
-                data-parallax-speed={sacredParallax["data-parallax-speed"]}
-                className="aspect-[4/5] w-full object-cover scale-105"
+                className="absolute inset-0 size-full object-cover object-center"
               />
             </div>
             <div className="absolute -bottom-6 -right-6 bg-forest p-8 rounded-2xl text-earth max-w-xs shadow-xl">
-              <p className="font-serif italic text-xl mb-2">"Iboga is the wood that speaks."</p>
-              <p className="text-xs uppercase tracking-widest text-gold">Gabonese Proverb</p>
+              <p className="font-serif italic text-xl mb-2">&ldquo;Iboga carries the grandfather spirit.&rdquo;</p>
+              <p className="text-xs uppercase tracking-widest text-gold">Wisdom teaching</p>
             </div>
           </div>
         </div>
@@ -164,28 +172,7 @@ function Home() {
           </div>
           <div className="hidden md:block text-xs text-earth/40 uppercase tracking-widest">Three playlists → swipe</div>
         </div>
-        <div className="flex gap-6 overflow-x-auto px-6 pb-6 snap-x no-scrollbar">
-          {[
-            { tag: "Playlist 01", title: "About Iboga", desc: "Origins, science, and the Bwiti tradition.", img: heroForest },
-            { tag: "Playlist 02", title: "Iboga Facilitators", desc: "Practitioners in their own words.", img: ceremonySpace },
-            { tag: "Playlist 03", title: "Healing Stories", desc: "Recovery from addiction, depression, PTSD.", img: seedling },
-          ].map((p) => (
-            <div key={p.title} className="shrink-0 w-[85vw] md:w-[440px] snap-center group cursor-pointer">
-              <div className="relative aspect-[3/2] rounded-2xl overflow-hidden ring-1 ring-gold/20 mb-4">
-                <img src={p.img} alt={p.title} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/30 to-transparent" />
-                <div className="absolute top-4 right-4 size-12 rounded-full bg-gold/90 text-forest grid place-items-center">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
-                </div>
-                <div className="absolute bottom-5 left-5">
-                  <div className="text-[10px] font-semibold tracking-widest uppercase text-gold mb-1">{p.tag}</div>
-                  <div className="font-serif text-2xl italic">{p.title}</div>
-                </div>
-              </div>
-              <p className="text-sm text-earth/60">{p.desc}</p>
-            </div>
-          ))}
-        </div>
+        <SacredBroadcastsCarousel playlists={VIDEO_PLAYLISTS.slice(0, 3)} />
       </section>
 
       {/* HEALING PLANETARY ADDICTION */}
@@ -298,14 +285,18 @@ function Home() {
                 ))}
                 <div className="pt-6 border-t border-forest/5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-forest/40 uppercase tracking-widest">Active Nomination</span>
-                    <span className="text-[10px] font-bold text-moss uppercase">Care Fund Open</span>
+                    <span className="text-[10px] text-forest/40 uppercase tracking-widest">Spread the Root</span>
+                    <span className="text-[10px] font-bold text-moss uppercase">Open knowledge</span>
                   </div>
                   <div className="mt-4 p-4 bg-earth rounded-xl">
-                    <p className="text-sm italic text-forest mb-3 leading-snug">"Treatment for Marcus — 10 years of opioid dependency."</p>
+                    <p className="text-sm italic text-forest mb-3 leading-snug">
+                      "Invite someone to the Iboga library — traditions, science, and ethical pathways."
+                    </p>
                     <div className="flex justify-between items-center text-sm">
-                      <span className="font-bold text-forest">$3,200 / $5,000</span>
-                      <Link to="/nominate" className="text-xs font-bold text-gold uppercase tracking-wider">Contribute →</Link>
+                      <span className="font-bold text-forest">Share & invite</span>
+                      <Link to="/share" className="text-xs font-bold text-gold uppercase tracking-wider">
+                        Share →
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -340,11 +331,11 @@ function Home() {
             badge="Sourcing"
           />
           <MarketplaceCard
-            title="Sponsor a Treatment"
-            desc="Nominate a person. Fund their access to care."
-            to="/nominate"
+            title="Share Iboga Knowledge"
+            desc="Invite someone to learn. Copy a link or share to your network."
+            to="/share"
             img={seedling}
-            badge="Care"
+            badge="Share"
           />
         </div>
         <div className="mt-12 text-center text-sm text-forest/60 italic">

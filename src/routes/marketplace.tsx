@@ -5,21 +5,21 @@ export const Route = createFileRoute("/marketplace")({
   head: () => ({
     meta: [
       { title: "Marketplace — ibo.garden" },
-      { name: "description", content: "Treatments, ceremonies, training, products, sponsorships. Network-verified, GAINE-certified listings." },
+      { name: "description", content: "Treatments, ceremonies, training, products, and donations. Network-verified, GAINE-certified listings." },
       { property: "og:title", content: "ibo.garden Marketplace" },
-      { property: "og:description", content: "Treatments, training, ceremonies, and care sponsorship." },
+      { property: "og:description", content: "Treatments, training, ceremonies, and ethical sourcing." },
     ],
   }),
   component: Marketplace,
 });
 
 const CATEGORIES = [
-  { title: "Treatments", desc: "Clinical programs · nominate funds at checkout", icon: "✦" },
+  { title: "Treatments", desc: "Clinical programs · verified facilitators", icon: "✦" },
   { title: "Ceremonies", desc: "Traditional Bwiti · in-person and virtual", icon: "◉" },
   { title: "Training", desc: <>Facilitation, certification, <span className="gaine-word gaine-word-sm">GAINE</span>-gated</>, icon: "❋" },
   { title: "Products", desc: "Root bark, extracts, tools, courses", icon: "◈" },
   { title: "Donations", desc: "General, project-specific, recurring", icon: "♢" },
-  { title: "Sponsorship", desc: "Sponsor a Treatment · Support a Farm", icon: "✤" },
+  { title: "Community", desc: "Share knowledge · Support a Farm", icon: "✤" },
 ];
 
 const LISTINGS = [
@@ -27,7 +27,7 @@ const LISTINGS = [
   { title: "Bwiti Initiation Ceremony", cat: "Ceremony", price: "By inquiry", loc: "Gabon", cert: "Decree 0239" },
   { title: "Facilitator Training · Level 1", cat: "Training", price: "$1,200", loc: "Online", cert: "GAINE" },
   { title: "Sustainable Root Bark (50g)", cat: "Product", price: "$145", loc: "Direct · Gabon", cert: "Nagoya" },
-  { title: "Sponsor Marcus' Recovery", cat: "Sponsorship", price: "$3,200 / $5,000", loc: "Mexico", cert: "Care Fund" },
+  { title: "Share the Iboga Library", cat: "Community", price: "Free", loc: "Invite link", cert: "Open" },
   { title: "Integration Coaching · 6 sessions", cat: "Treatment", price: "$680", loc: "Remote", cert: "GAINE" },
 ];
 

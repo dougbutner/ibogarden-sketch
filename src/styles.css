@@ -43,6 +43,16 @@
 
   --font-serif: "Crimson Pro", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", var(--font-sans);
+
+  /* GAINE page palette (scoped via .gaine-page) */
+  --color-gaine-bg: var(--gaine-bg);
+  --color-gaine-surface: var(--gaine-surface);
+  --color-gaine-text: var(--gaine-text);
+  --color-gaine-muted: var(--gaine-muted);
+  --color-gaine-primary: var(--gaine-primary);
+  --color-gaine-accent: var(--gaine-accent);
+  --color-gaine-border: var(--gaine-border);
 }
 
 :root {
@@ -79,6 +89,16 @@
   --ring: var(--gold);
 
   --gaine-token-icon: url("/gaine-token.png");
+
+  /* GAINE page defaults (overridden on .gaine-page) */
+  --gaine-bg: #0e1b12;
+  --gaine-surface: #14241a;
+  --gaine-text: #f4efe6;
+  --gaine-muted: #9db3a3;
+  --gaine-primary: #2fb477;
+  --gaine-accent: #e8b23a;
+  --gaine-border: rgba(244, 239, 230, 0.12);
+  --gaine-radius: 16px;
 }
 
 .dark {
@@ -122,6 +142,13 @@
     font-display: swap;
     src: url("https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2") format("woff2");
   }
+  @font-face {
+    font-family: "Space Grotesk";
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url("https://fonts.gstatic.com/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj62UU.woff2") format("woff2");
+  }
 
   * { border-color: var(--color-border); }
   html { -webkit-font-smoothing: antialiased; }
@@ -140,7 +167,7 @@
   .gaine-word {
     display: inline-flex;
     align-items: center;
-    gap: 0.35em;
+    gap: 0.12em;
   }
 
   .gaine-word::before {
@@ -160,7 +187,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5em;
+    gap: 0.25em;
   }
 
   .btn-gaine::before {
@@ -169,5 +196,21 @@
     width: 0.9em;
     height: 1.05em;
     background: var(--gaine-token-icon) center / contain no-repeat;
+  }
+
+  .gaine-page {
+    background: var(--gaine-bg);
+    color: var(--gaine-text);
+  }
+
+  .gaine-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  .gaine-surface-card {
+    background: var(--gaine-surface);
+    border: 1px solid var(--gaine-border);
+    border-radius: var(--gaine-radius);
   }
 }

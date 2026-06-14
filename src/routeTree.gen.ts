@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SourceRouteImport } from './routes/source'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as NominateRouteImport } from './routes/nominate'
+import { Route as ShareRouteImport } from './routes/share'
 import { Route as NetworkRouteImport } from './routes/network'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as LearnRouteImport } from './routes/learn'
@@ -33,9 +33,9 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NominateRoute = NominateRouteImport.update({
-  id: '/nominate',
-  path: '/nominate',
+const ShareRoute = ShareRouteImport.update({
+  id: '/share',
+  path: '/share',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NetworkRoute = NetworkRouteImport.update({
@@ -100,7 +100,7 @@ export interface FileRoutesByFullPath {
   '/learn': typeof LearnRoute
   '/marketplace': typeof MarketplaceRoute
   '/network': typeof NetworkRoute
-  '/nominate': typeof NominateRoute
+  '/share': typeof ShareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/source': typeof SourceRoute
 }
@@ -115,7 +115,7 @@ export interface FileRoutesByTo {
   '/learn': typeof LearnRoute
   '/marketplace': typeof MarketplaceRoute
   '/network': typeof NetworkRoute
-  '/nominate': typeof NominateRoute
+  '/share': typeof ShareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/source': typeof SourceRoute
 }
@@ -131,7 +131,7 @@ export interface FileRoutesById {
   '/learn': typeof LearnRoute
   '/marketplace': typeof MarketplaceRoute
   '/network': typeof NetworkRoute
-  '/nominate': typeof NominateRoute
+  '/share': typeof ShareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/source': typeof SourceRoute
 }
@@ -148,7 +148,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/marketplace'
     | '/network'
-    | '/nominate'
+    | '/share'
     | '/sitemap.xml'
     | '/source'
   fileRoutesByTo: FileRoutesByTo
@@ -163,7 +163,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/marketplace'
     | '/network'
-    | '/nominate'
+    | '/share'
     | '/sitemap.xml'
     | '/source'
   id:
@@ -178,7 +178,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/marketplace'
     | '/network'
-    | '/nominate'
+    | '/share'
     | '/sitemap.xml'
     | '/source'
   fileRoutesById: FileRoutesById
@@ -194,7 +194,7 @@ export interface RootRouteChildren {
   LearnRoute: typeof LearnRoute
   MarketplaceRoute: typeof MarketplaceRoute
   NetworkRoute: typeof NetworkRoute
-  NominateRoute: typeof NominateRoute
+  ShareRoute: typeof ShareRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SourceRoute: typeof SourceRoute
 }
@@ -215,11 +215,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/nominate': {
-      id: '/nominate'
-      path: '/nominate'
-      fullPath: '/nominate'
-      preLoaderRoute: typeof NominateRouteImport
+    '/share': {
+      id: '/share'
+      path: '/share'
+      fullPath: '/share'
+      preLoaderRoute: typeof ShareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/network': {
@@ -306,7 +306,7 @@ const rootRouteChildren: RootRouteChildren = {
   LearnRoute: LearnRoute,
   MarketplaceRoute: MarketplaceRoute,
   NetworkRoute: NetworkRoute,
-  NominateRoute: NominateRoute,
+  ShareRoute: ShareRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SourceRoute: SourceRoute,
 }
