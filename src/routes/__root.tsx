@@ -78,8 +78,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "ibo.garden — GAINE Token & Ethical Iboga Marketplace" },
       { name: "twitter:description", content: "GAINE SPL token and marketplace for ethically sourced Iboga. Nagoya Protocol-aligned sourcing, network-verified listings, and on-chain traceability." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3049594e-1591-4109-8a76-2551fd45299b/id-preview-7f773d3b--cb0a761f-7cfd-4846-9011-00acb9741abe.lovable.app-1781383248782.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3049594e-1591-4109-8a76-2551fd45299b/id-preview-7f773d3b--cb0a761f-7cfd-4846-9011-00acb9741abe.lovable.app-1781383248782.png" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a2a7676d-6923-4c9f-84ef-0ca0c4d2da34/id-preview-8d9f478c--cb0a761f-7cfd-4846-9011-00acb9741abe.lovable.app-1781442611467.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a2a7676d-6923-4c9f-84ef-0ca0c4d2da34/id-preview-8d9f478c--cb0a761f-7cfd-4846-9011-00acb9741abe.lovable.app-1781442611467.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
