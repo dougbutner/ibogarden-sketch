@@ -53,29 +53,6 @@ function Gaine() {
         <GainePanels panels={GAINE_INFO_PANELS} />
       </section>
 
-      <section className="px-6 py-20" style={{ background: "var(--gaine-surface)" }}>
-        <div className="max-w-7xl mx-auto">
-          <h2 className="gaine-display text-3xl md:text-4xl text-center mb-12">Fund Split Transparency</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { t: "Organization", p: "20%", d: "Platform operations, audits, infrastructure." },
-              { t: "Economic Participants", p: "30%", d: "Certified farms, suppliers, holders." },
-              { t: "Conservation & Gabon", p: "50%", d: "Reforestation, farmer working capital, benefit-sharing." },
-            ].map((c) => (
-              <div key={c.t} className="gaine-surface-card p-8" style={{ background: "var(--gaine-bg)" }}>
-                <div className="gaine-display text-5xl mb-4" style={{ color: "var(--gaine-accent)" }}>
-                  {c.p}
-                </div>
-                <h3 className="gaine-display text-xl mb-2">{c.t}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--gaine-muted)" }}>
-                  {c.d}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="px-6 py-20 max-w-7xl mx-auto w-full space-y-12">
         <div className="gaine-surface-card p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>

@@ -228,8 +228,7 @@ function Home() {
       {/* GAINE */}
       <section className="py-24 px-6">
         <div className="max-w-7xl mx-auto bg-gold/5 rounded-[2.5rem] p-10 md:p-16 border border-gold/15">
-          <div className="grid md:grid-cols-2 gap-14 items-start">
-            <div>
+          <div className="max-w-2xl">
               <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Financial Regeneration</span>
               <h2 className="font-serif text-4xl md:text-5xl mt-4 italic text-forest leading-tight">
                 The <span className="gaine-word">GAINE</span> Advantage
@@ -263,46 +262,6 @@ function Home() {
                 </Link>
               </div>
             </div>
-            <div className="bg-white rounded-3xl p-8 shadow-xl border border-gold/20">
-              <div className="flex justify-between items-center mb-8">
-                <h4 className="font-semibold uppercase tracking-[0.2em] text-[10px] text-forest/40">Live Impact Dashboard</h4>
-                <span className="text-[10px] font-mono text-gold flex items-center gap-1.5"><span className="size-1.5 rounded-full bg-gold animate-pulse" />LIVE</span>
-              </div>
-              <div className="space-y-7">
-                {[
-                  ["Trees Planted (Gabon)", "14,202", 75],
-                  ["Funds to Traditional Healers", "$84,200 USDC", 40],
-                  ["Clinical Treatments Funded", "62", 55],
-                ].map(([l, v, p]) => (
-                  <div key={l as string}>
-                    <div className="flex justify-between text-sm mb-2 font-medium text-forest">
-                      <span>{l}</span><span className="text-gold-deep">{v}</span>
-                    </div>
-                    <div className="w-full h-1 bg-forest/5 rounded-full overflow-hidden">
-                      <div className="h-full bg-forest" style={{ width: `${p}%` }} />
-                    </div>
-                  </div>
-                ))}
-                <div className="pt-6 border-t border-forest/5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-forest/40 uppercase tracking-widest">Spread the Root</span>
-                    <span className="text-[10px] font-bold text-moss uppercase">Open knowledge</span>
-                  </div>
-                  <div className="mt-4 p-4 bg-earth rounded-xl">
-                    <p className="text-sm italic text-forest mb-3 leading-snug">
-                      "Invite someone to the Iboga library — traditions, science, and ethical pathways."
-                    </p>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="font-bold text-forest">Share & invite</span>
-                      <Link to="/share" className="text-xs font-bold text-gold uppercase tracking-wider">
-                        Share →
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -338,16 +297,13 @@ function Home() {
             badge="Share"
           />
         </div>
-        <div className="mt-12 text-center text-sm text-forest/60 italic">
-          <span className="text-gold-deep font-semibold not-italic">Live impact counter →</span>
-        </div>
       </section>
 
       {/* IMPACT IN GABON */}
       <section className="py-24 px-6 bg-forest text-earth">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Live Impact</span>
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Impact in Gabon</span>
             <h2 className="font-serif text-4xl md:text-5xl mt-4 italic">Rooted in Gabon</h2>
             <p className="text-earth/60 mt-6 max-w-2xl mx-auto leading-relaxed">
               Committed to Gabon Presidential Decree 0239 (22 May 2026) — sovereign regulation of Iboga access,
@@ -360,19 +316,6 @@ function Home() {
             >
               Read the decree summary →
             </Link>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-            {[
-              ["14,202", "Trees Planted"],
-              ["840", "Families Supported"],
-              ["$284K", "USDC to Gabon"],
-              ["14", "Farms Certified"],
-            ].map(([n, l]) => (
-              <div key={l} className="text-center">
-                <div className="font-serif text-5xl md:text-6xl text-gold mb-3">{n}</div>
-                <p className="text-[11px] text-earth/50 uppercase tracking-widest">{l}</p>
-              </div>
-            ))}
           </div>
           <div className="grid md:grid-cols-2 gap-10 items-center">
             <div className="overflow-hidden rounded-3xl">
@@ -392,7 +335,7 @@ function Home() {
                 smallholders. Plot coordinates recorded. Verification open.
               </p>
               <Link to="/impact" className="inline-flex items-center text-gold font-semibold tracking-wider uppercase text-sm border-b border-gold/40 pb-1">
-                See the impact dashboard →
+                Learn about our Gabon work →
               </Link>
             </div>
           </div>
