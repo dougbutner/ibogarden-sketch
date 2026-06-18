@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { FOOTER_LEGAL_PARAGRAPHS } from "@/data/legal";
 
 const LAUNCH_LINKS = [
   { to: "/marketplace", label: "Marketplace" },
@@ -27,22 +28,18 @@ export function SiteFooter() {
               Ethical Iboga sourcing. Tokenized reciprocity. Rooted in Gabon.
             </p>
             <div className="text-sm text-earth/50 leading-relaxed max-w-lg space-y-3">
-              <p>
-                <strong className="text-earth/70">Important:</strong>{" "}
-                <span className="gaine-word gaine-word-sm">GAINE</span> is a reciprocating utility token in a
-                networking platform designed to legally expand, not an investment opportunity. Iboga and ibogaine
-                carry serious health risks and may be illegal in many jurisdictions. Nothing here is medical, legal,
-                therapeutic, or investment advice.
-              </p>
-              <p>
-                Some features may be experimental or nonfunctional as this platform is still being built, and we
-                assume no liability. This site does not imply approval, endorsement, or any contractual relationship
-                with governments or indigenous groups.
-              </p>
-              <p>
-                You must be 21+ to use. Users are responsible for complying with all laws. Marketplace transactions
-                are between independent parties; we provide the platform only.
-              </p>
+              {FOOTER_LEGAL_PARAGRAPHS.map((paragraph, index) => (
+                <p key={index}>
+                  {index === 0 ? (
+                    <>
+                      <strong className="text-earth/70">Important:</strong>{" "}
+                      <span className="gaine-word gaine-word-sm">GAINE</span> {paragraph}
+                    </>
+                  ) : (
+                    paragraph
+                  )}
+                </p>
+              ))}
             </div>
           </div>
           <div>

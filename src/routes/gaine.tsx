@@ -33,7 +33,6 @@ function Gaine() {
     <div className="gaine-page -mt-12 pb-0">
       <GaineHero />
       <GaineStatRow />
-      <GaineContractAddress />
       <GainePoolsTable />
       <GaineReflection />
 
@@ -107,6 +106,8 @@ function Gaine() {
           </div>
         </div>
       </section>
+
+      <GaineContractAddress />
 
       <GaineDisclaimer />
     </div>

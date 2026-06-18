@@ -1,4 +1,5 @@
 import { GAINE_ORCA_URL, GAINE_TOKEN_IMAGE } from "@/data/gaine";
+import { GaineDraggableToken } from "./gaine-draggable-token";
 import { GaineMoneyModel } from "./gaine-money-model";
 
 export function GaineHero() {
@@ -11,20 +12,7 @@ export function GaineHero() {
         Audited · Solana SPL-2022
       </span>
 
-      <div className="relative mb-6">
-        <div
-          className="absolute inset-0 rounded-full blur-3xl opacity-40 scale-125"
-          style={{ background: "var(--gaine-accent)" }}
-          aria-hidden
-        />
-        <img
-          src={GAINE_TOKEN_IMAGE}
-          alt="GAINE token"
-          width={220}
-          height={220}
-          className="relative size-[220px] rounded-full object-cover ring-1 ring-[var(--gaine-border)]"
-        />
-      </div>
+      <GaineDraggableToken />
 
       <p
         className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em]"
