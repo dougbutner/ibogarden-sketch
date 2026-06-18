@@ -1,4 +1,4 @@
-import { GAINE_ORCA_URL, GAINE_TOKEN_IMAGE, GAINE_WHITEPAPER_URL } from "@/data/gaine";
+import { GAINE_ORCA_URL, GAINE_TOKEN_IMAGE } from "@/data/gaine";
 import { GaineMoneyModel } from "./gaine-money-model";
 
 export function GaineHero() {
@@ -36,7 +36,7 @@ export function GaineHero() {
       <h1 className="gaine-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] max-w-4xl text-balance">
         Impact that stays.
         <br />
-        Investment you keep.
+        Investment that grows.
       </h1>
 
       <GaineMoneyModel />
@@ -59,13 +59,11 @@ export function GaineHero() {
           Buy GAINE
         </a>
         <a
-          href={GAINE_WHITEPAPER_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#what-is-gaine"
           className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-sm font-semibold uppercase tracking-widest border transition-colors hover:bg-white/5"
           style={{ borderColor: "var(--gaine-border)", color: "var(--gaine-text)" }}
         >
-          Read the Whitepaper
+          What is GAINE?
         </a>
       </div>
     </section>

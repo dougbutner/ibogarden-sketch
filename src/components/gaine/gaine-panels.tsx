@@ -12,12 +12,60 @@ const PANEL_IMAGES: Record<string, string> = {
   "gabon-farm": gabonFarm,
 };
 
+function PanelTag({ label, href }: { label: string; href?: string }) {
+  const className =
+    "inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] border";
+  const style = {
+    borderColor: "color-mix(in srgb, var(--gaine-accent) 35%, transparent)",
+    color: "var(--gaine-accent)",
+    background: "color-mix(in srgb, var(--gaine-accent) 12%, transparent)",
+  };
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${className} transition-opacity hover:opacity-80`}
+        style={style}
+      >
+        {label}
+      </a>
+    );
+  }
+
+  return (
+    <span className={className} style={style}>
+      {label}
+    </span>
+  );
+}
+
 function PanelParagraph({ paragraph }: { paragraph: GainePanel["paragraphs"][number] }) {
   if (typeof paragraph === "string") {
     return (
       <p className="text-sm md:text-base leading-relaxed" style={{ color: "color-mix(in srgb, var(--gaine-text) 75%, transparent)" }}>
         {paragraph}
       </p>
+    );
+  }
+
+  if (paragraph.type === "person") {
+    return (
+      <div className="space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <h4 className="gaine-display text-lg" style={{ color: "var(--gaine-text)" }}>
+            {paragraph.name}
+          </h4>
+          {paragraph.tags.map((tag) => (
+            <PanelTag key={tag.label} label={tag.label} href={tag.href} />
+          ))}
+        </div>
+        <p className="text-sm md:text-base leading-relaxed" style={{ color: "color-mix(in srgb, var(--gaine-text) 75%, transparent)" }}>
+          {paragraph.bio}
+        </p>
+      </div>
     );
   }
 
@@ -131,7 +179,7 @@ export function GainePanels({ panels }: { panels: GainePanel[] }) {
   const [openId, setOpenId] = useState<string | null>(panels[0]?.id ?? null);
 
   return (
-    <div className="flex gap-2 md:gap-3 h-[min(480px,calc(100dvh-10rem))] overflow-hidden">
+    <div className="flex gap-2 md:gap-3 h-[min(520px,calc(100dvh-10rem))] overflow-hidden">
       {panels.map((panel) => (
         <GainePanelCard
           key={panel.id}

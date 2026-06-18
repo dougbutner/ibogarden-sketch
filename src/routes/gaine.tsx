@@ -17,7 +17,7 @@ export const Route = createFileRoute("/gaine")({
         content:
           "GAINE on Solana: digitized fiat routes, buy-to-mint backing from $1–$10M per token, and a 2% transfer fee directed to Ibogabon, market-making, and iboga-focused initiatives.",
       },
-      { property: "og:title", content: "GAINE: Impact that stays. Investment you keep." },
+      { property: "og:title", content: "GAINE: Impact that stays. Investment that grows." },
       {
         property: "og:description",
         content:
@@ -37,7 +37,7 @@ function Gaine() {
       <GainePoolsTable />
       <GaineReflection />
 
-      <section className="px-6 pb-20 max-w-7xl mx-auto w-full">
+      <section id="what-is-gaine" className="px-6 pb-20 max-w-7xl mx-auto w-full scroll-mt-24">
         <div className="mb-8 md:mb-10">
           <span
             className="text-[11px] font-semibold uppercase tracking-[0.25em]"
@@ -46,12 +46,22 @@ function Gaine() {
             How GAINE is different
           </span>
           <h2 className="gaine-display text-3xl md:text-4xl mt-3">
-            Impact without giving up your principal
+            Real financial services, real returns
           </h2>
-          <p className="mt-4 max-w-2xl leading-relaxed" style={{ color: "var(--gaine-muted)" }}>
-            Traditional impact funds ask you to donate or lock capital. GAINE keeps your dollars liquid and backed
-            while routing transfer fees to the causes you choose.
-          </p>
+          <div className="mt-4 max-w-3xl space-y-4 leading-relaxed" style={{ color: "var(--gaine-muted)" }}>
+            <p>
+              Unlike traditional impact funds, GAINE is designed to make investors insane returns by providing
+              real (boring) financial services.
+            </p>
+            <p>
+              GAINE keeps your investment liquid, no lock-up period, while routing transfer fees to the
+              Iboga-related causes you choose.
+            </p>
+            <p>
+              Ibogabon serves as the Gabon-first investment hub, using our revenue to directly invest in farms
+              in Gabon that comply with regulation.
+            </p>
+          </div>
         </div>
         <GainePanels panels={GAINE_INFO_PANELS} />
       </section>
