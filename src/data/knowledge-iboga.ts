@@ -54,10 +54,10 @@ export const TOPIC_ROOT = {
   label: "Iboga",
   tagline: "The root at the center of everything here.",
   description:
-    "Tabernanthe iboga — plant, rite, molecule, and commodity. Four ways humans hold it: lineage, land, medicine, and exchange.",
+    "Tabernanthe iboga: plant, rite, molecule, and commodity. Four ways humans hold it: lineage, land, medicine, and exchange.",
 };
 
-/** Hierarchical topic map — four trunks, human-readable grouping */
+/** Hierarchical topic map: four trunks, human-readable grouping */
 export const TOPIC_MAP: TopicTrunk[] = [
   {
     id: "lineage",
@@ -71,7 +71,7 @@ export const TOPIC_MAP: TopicTrunk[] = [
         label: "History",
         href: "https://en.wikipedia.org/wiki/Ibogaine",
         description:
-          "From 19th-century documentation to 1901 isolation, the Lambarène stimulant era, and the addiction discovery — the whole arc in one node.",
+          "From 19th-century documentation to 1901 isolation, the Lambarène stimulant era, and the addiction discovery: the whole arc in one node.",
         shape: "circle",
       },
       {
@@ -97,7 +97,7 @@ export const TOPIC_MAP: TopicTrunk[] = [
     label: "Land",
     tagline: "Where the plant lives",
     description:
-      "The Congo Basin — wild iboga, conservation pressure, and why a keystone species can vanish quietly.",
+      "The Congo Basin: wild iboga, conservation pressure, and why a keystone species can vanish quietly.",
     leaves: [
       {
         id: "geography",
@@ -147,7 +147,7 @@ export const TOPIC_MAP: TopicTrunk[] = [
     label: "Exchange",
     tagline: "Trade, law & reciprocity",
     description:
-      "Markets, clinics, Nagoya benefit-sharing, and the GAINE economy — who profits and who is owed.",
+      "Markets, clinics, Nagoya benefit-sharing, and the GAINE economy: who profits and who is owed.",
     useGaineIcon: true,
     leaves: [
       {
@@ -163,7 +163,7 @@ export const TOPIC_MAP: TopicTrunk[] = [
         label: "Provider Economy",
         href: "https://link.springer.com/article/10.1057/s41285-025-00220-1",
         description:
-          "How a worldwide network of off-shore clinics built its own safety governance through trial and error — and how investment capital is now reshaping it.",
+          "How a worldwide network of off-shore clinics built its own safety governance through trial and error: and how investment capital is now reshaping it.",
         shape: "gaine",
       },
       {
@@ -187,14 +187,14 @@ export const TOPIC_MAP: TopicTrunk[] = [
         label: "US / Texas",
         href: "https://www.texastribune.org/2026/03/31/texas-ibogaine-research-clinical-trials-psychedelics/",
         description:
-          "Texas launching its own $50M ibogaine trials after no drug company would meet its terms — a snapshot of how hard commercialization really is.",
+          "Texas launching its own $50M ibogaine trials after no drug company would meet its terms: a snapshot of how hard commercialization really is.",
         shape: "rect",
       },
     ],
   },
 ];
 
-/** @deprecated — use TOPIC_MAP */
+/** @deprecated: use TOPIC_MAP */
 export type TopicNode = {
   id: string;
   label: string;
@@ -203,7 +203,7 @@ export type TopicNode = {
   group: "history" | "geography" | "market" | "regulations" | "ecology" | "body" | "tradition" | "research";
 };
 
-/** @deprecated — use TOPIC_MAP */
+/** @deprecated: use TOPIC_MAP */
 export const TOPIC_NODES: TopicNode[] = TOPIC_MAP.flatMap((t) =>
   t.leaves.map((l) => ({
     ...l,
@@ -227,13 +227,13 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
         title: "Ibogaine: Rite of Passage",
         href: "https://www.youtube.com/watch?v=vt0E8N4FRFY",
         description:
-          "Excerpt of ICEERS' documentary showing a traditional Bwiti ritual in Gabon — the clearest short window into where this medicine actually comes from.",
+          "Excerpt of ICEERS' documentary showing a traditional Bwiti ritual in Gabon: the clearest short window into where this medicine actually comes from.",
         source: "YouTube",
       },
       {
         title: "About Iboga",
         href: "https://www.youtube.com/watch?v=GSs-BVy2MC0",
-        description: "An introduction to iboga — plant, tradition, and why it matters now.",
+        description: "An introduction to iboga: plant, tradition, and why it matters now.",
         source: "YouTube",
       },
       {
@@ -278,7 +278,7 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
         title: "GITA context-of-care guidelines",
         href: "https://www.ibogainealliance.org/guidelines/context-of-care/",
         description:
-          "GITA's care-setting standards spell out what a responsible provider must have — ACLS-trained staff, emergency proximity, informed consent — making this the yardstick for judging any facilitator.",
+          "GITA's care-setting standards spell out what a responsible provider must have: ACLS-trained staff, emergency proximity, informed consent: making this the yardstick for judging any facilitator.",
         source: "GITA",
       },
       {
@@ -306,10 +306,10 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
         source: "Ambio Life Sciences",
       },
       {
-        title: "We Are Bwitiful — documentary roundup",
+        title: "We Are Bwitiful: documentary roundup",
         href: "https://wearebwitiful.com/research/",
         description:
-          "A curated roundup of iboga documentaries — initiation films, the opioid-crisis investigation Cure for a Crisis, and elder-wisdom features — in one place.",
+          "A curated roundup of iboga documentaries: initiation films, the opioid-crisis investigation Cure for a Crisis, and elder-wisdom features: in one place.",
         source: "We Are Bwitiful",
       },
     ],
@@ -341,31 +341,31 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
     header: "Know the risks of complications.",
     articles: [
       {
-        title: "Knuijver et al. 2022 — clinical safety in opioid detox",
+        title: "Knuijver et al. 2022: clinical safety in opioid detox",
         href: "https://onlinelibrary.wiley.com/doi/10.1111/add.15448",
         description:
-          "The first careful clinical safety study: 14 opioid-dependent patients given ibogaine, half showing QTc over 500 ms — proof the heart risk is real even at a modest dose, and that it reverses.",
+          "The first careful clinical safety study: 14 opioid-dependent patients given ibogaine, half showing QTc over 500 ms: proof the heart risk is real even at a modest dose, and that it reverses.",
         source: "Addiction",
       },
       {
-        title: "Brunt et al. 2026 — cardiovascular complications",
+        title: "Brunt et al. 2026: cardiovascular complications",
         href: "https://onlinelibrary.wiley.com/doi/10.1111/add.70319",
         description:
           "A 2026 review of why ibogaine's rare but lethal arrhythmias (Torsades de Pointes) strike even healthy hearts, and how a person's CYP2D6 genetics may decide who's at risk.",
         source: "Addiction",
       },
       {
-        title: "Molecules 2026 — scoping review",
+        title: "Molecules 2026: scoping review",
         href: "https://www.mdpi.com/1420-3049/31/3/545",
         description:
           "A 2026 scoping review weighing ibogaine's genuine anti-addiction promise against its cardiac dangers, and why use outside clinics leaves the safety record incomplete.",
         source: "Molecules",
       },
       {
-        title: "Koenig et al. — human cardiomyocyte study",
+        title: "Koenig et al.: human cardiomyocyte study",
         href: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5334404/",
         description:
-          "Lab evidence in human heart cells showing ibogaine and noribogaine delay repolarization — the mechanism behind QT prolongation, and why effects can appear days after dosing.",
+          "Lab evidence in human heart cells showing ibogaine and noribogaine delay repolarization: the mechanism behind QT prolongation, and why effects can appear days after dosing.",
         source: "PMC",
       },
       {
@@ -376,10 +376,10 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "PMC",
       },
       {
-        title: "Grogan et al. — emergency case report",
+        title: "Grogan et al.: emergency case report",
         href: "https://www.sciencedirect.com/science/article/abs/pii/S0736467919305700",
         description:
-          "An emergency-room case report of a woman who seized and went into Torsades after ibogaine — a blunt picture of what front-line crisis looks like.",
+          "An emergency-room case report of a woman who seized and went into Torsades after ibogaine: a blunt picture of what front-line crisis looks like.",
         source: "ScienceDirect",
       },
       {
@@ -400,7 +400,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         title: "GITA clinical guidelines",
         href: "https://ibogaineguidelines.com/",
         description:
-          "GITA's full clinical guidelines for ibogaine-assisted detox — the community's distilled, freely licensed safety playbook.",
+          "GITA's full clinical guidelines for ibogaine-assisted detox: the community's distilled, freely licensed safety playbook.",
         source: "GITA",
       },
       {
@@ -418,21 +418,21 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "The Ibogaine Institute · clinic-authored",
       },
       {
-        title: "PolitiFact — \"80% cured\" fact-check",
+        title: "PolitiFact: \"80% cured\" fact-check",
         href: "https://www.politifact.com/factchecks/2026/apr/22/joe-rogan/ibogaine-opioid-addiction-psychedelic-withdrawal/",
         description:
-          "A fact-check of the viral 80% cured in one dose claim — useful for separating hope from evidence before reading anything else.",
+          "A fact-check of the viral 80% cured in one dose claim: useful for separating hope from evidence before reading anything else.",
         source: "PolitiFact",
       },
       {
-        title: "PBS — psychedelic review executive order",
+        title: "PBS: psychedelic review executive order",
         href: "https://www.pbs.org/newshour/politics/trump-signs-order-to-speed-review-of-psychedelics",
         description:
           "News coverage noting ibogaine is tied to 30+ deaths in the literature, grounding the policy excitement in the safety reality.",
         source: "PBS NewsHour",
       },
       {
-        title: "TIME — psychedelics executive order explainer",
+        title: "TIME: psychedelics executive order explainer",
         href: "https://time.com/article/2026/04/21/trump-psychedelics-executive-order-what-to-know/",
         description:
           "Concise explainer on why fatal arrhythmia risk halted U.S. research in the 1990s and why most evidence still comes from small overseas studies.",
@@ -446,24 +446,24 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
     header: "Firsthand experience with Iboga Tabernanthe root bark and ibogaine.",
     articles: [
       {
-        title: "Mash et al. — 191-person clinical case series",
+        title: "Mash et al.: 191-person clinical case series",
         href: "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2018.00529/full",
         description:
           "A 191-person clinical case series with patients' own elicitation narratives of moving from dependence toward sobriety after a single dose.",
         source: "Frontiers",
       },
       {
-        title: "NYT The Daily — reporter's ibogaine trip",
+        title: "NYT The Daily: reporter's ibogaine trip",
         href: "https://podcasts.apple.com/us/podcast/one-reporters-life-altering-psychedelic-trip/id1200361736?i=1000760921425",
         description:
           "A New York Times political reporter describes traveling to Mexico to take ibogaine himself, and how the trip changed his life.",
         source: "NYT The Daily",
       },
       {
-        title: "Rolling Stone — addiction and a last trip",
+        title: "Rolling Stone: addiction and a last trip",
         href: "https://qc.rollingstone.com/en/culture/he-took-a-psychedelic-to-cure-his-addiction-it-was-his-last-trip/",
         description:
-          "A necessary counterweight — the story of a man who went to Cancún to beat addiction and died, a reminder of the stakes.",
+          "A necessary counterweight: the story of a man who went to Cancún to beat addiction and died, a reminder of the stakes.",
         source: "Rolling Stone",
       },
       {
@@ -474,7 +474,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "Men's Journal via AOL",
       },
       {
-        title: "USA TODAY — Stanford veterans reporting",
+        title: "USA TODAY: Stanford veterans reporting",
         href: "https://www.aol.com/combat-veterans-took-psychedelic-drug-101312889.html",
         description:
           "USA TODAY's reporting on the Stanford veterans, including how a grassroots Mexican clinic and a nonprofit made the study possible.",
@@ -502,7 +502,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "The Ibogaine Institute · clinic-authored",
       },
       {
-        title: "VETS — Stanford neuroimaging study",
+        title: "VETS: Stanford neuroimaging study",
         href: "https://vetsolutions.org/research/stanford-university-neuroimaging-study/",
         description:
           "The veterans' nonprofit that funded the Stanford grantees, with the personal accounts behind the data.",
@@ -516,14 +516,14 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "San Gabriel Valley Tribune",
       },
       {
-        title: "The Ibogaine Institute — success stories",
+        title: "The Ibogaine Institute: success stories",
         href: "https://theibogainstitute.org/success-stories/",
         description:
-          "A collection of patient outcome stories across addiction, trauma and neurological conditions — read as testimony, not guarantee.",
+          "A collection of patient outcome stories across addiction, trauma and neurological conditions: read as testimony, not guarantee.",
         source: "The Ibogaine Institute · clinic-authored",
       },
       {
-        title: "National Geographic — root to patient",
+        title: "National Geographic: root to patient",
         href: "https://www.nationalgeographic.com/animals/article/ibogaine-pschedelic-drug-root-fair-trade-gabon",
         description:
           "Feature reporting that follows the root from Gabonese forest to the people it ends up healing abroad.",
@@ -534,24 +534,24 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
   {
     id: "places",
     title: "Places",
-    header: "Reputable Iboga facilities globally — vetted directories and verified centers.",
+    header: "Reputable Iboga facilities globally: vetted directories and verified centers.",
     articles: [
       {
         title: "Global Ibogaine Therapy Alliance",
         href: "https://www.ibogainealliance.org/",
         description:
-          "The Global Ibogaine Therapy Alliance — its member standards are the baseline credential to look for in any facility.",
+          "The Global Ibogaine Therapy Alliance: its member standards are the baseline credential to look for in any facility.",
         source: "GITA",
       },
       {
-        title: "HealingMaps — ibogaine centers",
+        title: "HealingMaps: ibogaine centers",
         href: "https://healingmaps.com/ibogaine-treatment-centers/",
         description:
           "A continually updated directory of ibogaine-specific centers with notes on which have closed or gone inactive.",
         source: "HealingMaps",
       },
       {
-        title: "Recovery.com — ibogaine therapy directory",
+        title: "Recovery.com: ibogaine therapy directory",
         href: "https://recovery.com/therapies/ibogaine-treatment/",
         description:
           "A vetted treatment directory with transparent cash-pay pricing and the repeated warning that unsupervised use can be deadly.",
@@ -572,7 +572,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "InnerVision Ibogaine",
       },
       {
-        title: "Lucid News — offshore clinics profile",
+        title: "Lucid News: offshore clinics profile",
         href: "https://www.lucid.news/offshore-ibogaine-clinics-in-mexico-portugal-and-brazil/",
         description:
           "Independent journalism profiling real clinics (Beond, Transcend, Ambio, Tabula Rasa and others) and how they're adapting to fentanyl-era patients.",
@@ -600,14 +600,14 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "Beōnd · clinic-authored",
       },
       {
-        title: "Recovery.com — Tabula Rasa profile",
+        title: "Recovery.com: Tabula Rasa profile",
         href: "https://recovery.com/tabula-rasa-retreat/",
         description:
           "An independent profile of Tabula Rasa with verified pricing, reviews and its medical-vetting claims.",
         source: "Recovery.com",
       },
       {
-        title: "Recovery.com — Beōnd profile",
+        title: "Recovery.com: Beōnd profile",
         href: "https://recovery.com/beond-ibogaine-treatment-cancun-mexico/",
         description:
           "An independent profile of Beōnd detailing its screening, environment and treatment model.",
@@ -617,7 +617,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         title: "GITA context-of-care guidelines",
         href: "https://www.ibogainealliance.org/guidelines/context-of-care/",
         description:
-          "The care-context guidelines to hold any place to — emergency proximity, trained staff, and equipment requirements.",
+          "The care-context guidelines to hold any place to: emergency proximity, trained staff, and equipment requirements.",
         source: "GITA",
       },
     ],
@@ -628,7 +628,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
     header: "Meet the Babongo tribe and learn about the history of Iboga.",
     articles: [
       {
-        title: "Holy Spirit of Iboga — Gabonese Bwiti",
+        title: "Holy Spirit of Iboga: Gabonese Bwiti",
         href: "https://journals.co.za/doi/10.10520/ejc-jiss_v2_n1_a1",
         description:
           "A peer-reviewed study presenting Bwiti as pioneered by the Babongo and possibly the first religion practiced by humanity.",
@@ -638,7 +638,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         title: "The Holy Spirit of Iboga (full paper)",
         href: "https://www.researchgate.net/publication/365964412_The_Holy_Spirit_of_Iboga_and_a_Contemporary_Perspective_on_Africa's_Spiritual_Renaissance_Focus_on_Gabonese_Bwiti_Tradition",
         description:
-          "The fuller paper tracing how Bwiti spread and split — Disumba to Misoko — and how that shift empowered women and junior initiates.",
+          "The fuller paper tracing how Bwiti spread and split: Disumba to Misoko: and how that shift empowered women and junior initiates.",
         source: "ResearchGate",
       },
       {
@@ -663,7 +663,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "Root Healing",
       },
       {
-        title: "About Bwiti — lineage map",
+        title: "About Bwiti: lineage map",
         href: "https://www.mamaaline.com/about-bwiti.html",
         description:
           "A lineage map of how iboga ceremony moved through the Apindji, Mitsogo, Fang and other peoples, each adding its own thread.",
@@ -673,7 +673,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         title: "The night of the Bwiti in Gabon",
         href: "https://kumakonda.com/bwiti-gabon-iboga-travel/",
         description:
-          "An evocative description of an all-night Bwiti ceremony — music, masks and trance bridging the living and the ancestors.",
+          "An evocative description of an all-night Bwiti ceremony: music, masks and trance bridging the living and the ancestors.",
         source: "Kumakonda",
       },
       {
@@ -684,31 +684,31 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "Bwiti Initiations",
       },
       {
-        title: "Missoko Bwiti — why structure matters",
+        title: "Missoko Bwiti: why structure matters",
         href: "https://www.ibogarebirth.com/missoko-bwiti",
         description:
-          "On why Bwiti structure matters — without context, iboga's revelations can be misread, so the tradition exists to make them usable.",
+          "On why Bwiti structure matters: without context, iboga's revelations can be misread, so the tradition exists to make them usable.",
         source: "Iboga Rebirth",
       },
       {
-        title: "The power of iboga — 10th-generation shaman",
+        title: "The power of iboga: 10th-generation shaman",
         href: "https://www.bwitihouse.com/the-power-of-iboga",
         description:
           "A 10th-generation Missoko shaman's framing of Bwiti as understanding life itself, and of iboga as holding both male and female spirits.",
         source: "Bwiti House",
       },
       {
-        title: "Bwiti and iboga — respectful primer",
+        title: "Bwiti and iboga: respectful primer",
         href: "https://www.tabularasaretreat.com/ibogaine/bwiti-and-iboga/",
         description:
           "A clinic's respectful primer on the Bwiti relationship to iboga, for those whose Western treatment sparks deeper interest.",
         source: "Tabula Rasa · clinic-authored",
       },
       {
-        title: "Ibogaine — historical record",
+        title: "Ibogaine: historical record",
         href: "https://en.wikipedia.org/wiki/Ibogaine",
         description:
-          "The documented historical record — discovery by forager tribes, transmission to the Bwiti, and the move into Western science.",
+          "The documented historical record: discovery by forager tribes, transmission to the Bwiti, and the move into Western science.",
         source: "Wikipedia",
       },
     ],
@@ -719,21 +719,21 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
     header: "There's a history surrounding Iboga you have the chance to be on the right side of.",
     articles: [
       {
-        title: "ICEERS — legality and export ban",
+        title: "ICEERS: legality and export ban",
         href: "https://www.iceers.org/en/basic-info/iboga-basic-info/",
         description:
           "Iboga as Gabon's declared national treasure, the 2019 export ban, and why bio-cultural sustainability is now a pressing concern.",
         source: "ICEERS",
       },
       {
-        title: "Chacruna — iboga conservation status",
+        title: "Chacruna: iboga conservation status",
         href: "https://chacruna.net/iboga_conservation/",
         description:
           "A clear-eyed look at iboga as a cultural keystone species threatened by poaching, despite a thin scientific record on its true population.",
         source: "Chacruna",
       },
       {
-        title: "National Geographic — fair-trade root",
+        title: "National Geographic: fair-trade root",
         href: "https://www.nationalgeographic.com/animals/article/ibogaine-pschedelic-drug-root-fair-trade-gabon",
         description:
           "How the first legal export under the Nagoya Protocol aimed to fund rural Gabonese and protect the plant rather than strip it.",
@@ -771,7 +771,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         title: "Gabon 2026 law restructuring",
         href: "https://jonathandickinson.substack.com/p/gabon-to-restructure-iboga-and-ibogaine",
         description:
-          "Inside Gabon's 2026 move to tighten iboga/ibogaine law — anti-poaching enforcement, benefit-sharing, and a response to surging U.S. interest.",
+          "Inside Gabon's 2026 move to tighten iboga/ibogaine law: anti-poaching enforcement, benefit-sharing, and a response to surging U.S. interest.",
         source: "Jonathan Dickinson",
       },
       {
@@ -782,7 +782,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "Ibogaine Clinic · clinic-authored; verify claims",
       },
       {
-        title: "Ibogaine — range and regulatory barriers",
+        title: "Ibogaine: range and regulatory barriers",
         href: "https://en.wikipedia.org/wiki/Ibogaine",
         description:
           "Background on iboga's range across Central Africa and the regulatory barriers shaping how it can be sourced.",
@@ -797,14 +797,14 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
       "Read past research, and fund research drug companies won't; micro and macrodosing research to benefit the planet through healing the individual.",
     articles: [
       {
-        title: "Nature Medicine — magnesium-ibogaine in TBI veterans",
+        title: "Nature Medicine: magnesium-ibogaine in TBI veterans",
         href: "https://www.nature.com/articles/s41591-023-02705-w",
         description:
-          "The landmark Stanford/Nature Medicine study — 30 veterans, magnesium to protect the heart, and large sustained gains against PTSD and depression.",
+          "The landmark Stanford/Nature Medicine study: 30 veterans, magnesium to protect the heart, and large sustained gains against PTSD and depression.",
         source: "Nature Medicine",
       },
       {
-        title: "Stanford Report — ibogaine and PTSD",
+        title: "Stanford Report: ibogaine and PTSD",
         href: "https://news.stanford.edu/stories/2024/05/ibogaine-ptsd",
         description:
           "Stanford's own plain-language writeup of why the result matters for the invisible wounds of military service.",
@@ -814,56 +814,56 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         title: "MISTIC trial (NCT04313712)",
         href: "https://clinicaltrials.gov/study/NCT04313712",
         description:
-          "The official MISTIC trial registration — the primary-source record of the protocol behind the headlines.",
+          "The official MISTIC trial registration: the primary-source record of the protocol behind the headlines.",
         source: "ClinicalTrials.gov",
       },
       {
-        title: "Mash et al. — 191-patient detox study",
+        title: "Mash et al.: 191-patient detox study",
         href: "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2018.00529/full",
         description:
           "The 191-patient detox study that moved ibogaine evidence beyond anecdote while honestly flagging its methodological limits.",
         source: "Frontiers",
       },
       {
-        title: "Molecules 2026 — scoping review",
+        title: "Molecules 2026: scoping review",
         href: "https://www.mdpi.com/1420-3049/31/3/545",
         description:
           "A 2026 scoping review framing ibogaine as a multi-target reset for addiction and calling for rigorous, standardized study.",
         source: "Molecules",
       },
       {
-        title: "Knuijver 2022 — controlled safety study",
+        title: "Knuijver 2022: controlled safety study",
         href: "https://onlinelibrary.wiley.com/doi/10.1111/add.15448",
         description:
-          "The controlled safety study that quantified the QT risk — essential reading for anyone funding future human trials.",
+          "The controlled safety study that quantified the QT risk: essential reading for anyone funding future human trials.",
         source: "Addiction",
       },
       {
-        title: "PK/PD — plasma levels and cardiac effects",
+        title: "PK/PD: plasma levels and cardiac effects",
         href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11102648/",
         description:
-          "The pharmacokinetic/pharmacodynamic data linking plasma levels, metabolism and cardiac effects — the dosing science.",
+          "The pharmacokinetic/pharmacodynamic data linking plasma levels, metabolism and cardiac effects: the dosing science.",
         source: "PMC",
       },
       {
-        title: "Oxa-iboga analogs — safer next generation",
+        title: "Oxa-iboga analogs: safer next generation",
         href: "https://www.nature.com/articles/s41467-024-51856-y",
         description:
-          "Proof-of-concept that iboga-inspired molecules can keep the benefit while dropping the cardiac risk — a research direction worth funding.",
+          "Proof-of-concept that iboga-inspired molecules can keep the benefit while dropping the cardiac risk: a research direction worth funding.",
         source: "Nature Communications, 2024",
       },
       {
         title: "Texas $50M IMPACT consortium",
         href: "https://www.uth.edu/news/story/uthealth-houston-in-collaboration-with-utmb-health-awarded-50-million-by-the-state-of-texas-to-lead-ibogaine-clinical-trials",
         description:
-          "The $50M Texas IMPACT consortium — the largest public ibogaine research bet yet, aimed squarely at FDA approval.",
+          "The $50M Texas IMPACT consortium: the largest public ibogaine research bet yet, aimed squarely at FDA approval.",
         source: "UTHealth",
       },
       {
-        title: "Brunt 2026 — cardiovascular literature synthesis",
+        title: "Brunt 2026: cardiovascular literature synthesis",
         href: "https://onlinelibrary.wiley.com/doi/10.1111/add.70319",
         description:
-          "A 2026 synthesis of the cardiovascular literature — the safety questions any serious research program must answer.",
+          "A 2026 synthesis of the cardiovascular literature: the safety questions any serious research program must answer.",
         source: "Addiction",
       },
       {
@@ -877,14 +877,14 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         title: "Iboga microdosing case series (2026)",
         href: "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2026.1840956/full",
         description:
-          "A June 2026 case series on iboga microdosing (whole root bark, 4-on/3-off) for brain injury, with two of three patients reaching full remission — hypothesis-generating, explicitly not proof.",
+          "A June 2026 case series on iboga microdosing (whole root bark, 4-on/3-off) for brain injury, with two of three patients reaching full remission: hypothesis-generating, explicitly not proof.",
         source: "Frontiers · verified full-text",
       },
       {
-        title: "Microdosing case report — bipolar depression",
+        title: "Microdosing case report: bipolar depression",
         href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9375667/",
         description:
-          "A published microdosing case report in bipolar depression — a rare peer-reviewed look at sub-perceptual dosing, with the caveats stated plainly.",
+          "A published microdosing case report in bipolar depression: a rare peer-reviewed look at sub-perceptual dosing, with the caveats stated plainly.",
         source: "PMC",
       },
       {
@@ -895,17 +895,17 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         source: "Frontiers",
       },
       {
-        title: "White House fact sheet — ibogaine research",
+        title: "White House fact sheet: ibogaine research",
         href: "https://www.whitehouse.gov/fact-sheets/2026/04/fact-sheet-president-donald-j-trump-is-accelerating-medical-treatments-for-serious-mental-illness/",
         description:
           "The primary federal document: $50M ARPA-H match for state research and a Right-to-Try pathway naming ibogaine specifically.",
         source: "White House",
       },
       {
-        title: "Harvard — executive order Q&A",
+        title: "Harvard: executive order Q&A",
         href: "https://petrieflom.law.harvard.edu/2026/04/18/a-new-executive-order-on-psychedelics-q-a-with-i-glenn-cohen-and-mason-marks/",
         description:
-          "Harvard legal scholars unpack what the executive order actually changes — and what it pointedly does not.",
+          "Harvard legal scholars unpack what the executive order actually changes: and what it pointedly does not.",
         source: "Petrie-Flom Center, Harvard",
       },
     ],
@@ -913,24 +913,24 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
   {
     id: "legal",
     title: "Legal Status & Policy",
-    header: "Where iboga and ibogaine stand — and the fast-moving 2026 policy shifts.",
+    header: "Where iboga and ibogaine stand: and the fast-moving 2026 policy shifts.",
     articles: [
       {
-        title: "CBS — psychedelic research executive order",
+        title: "CBS: psychedelic research executive order",
         href: "https://www.cbsnews.com/news/trump-administration-executive-order-psychedelic-drug-ibogaine/",
         description:
           "Trump's executive order easing psychedelic research limits and opening a Right-to-Try pathway for desperately ill patients.",
         source: "CBS News",
       },
       {
-        title: "CNBC — order legitimizes field, changes no status",
+        title: "CNBC: order legitimizes field, changes no status",
         href: "https://www.cnbc.com/2026/04/20/trump-psychedelics-executive-order-cannabis-reform.html",
         description:
           "Why the order legitimizes the field but changes no drug's legal status, with cardiac risk still the central barrier for ibogaine.",
         source: "CNBC",
       },
       {
-        title: "STAT — is the field ready?",
+        title: "STAT: is the field ready?",
         href: "https://www.statnews.com/2026/05/06/psychedelics-executive-order-ibogaine-trump-research-funding-scheduling/",
         description:
           "A psychedelics researcher's candid right move, but is the field ready? assessment of the new federal push.",
@@ -972,7 +972,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
     header: "Profiles tying Tradition, Healing and Research together.",
     articles: [
       {
-        title: "Ibogaine — Lotsof to today's trials",
+        title: "Ibogaine: Lotsof to today's trials",
         href: "https://en.wikipedia.org/wiki/Ibogaine",
         description:
           "The documented through-line from Lotsof's 1960s discovery to today's trials.",
@@ -982,7 +982,7 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
         title: "The Ibogaine Stories",
         href: "https://theibogainestories.com/",
         description:
-          "The living voices — researchers, healers and recovered patients — in one project.",
+          "The living voices: researchers, healers and recovered patients: in one project.",
         source: "The Ibogaine Stories",
       },
       {

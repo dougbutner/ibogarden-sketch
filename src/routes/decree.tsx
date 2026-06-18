@@ -5,17 +5,17 @@ import { PageHeader } from "@/components/page-header";
 export const Route = createFileRoute("/decree")({
   head: () => ({
     meta: [
-      { title: "Gabon Decree 0239 — ibo.garden" },
+      { title: "Gabon Decree 0239 | ibo.garden" },
       {
         name: "description",
         content:
           "Plain-English guide to Gabon Presidential Decree No. 0239/PR/MJSRCAVA (22 May 2026): Iboga access, use, research, transformation, commercialization, and traditional knowledge.",
       },
-      { property: "og:title", content: "Gabon Decree 0239 — Iboga Sovereignty & Regulation" },
+      { property: "og:title", content: "Gabon Decree 0239: Iboga Sovereignty & Regulation" },
       {
         property: "og:description",
         content:
-          "How Gabon regulates Iboga, its derivatives, and associated traditional knowledge — and what it means for ethical sourcing.",
+          "How Gabon regulates Iboga, its derivatives, and associated traditional knowledge: and what it means for ethical sourcing.",
       },
     ],
   }),
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/decree")({
 const DEFINITIONS = [
   {
     term: "Iboga",
-    text: "Tabernanthe iboga — a Gabonese forest medicinal shrub (also known as Eboghe or Bois Sacré). Rich in indole alkaloids, notably ibogaine. Used traditionally in ritual, spiritual, and therapeutic practice; studied for addiction and neurological conditions.",
+    text: "Tabernanthe iboga: a Gabonese forest medicinal shrub (also known as Eboghe or Bois Sacré). Rich in indole alkaloids, notably ibogaine. Used traditionally in ritual, spiritual, and therapeutic practice; studied for addiction and neurological conditions.",
   },
   {
     term: "Iboga derivatives",
@@ -142,13 +142,13 @@ function Decree() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4 text-forest/80 leading-relaxed">
               <p>
-                Decree 0239 establishes Gabon's sovereign framework for Iboga — from wild harvest and farm
+                Decree 0239 establishes Gabon's sovereign framework for Iboga: from wild harvest and farm
                 cultivation to research, processing, domestic trade, and export. It applies to Iboga in all forms,
                 ibogaine and all related alkaloids, and any compound whose properties were first identified from
                 Iboga, regardless of where it is later produced.
               </p>
               <p>
-                The decree applies to all persons and entities — Gabonese or foreign — whose activities involve
+                The decree applies to all persons and entities: Gabonese or foreign: whose activities involve
                 use, exploitation, research, transformation, or commercialization of Iboga, its derivatives, or
                 associated traditional knowledge.
               </p>
@@ -184,13 +184,13 @@ function Decree() {
             <p>
               <strong className="text-forest">Attachment principle (Articles 7–8):</strong> Any compound, process,
               application, or use whose properties or indications were first identified from Iboga or ibogaine is
-              legally attached to that resource and to associated traditional knowledge — including activities
+              legally attached to that resource and to associated traditional knowledge: including activities
               outside Gabon's territory.
             </p>
             <p>
               <strong className="text-forest">Full sovereignty (Article 6):</strong> Gabon exercises complete
               sovereignty over Iboga, its derivatives, associated traditional knowledge, and their present and
-              future applications — in respect of community interests.
+              future applications: in respect of community interests.
             </p>
             <div className="bg-forest text-earth rounded-3xl p-8">
               <h3 className="font-serif text-2xl italic mb-4">What falls under the decree</h3>
@@ -207,8 +207,8 @@ function Decree() {
 
         <Section id="authorization" title="Prior authorization required">
           <p className="text-forest/80 leading-relaxed mb-8 max-w-3xl">
-            Any use, exploitation, research, transformation, or commercialization of Iboga — as well as access to
-            Iboga, its derivatives, partnerships, or markets — requires prior administrative authorization.
+            Any use, exploitation, research, transformation, or commercialization of Iboga: as well as access to
+            Iboga, its derivatives, partnerships, or markets: requires prior administrative authorization.
           </p>
           <div className="grid md:grid-cols-2 gap-8">
             <ul className="space-y-4">
@@ -250,8 +250,8 @@ function Decree() {
           <div className="grid md:grid-cols-2 gap-8 items-start">
             <p className="text-forest/80 leading-relaxed">
               Export of Iboga from legal, certified farms is permitted under a national certification system
-              guaranteeing traceability, environmental standards, and benefit-sharing (Article 10). Producers —
-              individually, collectively, or supported by accredited operators — may access international markets
+              guaranteeing traceability, environmental standards, and benefit-sharing (Article 10). Producers : 
+              individually, collectively, or supported by accredited operators: may access international markets
               directly, in compliance with this decree.
             </p>
             <div className="bg-gold/10 border border-gold/25 rounded-3xl p-8">
@@ -289,8 +289,8 @@ function Decree() {
               <p>
                 <strong className="text-forest">Patent applications (Article 17):</strong> Any patent application
                 relating to Iboga, its derivatives, or associated traditional knowledge must declare the origin of
-                the product. A certificate of origin issued by the Minister of Culture — after unanimous approval
-                from the Interministerial Technical Commission — must accompany the application.
+                the product. A certificate of origin issued by the Minister of Culture: after unanimous approval
+                from the Interministerial Technical Commission: must accompany the application.
               </p>
               <p>
                 <strong className="text-forest">State opposition (Article 18):</strong> The State reserves the
@@ -357,7 +357,7 @@ function Decree() {
         <Section id="alignment" title="How ibo.garden aligns">
           <div className="bg-forest text-earth rounded-[2rem] p-10 md:p-14">
             <p className="text-earth/80 leading-relaxed mb-10 max-w-3xl">
-              ibo.garden is built to support implementation of Decree 0239 — not to circumvent it. Our marketplace,
+              ibo.garden is built to support implementation of Decree 0239: not to circumvent it. Our marketplace,
               certification, and <span className="gaine-word gaine-word-sm">GAINE</span> token infrastructure are
               designed around the decree's core requirements.
             </p>

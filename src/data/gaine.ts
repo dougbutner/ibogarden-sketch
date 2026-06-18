@@ -6,11 +6,24 @@ export const GAINE_TOKEN_IMAGE =
 
 export const GAINE_WHITEPAPER_URL = GAINE_METADATA_URL;
 
+/** GAINE token mint on Solana mainnet. Override with VITE_GAINE_MINT in env. */
+export const GAINE_MINT_ADDRESS = "ibozy4AxS6TdsBDerGJN1ZKFFohEubFdHWGcyLxPLFL";
+
 /** Paste your Solana mint here, or set VITE_GAINE_MINT in env. */
 export const GAINE_CONTRACT_ADDRESS =
-  (import.meta.env.VITE_GAINE_MINT as string | undefined) ?? "";
+  (import.meta.env.VITE_GAINE_MINT as string | undefined) || GAINE_MINT_ADDRESS;
+
+/** Project wallet that holds GAINE liquidity positions on Orca. */
+export const GAINE_PROJECT_WALLET = "GAinSTufAma6Z53W1EveJPYSXh2bJySw4k2kZ1TMoLF3";
+
+/** Minimum expected Orca Whirlpool count: used to verify the feed is complete. */
+export const GAINE_MIN_EXPECTED_POOLS = 20;
 
 export const GAINE_ORCA_URL = "https://www.orca.so";
+
+export function gainePoolOrcaUrl(poolAddress: string) {
+  return `https://www.orca.so/pools/${poolAddress}`;
+}
 
 export const GAINE_MAX_SUPPLY = "999,369";
 export const GAINE_LAUNCH_PRICE = "$1.00";
@@ -75,7 +88,7 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
     title: "Numbers, not narrative",
     image: "iboga-root",
     paragraphs: [
-      "GAINE is not an experiment — it's an evolution of the most successful stable-bonded token design by the same architect.",
+      "GAINE is not an experiment: it's an evolution of the most successful stable-bonded token design by the same architect.",
       {
         type: "link",
         text: "That project",
@@ -90,7 +103,7 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
     title: "Impact with interest, principal that stays",
     image: "gabon-farm",
     paragraphs: [
-      "You buy GAINE and keep 98% of the value. The whole time you hold it, the dollars backing your tokens stay liquid in the pool — while the 2% transfer tax from every transaction flows to impact you choose.",
+      "You buy GAINE and keep 98% of the value. The whole time you hold it, the dollars backing your tokens stay liquid in the pool: while the 2% transfer tax from every transaction flows to impact you choose.",
       "GAINE builds on this market understanding to create a New Earth finance model. For the first time, you have the ability to provide lasting impact without your assets leaving your hand.",
     ],
   },

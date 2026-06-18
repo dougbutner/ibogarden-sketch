@@ -18,7 +18,7 @@ const SHARE_MESSAGES = [
   {
     id: "learn",
     label: "Invite to learn",
-    text: "Iboga is a sacred root from Gabon with deep healing potential. Start with the curated knowledge library at ibo.garden — traditions, science, and ethical sourcing.",
+    text: "Iboga is a sacred root from Gabon with deep healing potential. Start with the curated knowledge library at ibo.garden: traditions, science, and ethical sourcing.",
   },
   {
     id: "story",
@@ -28,7 +28,7 @@ const SHARE_MESSAGES = [
   {
     id: "gabon",
     label: "Gabon-first framing",
-    text: "Ethical Iboga respects Gabonese soil and Bwiti lineages. ibo.garden maps knowledge, sourcing, and reciprocity — Nagoya-aligned and decree-aware.",
+    text: "Ethical Iboga respects Gabonese soil and Bwiti lineages. ibo.garden maps knowledge, sourcing, and reciprocity: Nagoya-aligned and decree-aware.",
   },
 ] as const;
 
@@ -48,7 +48,7 @@ export function IbogaShareTool() {
   const message = SHARE_MESSAGES.find((item) => item.id === activeMessage) ?? SHARE_MESSAGES[0];
   const inviteUrl = useMemo(() => buildInviteUrl(origin, activeMessage), [origin, activeMessage]);
   const shareText = note.trim() ? `${message.text}\n\n${note.trim()}` : message.text;
-  const shareTitle = "Learn about Iboga — ibo.garden";
+  const shareTitle = "Learn about Iboga | ibo.garden";
 
   async function handleCopyLink() {
     try {
@@ -154,7 +154,7 @@ export function IbogaShareTool() {
           <LinkedinShareButton url={inviteUrl} title={shareTitle} summary={shareText} className={buttonClass}>
             LinkedIn
           </LinkedinShareButton>
-          <WhatsappShareButton url={inviteUrl} title={shareText} separator=" — " className={buttonClass}>
+          <WhatsappShareButton url={inviteUrl} title={shareText} separator=" | " className={buttonClass}>
             WhatsApp
           </WhatsappShareButton>
           <TelegramShareButton url={inviteUrl} title={shareText} className={buttonClass}>

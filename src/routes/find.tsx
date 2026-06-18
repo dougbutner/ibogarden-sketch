@@ -5,10 +5,10 @@ import { PageHeader } from "@/components/page-header";
 export const Route = createFileRoute("/find")({
   head: () => ({
     meta: [
-      { title: "Find a Facilitator — ibo.garden" },
+      { title: "Find a Facilitator | ibo.garden" },
       { name: "description", content: "Verified clinical, traditional Bwiti, and retreat facilitators. Filter by certification, location, and language." },
-      { property: "og:title", content: "Find an Iboga Facilitator — ibo.garden" },
-      { property: "og:description", content: "Clinical, Traditional, Retreat — verified globally." },
+      { property: "og:title", content: "Find an Iboga Facilitator | ibo.garden" },
+      { property: "og:description", content: "Clinical, Traditional, Retreat: verified globally." },
     ],
   }),
   component: Find,

@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/page-header";
 export const Route = createFileRoute("/marketplace")({
   head: () => ({
     meta: [
-      { title: "Marketplace — ibo.garden" },
+      { title: "Marketplace | ibo.garden" },
       { name: "description", content: "Treatments, ceremonies, training, products, and donations. Network-verified, GAINE-certified listings." },
       { property: "og:title", content: "ibo.garden Marketplace" },
       { property: "og:description", content: "Treatments, training, ceremonies, and ethical sourcing." },
@@ -23,7 +23,7 @@ const CATEGORIES = [
 ];
 
 const LISTINGS = [
-  { title: "Clinical Iboga Protocol — 10 days", cat: "Treatment", price: "$8,400", loc: "Costa Rica", cert: "GAINE" },
+  { title: "Clinical Iboga Protocol: 10 days", cat: "Treatment", price: "$8,400", loc: "Costa Rica", cert: "GAINE" },
   { title: "Bwiti Initiation Ceremony", cat: "Ceremony", price: "By inquiry", loc: "Gabon", cert: "Decree 0239" },
   { title: "Facilitator Training · Level 1", cat: "Training", price: "$1,200", loc: "Online", cert: "GAINE" },
   { title: "Sustainable Root Bark (50g)", cat: "Product", price: "$145", loc: "Direct · Gabon", cert: "Nagoya" },

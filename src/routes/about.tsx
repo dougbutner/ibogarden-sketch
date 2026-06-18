@@ -5,7 +5,7 @@ import ibogaRoot from "@/assets/iboga-root.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — ibo.garden" },
+      { title: "About | ibo.garden" },
       { name: "description", content: "Mission, team, and values: ethical, sustainable access to Iboga rooted in Gabonese Bwiti tradition and the Nagoya Protocol." },
       { property: "og:title", content: "About ibo.garden" },
       { property: "og:description", content: "Mission, team, and values rooted in Gabon and Bwiti tradition." },
@@ -28,7 +28,7 @@ function About() {
       <PageHeader
         eyebrow="About"
         title="A garden, not a marketplace."
-        lead="ibo.garden exists to provide ethical, sustainable access to Iboga — for planetary healing, in partnership with the Gabonese communities who have stewarded this medicine for millennia."
+        lead="ibo.garden exists to provide ethical, sustainable access to Iboga: for planetary healing, in partnership with the Gabonese communities who have stewarded this medicine for millennia."
       />
 
       <section className="px-6 max-w-7xl mx-auto pb-20 grid md:grid-cols-2 gap-12 items-start">
@@ -37,10 +37,10 @@ function About() {
           <div>
             <h2 className="font-serif text-3xl italic text-forest mb-4">Our Values</h2>
             <ul className="space-y-3 text-forest/80">
-              {["Sustainability — every harvest replanted, tracked, and verified.",
-                "Reciprocity — funds flow back to Gabon, not away from it.",
-                "Transparency — sourcing, finances, and certification on-chain.",
-                "Accessibility — care for those who cannot afford it, through nomination.",
+              {["Sustainability: every harvest replanted, tracked, and verified.",
+                "Reciprocity: funds flow back to Gabon, not away from it.",
+                "Transparency: sourcing, finances, and certification on-chain.",
+                "Accessibility: care for those who cannot afford it, through nomination.",
               ].map((v) => (
                 <li key={v} className="flex gap-3"><span className="text-gold mt-1">◆</span><span>{v}</span></li>
               ))}
@@ -50,7 +50,7 @@ function About() {
             <h3 className="font-serif text-xl italic text-forest mb-2">Gabon Decree 0239 & Nagoya Protocol</h3>
             <p className="text-sm text-forest/70 leading-relaxed mb-4">
               Gabon's Presidential Decree 0239 (22 May 2026) establishes sovereign control over Iboga, its
-              derivatives, and associated traditional knowledge — requiring prior authorization, community
+              derivatives, and associated traditional knowledge: requiring prior authorization, community
               consultation, traceable export from certified farms, and fair benefit-sharing. We operate
               within this framework and the Nagoya Protocol, under guidance from a Bwiti Practitioner Council.
             </p>

@@ -1,0 +1,34 @@
+mint,symbol,is_stablecoin,is_usd_pegged,country_emoji,notes
+EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v,USDC,true,true,🇺🇸,USD stablecoin
+Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB,USDT,true,true,🇺🇸,USD stablecoin
+2b1kV6DkPAnxd5ixfnxCpjxmKwqjjaYmCZfHsFu24GXo,PYUSD,true,true,🇺🇸,PayPal USD
+9zNQRsGLjNKwCUU5Gq5LR8beUCPzQMVMqKAi3SSZh54u,FDUSD,true,true,🇺🇸,First Digital USD
+USD1ttGY1N17NEEHLmELoaybftRBUSErhqYiQzvEmuB,USD1,true,true,🇺🇸,World Liberty Financial USD
+DEkqHyPN7GMRJ5cArtQFAWefqbZb33Hyf6s5iCwjEonT,USDe,true,true,🇺🇸,Ethena USDe
+9ckR7pPPvyPadACDTzLwK2ZAEeUJ3qGSnzPs8bVaHrSy,USDu,true,true,🇺🇸,USD unit stable
+A1KLoBrKBde8Ty9qtNQUtq3C2ortoC3u7twggz7sEto6,USDY,true,true,🇺🇸,Ondo USDY
+2u1tszSeqZ3qBWF3uNGPFc8TzMk2tdiwknnRMWGWjGWH,USDG,true,true,🇺🇸,Global Dollar
+USDSwr9ApdHk5bvJKMjzff41FfuX8bSxdKcR81vTwcA,USDS,true,true,🇺🇸,Sky USD
+EjmyN6qEC1Tf1JxiG1ae7UTJhUxSwk1TCWNWqxWV4J6o,DAI,true,true,🇺🇸,Maker DAI
+33fsBLA8djQm82RpHmE3SuVrPGtZBWNYExsEUeKX1HXX,BUSD,true,true,🇺🇸,Binance USD
+GzX1ireZDU865FiMaKrdVB1H6AE8LAqWYCg6chrMrfBw,frxUSD,true,true,🇺🇸,Frax USD
+5YMkXAYccHSGnHn9nob9xEvv6Pvka9DZWH7nTbotTu9E,hyUSD,true,true,🇺🇸,Hylo USD
+CASHx9KJUStyftLFWGvEVf59SGeG9sh5FfcnZMVPCASH,CASH,true,true,🇺🇸,Phantom CASH
+AUSD1jCcCyPLybk1YnvPWsHQSrZ46dxwoMniN4N2UEB9,AUSD,true,true,🇺🇸,Agora USD
+DUSDt4AeLZHWYmcXnVGYdgAzjtzU5mXUVnTMdnSzAttM,DUSD,true,true,🇺🇸,Dialect USD
+JuprjznTrTSp2UFa3ZBUFgwdAmtZCq4MQCwysN55USD,JupUSD,true,true,🇺🇸,Jupiter USD
+6FrrzDk5mQARGc1TDYoyVnSyRdds1t4PbtohCD6p3tgG,USX,true,true,🇺🇸,Solstice USX
+8fr7WGTVFszfyNWRMXj6fRjZZAnDwmXwEpCrtzmUkdih,wYLDS,true,true,🇺🇸,Yields USD
+HzwqbKZw8HxMN6bF2yFZNrht3c2iXXzpKcFu7uBEDKtr,EURC,true,false,🇪🇺,Circle euro stablecoin
+C4Kkr9NZU3VbyedcgutU6LKmi6MKz81sx6gRmk5pX519,VEUR,true,false,🇪🇺,VNX euro
+5H4voZhzySsVvwVYDAKku8MZGuYBC7cXaBKDPW4YHWW1,VGBP,true,false,🇬🇧,VNX pound
+AhhdRu5YZdjVkKR3wbnUDaymVQL2ucjMQ63sZ3LFHsch,VCHF,true,false,🇨🇭,VNX franc
+AUDDttiEpCydTm7joUMbYddm72jAWXZnCpPZtDoxqBSw,AUDD,true,false,🇦🇺,Australian dollar stablecoin
+BRZbFNQDcWLfcdHmAkqEVnLHCAWKTRf6eHyEaWdZp3JN,BRZ,true,false,🇧🇷,Brazilian real stablecoin
+AymATz4TCL9sWNEEV9Kvyz45CHVhDZ6kUgjTJPzLpU9P,XAUt0,true,false,🟡,Tether gold (commodity-backed)
+GoLDEDmbque3qd1xfmnzMtg7HMju8p4UoaRX1vBsehjA,SOLOMON,true,false,🟡,Gold-backed token
+So11111111111111111111111111111111111111112,SOL,false,false,,Native Solana
+27G8MtK7VtTcCHkpASjSDdkWWYfoqT6ggEuKidVJidD4,JLP,false,false,,Jupiter LP token
+22pomM7dVyir9tE2Vkd1TtqaAkYeiPKAbSz2225LmAku,EASY,false,false,,EASY community token
+iy11ytbSGcUnrjE6Lfv78TFqxKyUESfku1FugS9ondo,SLVon,false,false,⚪,Silver token
+QuicEPtN6QtDoMvmsWe5Xqb5da3FqBQWff7jh2cBXn7,QUICK,false,false,⚪,Quick token

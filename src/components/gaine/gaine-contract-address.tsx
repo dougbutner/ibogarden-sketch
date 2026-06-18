@@ -10,6 +10,7 @@ function truncateAddress(address: string) {
 
 export function GaineContractAddress() {
   const [copied, setCopied] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const hasAddress = GAINE_CONTRACT_ADDRESS.length > 0;
 
   async function handleCopy() {
@@ -36,17 +37,29 @@ export function GaineContractAddress() {
         <button
           type="button"
           onClick={handleCopy}
-          className="gaine-surface-card w-full px-6 py-4 font-mono text-sm md:text-base transition-colors hover:bg-white/[0.03] cursor-pointer"
+          onMouseEnter={() => setExpanded(true)}
+          onMouseLeave={() => setExpanded(false)}
+          onFocus={() => setExpanded(true)}
+          onBlur={() => setExpanded(false)}
+          className="gaine-surface-card w-full px-6 py-4 font-mono text-sm md:text-base transition-all duration-300 hover:bg-white/[0.03] cursor-pointer overflow-hidden"
           style={{ color: "var(--gaine-text)" }}
         >
-          {copied ? "Copied!" : truncateAddress(GAINE_CONTRACT_ADDRESS)}
+          <span
+            className="inline-block transition-all duration-300 ease-out"
+            style={{
+              letterSpacing: expanded ? "0.02em" : "0",
+              transform: expanded ? "scale(1)" : "scale(1)",
+            }}
+          >
+            {copied ? "Copied!" : expanded ? GAINE_CONTRACT_ADDRESS : truncateAddress(GAINE_CONTRACT_ADDRESS)}
+          </span>
         </button>
       ) : (
         <div
           className="gaine-surface-card w-full px-6 py-4 text-sm"
           style={{ color: "var(--gaine-muted)" }}
         >
-          Mint address will be published at launch — set{" "}
+          Mint address will be published at launch: set{" "}
           <code className="font-mono text-xs" style={{ color: "var(--gaine-accent)" }}>
             VITE_GAINE_MINT
           </code>{" "}
@@ -56,7 +69,7 @@ export function GaineContractAddress() {
 
       {hasAddress && (
         <p className="mt-3 text-xs" style={{ color: "var(--gaine-muted)" }}>
-          Click to copy full address
+          Hover to reveal · click to copy
         </p>
       )}
     </section>

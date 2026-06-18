@@ -5,10 +5,10 @@ import { PageHeader } from "@/components/page-header";
 export const Route = createFileRoute("/network")({
   head: () => ({
     meta: [
-      { title: "Partners Network — ibo.garden" },
+      { title: "Partners Network | ibo.garden" },
       { name: "description", content: "Register your facility, practice, or farm. Decree 0239-aligned and GAINE Certified partners earn visibility and marketplace access." },
       { property: "og:title", content: "Join the ibo.garden Partners Network" },
-      { property: "og:description", content: "Facilities, Practitioners, Farms — register for marketplace access." },
+      { property: "og:description", content: "Facilities, Practitioners, Farms: register for marketplace access." },
     ],
   }),
   component: Network,

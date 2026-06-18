@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/page-header";
 export const Route = createFileRoute("/community")({
   head: () => ({
     meta: [
-      { title: "Community — ibo.garden" },
+      { title: "Community | ibo.garden" },
       { name: "description", content: "Recovery stories, forum, volunteer and ambassador programs. Get involved with ibo.garden." },
       { property: "og:title", content: "ibo.garden Community" },
       { property: "og:description", content: "Stories, forum, ambassadors, and ways to get involved." },

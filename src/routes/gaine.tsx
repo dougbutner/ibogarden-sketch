@@ -4,22 +4,24 @@ import { GaineDisclaimer } from "@/components/gaine/gaine-disclaimer";
 import { GaineHero } from "@/components/gaine/gaine-hero";
 import { GainePanels } from "@/components/gaine/gaine-panels";
 import { GaineReflection } from "@/components/gaine/gaine-reflection";
+import { GainePoolsTable } from "@/components/gaine/gaine-pools-table";
 import { GaineStatRow } from "@/components/gaine/gaine-stat-row";
 import { GAINE_INFO_PANELS } from "@/data/gaine";
 
 export const Route = createFileRoute("/gaine")({
   head: () => ({
     meta: [
-      { title: "GAINE Token on Solana — ibo.garden" },
+      { title: "GAINE Token on Solana | ibo.garden" },
       {
         name: "description",
         content:
-          "GAINE is a reciprocating utility token on Solana. Hold it — 2% of every transfer routes to iboga sourcing and Gabon communities you choose.",
+          "GAINE on Solana: digitized fiat routes, buy-to-mint backing from $1–$10M per token, and a 2% transfer fee directed to Ibogabon, market-making, and iboga-focused initiatives.",
       },
-      { property: "og:title", content: "GAINE — Impact you keep. Principal that stays." },
+      { property: "og:title", content: "GAINE: Impact that stays. Investment you keep." },
       {
         property: "og:description",
-        content: "Reciprocating utility token on Solana. 2% transfer fee → USDC, directed by you.",
+        content:
+          "DeFi money model on Solana: trusted fiat routes, range-backed GAINE, and transparent 2% redistribution.",
       },
     ],
   }),
@@ -32,6 +34,7 @@ function Gaine() {
       <GaineHero />
       <GaineStatRow />
       <GaineContractAddress />
+      <GainePoolsTable />
       <GaineReflection />
 
       <section className="px-6 pb-20 max-w-7xl mx-auto w-full">
@@ -58,7 +61,7 @@ function Gaine() {
           <div>
             <h2 className="gaine-display text-2xl mb-2">Legal framework</h2>
             <p className="text-sm leading-relaxed max-w-xl" style={{ color: "var(--gaine-muted)" }}>
-              GAINE operates under Gabon Decree 0239 — supporting traceability, community benefit-sharing, and
+              GAINE operates under Gabon Decree 0239: supporting traceability, community benefit-sharing, and
               certified export from legal farms.
             </p>
           </div>

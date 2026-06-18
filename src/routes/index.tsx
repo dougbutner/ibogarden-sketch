@@ -11,9 +11,9 @@ import { VIDEO_PLAYLISTS } from "@/data/knowledge-iboga";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ibo.garden — GAINE Token & Ethical Iboga Marketplace" },
+      { title: "ibo.garden: GAINE Token & Ethical Iboga Marketplace" },
       { name: "description", content: "GAINE SPL token and marketplace for ethically sourced Iboga. Nagoya Protocol-aligned sourcing, network-verified listings, and on-chain traceability." },
-      { property: "og:title", content: "ibo.garden — GAINE Token & Ethical Iboga Marketplace" },
+      { property: "og:title", content: "ibo.garden: GAINE Token & Ethical Iboga Marketplace" },
       { property: "og:description", content: "GAINE SPL token and marketplace for ethically sourced Iboga. Nagoya Protocol-aligned sourcing, network-verified listings, and on-chain traceability." },
       { property: "og:image", content: heroForest },
       { name: "twitter:image", content: heroForest },
@@ -181,7 +181,7 @@ function Home() {
           <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Mission</span>
           <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 italic leading-tight">Healing Planetary Addiction</h2>
           <p className="text-forest/70 mt-5 text-lg leading-relaxed">
-            Addiction is not only substances. It is emotion, consumption, and the false stories we tell about ourselves. We work upstream — through research, free access, education, and certification of farms and care.
+            Addiction is not only substances. It is emotion, consumption, and the false stories we tell about ourselves. We work upstream: through research, free access, education, and certification of farms and care.
           </p>
         </div>
         <div className="grid md:grid-cols-4 gap-px bg-forest/10 border border-forest/10 rounded-2xl overflow-hidden">
@@ -235,14 +235,14 @@ function Home() {
               </h2>
               <p className="text-forest/75 mt-6 leading-relaxed">
                 Our SPL token on Solana powers ethical sourcing. A 2% reflection on every transaction is converted to
-                USDC and directed — by you — to Gabon reforestation, traditional communities, or clinical research.
+                USDC and directed: by you: to Gabon reforestation, traditional communities, or clinical research.
               </p>
               <ul className="mt-8 space-y-5">
                 {[
                   ["Certified", <><span className="gaine-word gaine-word-sm">GAINE</span> Certified farms and facilitators are audited and badged.</>],
                   ["Ethical Source", "Direct relationships with Gabonese growers. Nagoya-compliant."],
                   ["Legal Pathways", "Jurisdiction-aware referrals into licensed clinical access."],
-                  ["Philanthropy", "Holders redirect their reflection — never receive their own."],
+                  ["Philanthropy", "Holders redirect their reflection: never receive their own."],
                 ].map(([t, d]) => (
                   <li key={t as string} className="flex gap-4">
                     <div className="size-2 rounded-full bg-gold mt-2 shrink-0" />
@@ -277,7 +277,7 @@ function Home() {
         <div className="grid md:grid-cols-3 gap-8">
           <MarketplaceCard
             title="Find a Facilitator"
-            desc="Clinical, traditional, retreat — verified globally."
+            desc="Clinical, traditional, retreat: verified globally."
             to="/find"
             img={ceremonySpace}
             badge="Directory"
@@ -306,7 +306,7 @@ function Home() {
             <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Impact in Gabon</span>
             <h2 className="font-serif text-4xl md:text-5xl mt-4 italic">Rooted in Gabon</h2>
             <p className="text-earth/60 mt-6 max-w-2xl mx-auto leading-relaxed">
-              Committed to Gabon Presidential Decree 0239 (22 May 2026) — sovereign regulation of Iboga access,
+              Committed to Gabon Presidential Decree 0239 (22 May 2026): sovereign regulation of Iboga access,
               export certification, community benefit-sharing, and traditional knowledge protection. Every
               transaction supports reforestation and fair returns to Gabonese communities.
             </p>

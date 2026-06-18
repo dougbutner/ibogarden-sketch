@@ -6,9 +6,9 @@ import seedling from "@/assets/seedling.jpg";
 export const Route = createFileRoute("/impact")({
   head: () => ({
     meta: [
-      { title: "Impact in Gabon — ibo.garden" },
+      { title: "Impact in Gabon | ibo.garden" },
       { name: "description", content: "Reforestation, partner farms, and benefit-sharing in Gabon. Photography and stories from the field." },
-      { property: "og:title", content: "Impact in Gabon — ibo.garden" },
+      { property: "og:title", content: "Impact in Gabon | ibo.garden" },
       { property: "og:description", content: "Reforestation and partner farms in Gabon." },
       { property: "og:image", content: gabonFarm },
     ],
@@ -22,7 +22,7 @@ function Impact() {
       <PageHeader
         eyebrow="Impact in Gabon"
         title="Verified by the forest itself."
-        lead="Reforestation, fair returns to communities, and open verification — aligned with Gabon Decree 0239."
+        lead="Reforestation, fair returns to communities, and open verification: aligned with Gabon Decree 0239."
       />
 
       <section className="px-6 py-16 max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-center">
@@ -45,7 +45,7 @@ function Impact() {
           <h2 className="font-serif text-4xl italic text-forest mb-5">Partner Farms</h2>
           <p className="text-forest/75 leading-relaxed mb-6">
             Partner farms across Estuaire and Ogooué-Maritime. Plot coordinates recorded, quarterly drone
-            surveys, and on-ground audits verify every tree planted under Decree 0239 — which requires legal
+            surveys, and on-ground audits verify every tree planted under Decree 0239: which requires legal
             farm certification, traceability, and benefit-sharing with Gabonese communities.
           </p>
           <p className="text-sm text-forest/60">

@@ -6,9 +6,9 @@ import gabonFarm from "@/assets/gabon-farm.jpg";
 export const Route = createFileRoute("/source")({
   head: () => ({
     meta: [
-      { title: "Direct Sourcing Consultation — ibo.garden" },
+      { title: "Direct Sourcing Consultation | ibo.garden" },
       { name: "description", content: "Direct sourcing consultation with Benny Friedmann, $250 USD. Ethical, Gabon-rooted Iboga procurement guidance." },
-      { property: "og:title", content: "Source Iboga — Consultation with Benny Friedmann" },
+      { property: "og:title", content: "Source Iboga: Consultation with Benny Friedmann" },
       { property: "og:description", content: "$250 consultation for ethical Gabonese sourcing." },
     ],
   }),
@@ -33,7 +33,7 @@ const BULK_PRODUCTS = [
   "Extract / TA",
   "Seedlings & nursery stock",
   "Farm partnership",
-  "Other — describe below",
+  "Other: describe below",
 ];
 
 const BOOKING_WHATSAPP = "24160197640";
@@ -128,7 +128,7 @@ function Source() {
                 <p className="text-sm text-earth/75 leading-relaxed mb-8">
                   Benny was in finance in his former life; now he&apos;s frequently on the ground in Gabon, with
                   relationships with dozens of Gabonese growers, Bwiti shaman including Moughenda, Cameroon
-                  connections, and large-scale corporate sourcing options in accordance with Gabon Decree 0239 — no
+                  connections, and large-scale corporate sourcing options in accordance with Gabon Decree 0239: no
                   intermediaries, fastest turnaround.
                 </p>
                 <ul className="space-y-3.5">
@@ -153,7 +153,7 @@ function Source() {
             </p>
           </div>
 
-          {/* Booking form — floating-label pattern (CodePen / lbebber style) */}
+          {/* Booking form: floating-label pattern (CodePen / lbebber style) */}
           <div className="bg-white border border-forest/10 rounded-3xl p-8 md:p-10 shadow-sm">
             <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-deep">
               Book a session
@@ -210,7 +210,7 @@ function Source() {
             </span>
             <h2 className="font-serif text-4xl italic text-forest mt-3 mb-4">Ready to buy?</h2>
             <p className="text-forest/70 leading-relaxed">
-              Request a quote for bulk iboga root bark, extracts, and verified products — or browse live listings on
+              Request a quote for bulk iboga root bark, extracts, and verified products: or browse live listings on
               the marketplace.
             </p>
           </div>

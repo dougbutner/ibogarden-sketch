@@ -56,36 +56,44 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 1.125rem;
 
-  /* Brand palette */
-  --forest: #0a2418;
-  --moss: #2d4a22;
-  --gold: #c5a059;
-  --gold-deep: #8a6e35;
-  --earth: #fdfaf3;
-  --bone: #f4eedd;
-  --clay: #b66a3e;
+  /* Brand palette: paper, bark, dark clay */
+  --forest: #141a14;
+  --moss: #2c3428;
+  --gold: #b89452;
+  --gold-deep: #7a5c2e;
+  --earth: #f0e8da;
+  --bone: #e3d8c6;
+  --clay: #5c3a28;
+
+  /* Surface border system (light: semi-opaque black) */
+  --surface-border-side: rgba(0, 0, 0, 0.35);
+  --surface-border-top-hover: rgba(0, 0, 0, 0.5);
+  --surface-border-strong: rgba(0, 0, 0, 0.7);
+  --surface-border-active: var(--gold);
+  --texture-paper: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+  --texture-bark: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
 
   /* Shadcn mapped to brand */
   --background: var(--earth);
   --foreground: var(--forest);
-  --card: #ffffff;
+  --card: #f7f1e8;
   --card-foreground: var(--forest);
-  --popover: #ffffff;
+  --popover: #f7f1e8;
   --popover-foreground: var(--forest);
   --primary: var(--forest);
   --primary-foreground: var(--earth);
   --secondary: var(--bone);
   --secondary-foreground: var(--forest);
   --muted: var(--bone);
-  --muted-foreground: #5a6a55;
+  --muted-foreground: #5c5648;
   --accent: var(--gold);
   --accent-foreground: var(--forest);
-  --destructive: #a33a2a;
+  --destructive: #8f3a2a;
   --destructive-foreground: var(--earth);
-  --border: rgba(10, 36, 24, 0.12);
-  --input: rgba(10, 36, 24, 0.15);
+  --border: var(--surface-border-side);
+  --input: rgba(0, 0, 0, 0.2);
   --ring: var(--gold);
 
   --gaine-token-icon: url("/gaine-token.png");
@@ -110,14 +118,17 @@
   --popover-foreground: var(--earth);
   --primary: var(--gold);
   --primary-foreground: var(--forest);
-  --secondary: #1a3322;
+  --secondary: #242c22;
   --secondary-foreground: var(--earth);
-  --muted: #1a3322;
-  --muted-foreground: #b8c0a8;
+  --muted: #242c22;
+  --muted-foreground: #b8b0a0;
   --accent: var(--gold);
   --accent-foreground: var(--forest);
-  --border: rgba(244, 238, 221, 0.12);
-  --input: rgba(244, 238, 221, 0.15);
+  --border: var(--surface-border-side);
+  --input: rgba(255, 255, 255, 0.2);
+  --surface-border-side: rgba(255, 255, 255, 0.35);
+  --surface-border-top-hover: rgba(255, 255, 255, 0.5);
+  --surface-border-strong: rgba(255, 255, 255, 0.7);
 }
 
 @layer base {
@@ -154,10 +165,52 @@
   html { -webkit-font-smoothing: antialiased; }
   body {
     background-color: var(--color-earth);
+    background-image:
+      var(--texture-paper),
+      radial-gradient(ellipse 120% 80% at 15% 0%, rgba(92, 58, 40, 0.07), transparent 55%),
+      radial-gradient(ellipse 90% 70% at 85% 100%, rgba(44, 52, 40, 0.06), transparent 50%);
+    background-blend-mode: multiply, normal, normal;
     color: var(--color-forest);
     font-family: var(--font-sans);
   }
   h1, h2, h3, h4 { font-family: var(--font-serif); }
+
+  .bg-forest,
+  .gaine-page {
+    --surface-border-side: rgba(255, 255, 255, 0.35);
+    --surface-border-top-hover: rgba(255, 255, 255, 0.5);
+    --surface-border-strong: rgba(255, 255, 255, 0.7);
+  }
+
+  .bg-forest:not(img) {
+    background-image:
+      var(--texture-bark),
+      linear-gradient(165deg, rgba(20, 26, 20, 0.92), rgba(44, 52, 40, 0.88));
+    background-blend-mode: overlay, normal;
+  }
+
+  /* Paper surfaces: base utilities only (not hover:/focus: variants) */
+  :is(
+    .bg-white,
+    .bg-card,
+    .bg-bone,
+    [class~="bg-white"],
+    [class~="bg-card"],
+    [class~="bg-bone"],
+    [class^="bg-white/"],
+    [class*=" bg-white/"],
+    [class^="bg-bone/"],
+    [class*=" bg-bone/"]
+  ) {
+    background-color: var(--card) !important;
+    background-image: var(--texture-paper);
+    background-blend-mode: multiply;
+    color: var(--foreground);
+  }
+
+  .bg-bone {
+    background-color: var(--bone) !important;
+  }
 }
 
 @layer utilities {
@@ -210,7 +263,110 @@
 
   .gaine-surface-card {
     background: var(--gaine-surface);
-    border: 1px solid var(--gaine-border);
+    background-image: var(--texture-bark);
+    background-blend-mode: overlay;
+    color: var(--gaine-text);
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: var(--surface-border-side);
+    border-right-color: var(--surface-border-side);
+    border-width: 1px;
+    border-style: solid;
     border-radius: var(--gaine-radius);
+    transition: border-color 0.25s ease, border-bottom-width 0.25s ease, border-top-width 0.25s ease;
   }
+
+  .gaine-surface-card:hover {
+    border-top-color: var(--surface-border-top-hover);
+    border-top-width: 1px;
+    border-bottom-color: var(--surface-border-strong);
+    border-bottom-width: 2px;
+  }
+
+  .gaine-surface-card:is(:active, [data-state=active], [aria-current="page"], [aria-selected="true"], [data-active="true"]) {
+    border-top-color: transparent;
+    border-top-width: 0;
+    border-bottom-color: var(--surface-border-active);
+    border-bottom-width: 2px;
+  }
+}
+
+/* Rounded panels: left/right borders; thicker bottom on hover */
+:where(div, article, section, li, button, a):where(
+  [class*="rounded-lg"],
+  [class*="rounded-xl"],
+  [class*="rounded-2xl"],
+  [class*="rounded-3xl"]
+):where([class*="border"]):not(
+  [class*="rounded-full"],
+  [class*="rounded-sm"],
+  [class*="border-0"],
+  [class*="border-none"],
+  [class*="border-b"],
+  [class*="border-t"],
+  [class*="border-l"],
+  [class*="border-r"],
+  [class*="border-x"],
+  [class*="border-y"],
+  input,
+  textarea,
+  select
+) {
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-left-color: var(--surface-border-side) !important;
+  border-right-color: var(--surface-border-side) !important;
+  transition: border-color 0.25s ease, border-bottom-width 0.25s ease, border-top-width 0.25s ease;
+}
+
+:where(div, article, section, li, button, a):where(
+  [class*="rounded-lg"],
+  [class*="rounded-xl"],
+  [class*="rounded-2xl"],
+  [class*="rounded-3xl"]
+):where([class*="border"]):not(
+  [class*="rounded-full"],
+  [class*="rounded-sm"],
+  [class*="border-0"],
+  [class*="border-none"],
+  [class*="border-b"],
+  [class*="border-t"],
+  [class*="border-l"],
+  [class*="border-r"],
+  [class*="border-x"],
+  [class*="border-y"],
+  input,
+  textarea,
+  select
+):hover {
+  border-top-color: var(--surface-border-top-hover) !important;
+  border-top-width: 1px !important;
+  border-bottom-color: var(--surface-border-strong) !important;
+  border-bottom-width: 2px !important;
+}
+
+:where(div, article, section, li, button, a):where(
+  [class*="rounded-lg"],
+  [class*="rounded-xl"],
+  [class*="rounded-2xl"],
+  [class*="rounded-3xl"]
+):where([class*="border"]):not(
+  [class*="rounded-full"],
+  [class*="rounded-sm"],
+  [class*="border-0"],
+  [class*="border-none"],
+  [class*="border-b"],
+  [class*="border-t"],
+  [class*="border-l"],
+  [class*="border-r"],
+  [class*="border-x"],
+  [class*="border-y"],
+  input,
+  textarea,
+  select
+):is(:active, [data-state=active], [aria-current="page"], [aria-selected="true"], [data-active="true"]) {
+  border-top-color: transparent !important;
+  border-top-width: 0 !important;
+  border-bottom-color: var(--surface-border-active) !important;
+  border-bottom-width: 2px !important;
 }

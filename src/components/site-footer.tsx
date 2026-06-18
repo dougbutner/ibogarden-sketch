@@ -101,7 +101,7 @@ export function SiteFooter() {
 
         <div className="pt-6 border-t border-earth/10 flex flex-col md:flex-row justify-between gap-4 text-[10px] text-earth/40 uppercase tracking-widest">
           <span>
-            &copy; 2026 ibo.garden / iboga.market — All Rights Reserved. Content provided &ldquo;as is&rdquo; with no
+            &copy; 2026 ibo.garden / iboga.market: All Rights Reserved. Content provided &ldquo;as is&rdquo; with no
             warranties.
           </span>
           <span>Committed to Gabon Decree 0239 · Nagoya Protocol</span>
