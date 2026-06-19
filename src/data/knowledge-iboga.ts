@@ -40,7 +40,7 @@ export type TopicTrunk = {
   label: string;
   tagline: string;
   description: string;
-  /** Exchange trunk uses the GAINE coin as its hub symbol */
+  /** Economic trunk uses the GAINE coin as its hub symbol */
   useGaineIcon?: boolean;
   leaves: TopicLeaf[];
 };
@@ -54,37 +54,37 @@ export const TOPIC_ROOT = {
   label: "Iboga",
   tagline: "The root at the center of everything here.",
   description:
-    "Tabernanthe iboga: plant, rite, molecule, and commodity. Four ways humans hold it: lineage, land, medicine, and exchange.",
+    "Tabernanthe iboga: plant, rite, molecule, and commodity. Five ways humans hold it: tradition, roots, medicine, economic exchange, and law.",
 };
 
-/** Hierarchical topic map: four trunks, human-readable grouping */
+/** Hierarchical topic map: five trunks, human-readable grouping */
 export const TOPIC_MAP: TopicTrunk[] = [
   {
-    id: "lineage",
-    label: "Lineage",
+    id: "tradition",
+    label: "Tradition",
     tagline: "Where the rite began",
     description:
       "The Babongo, Bwiti initiation, and the story passed down long before Western science named the alkaloid.",
     leaves: [
       {
-        id: "history",
-        label: "History",
-        href: "https://en.wikipedia.org/wiki/Ibogaine",
+        id: "early-bwiti",
+        label: "Early Bwiti",
+        href: "https://www.roothealing.com/post/the-early-bwiti",
         description:
-          "From 19th-century documentation to 1901 isolation, the Lambarène stimulant era, and the addiction discovery: the whole arc in one node.",
+          "The argument that Bwiti began before iboga was even discovered, as the Babongo's study of life itself in the forests of southern Gabon.",
         shape: "circle",
       },
       {
-        id: "history-bwiti",
-        label: "Bwiti Origins",
-        href: "https://journals.co.za/doi/10.10520/ejc-jiss_v2_n1_a1",
+        id: "bwiti-rites",
+        label: "Initiation Rites",
+        href: "https://www.kanaga-at.com/en/trip-info/gabon-en/the-mysterious-bwiti-initiation-rites/",
         description:
-          "A scholarly account of Bwiti as possibly humanity's oldest religion, pioneered by the Babongo and formalized by the Mitsogo.",
+          "How the rite passed from the forest-dwelling Babongo to the Fang who made Bwiti widely known across Gabon and beyond.",
         shape: "circle",
       },
       {
-        id: "tradition",
-        label: "Bwiti Tradition",
+        id: "missoko-bwiti",
+        label: "Missoko Bwiti",
         href: "https://www.roothealing.com/missoko-bwiti",
         description:
           "The Missoko branch said to preserve Bwiti as it was before French and Christian influence, told by people initiated into it.",
@@ -93,8 +93,8 @@ export const TOPIC_MAP: TopicTrunk[] = [
     ],
   },
   {
-    id: "land",
-    label: "Land",
+    id: "roots",
+    label: "Roots",
     tagline: "Where the plant lives",
     description:
       "The Congo Basin: wild iboga, conservation pressure, and why a keystone species can vanish quietly.",
@@ -113,6 +113,14 @@ export const TOPIC_MAP: TopicTrunk[] = [
         href: "https://chacruna.net/iboga_conservation/",
         description:
           "Why a plant the IUCN calls least concern may quietly be in trouble, given how little real biological data on it exists.",
+        shape: "hexagon",
+      },
+      {
+        id: "sustainability",
+        label: "Sustainability",
+        href: "https://awake.net/is-iboga-endangered/",
+        description:
+          "The 2019 Gabon export suspension, poaching pressure, and why Blessings of the Forest argues wild harvest cannot meet global demand.",
         shape: "hexagon",
       },
     ],
@@ -140,12 +148,20 @@ export const TOPIC_MAP: TopicTrunk[] = [
           "The Stanford study that put ibogaine on the map: 30 veterans with brain injuries, large drops in PTSD, depression and disability, no serious cardiac events with magnesium.",
         shape: "diamond",
       },
+      {
+        id: "clinical-guidelines",
+        label: "Clinical Guidelines",
+        href: "https://ibogaineguidelines.com/",
+        description:
+          "GITA's full clinical guidelines for ibogaine-assisted detox: the community's distilled, freely licensed safety playbook for providers and patients.",
+        shape: "diamond",
+      },
     ],
   },
   {
-    id: "exchange",
-    label: "Exchange",
-    tagline: "Trade, law & reciprocity",
+    id: "economic",
+    label: "Economic",
+    tagline: "Trade & reciprocity",
     description:
       "Markets, clinics, Nagoya benefit-sharing, and the GAINE economy: who profits and who is owed.",
     useGaineIcon: true,
@@ -166,6 +182,23 @@ export const TOPIC_MAP: TopicTrunk[] = [
           "How a worldwide network of off-shore clinics built its own safety governance through trial and error: and how investment capital is now reshaping it.",
         shape: "gaine",
       },
+      {
+        id: "nagoya-trade",
+        label: "Fair-Trade Model",
+        href: "https://www.etheridgefoundation.org/educational-blog/what-is-ibogaine",
+        description:
+          "How Blessings of the Forest became the first group to apply Nagoya to a psychedelic, routing clinic revenue back to Gabonese farming villages.",
+        shape: "gaine",
+      },
+    ],
+  },
+  {
+    id: "legal",
+    label: "Legal",
+    tagline: "Law & policy",
+    description:
+      "Gabon's national treasure status, the Nagoya Protocol, export bans, and the fast-moving 2026 policy shifts in the U.S. and abroad.",
+    leaves: [
       {
         id: "reg-nagoya",
         label: "Nagoya Protocol",
@@ -207,7 +240,16 @@ export type TopicNode = {
 export const TOPIC_NODES: TopicNode[] = TOPIC_MAP.flatMap((t) =>
   t.leaves.map((l) => ({
     ...l,
-    group: t.id === "lineage" ? "history" : t.id === "land" ? "geography" : t.id === "medicine" ? "body" : "market",
+    group:
+      t.id === "tradition"
+        ? "tradition"
+        : t.id === "roots"
+          ? "geography"
+          : t.id === "medicine"
+            ? "body"
+            : t.id === "legal"
+              ? "regulations"
+              : "market",
   })) as TopicNode[],
 );
 
@@ -216,10 +258,34 @@ export const TOPIC_EDGES: [string, string][] = [];
 
 export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
   {
-    id: "about-iboga",
-    title: "About Iboga",
+    id: "healing-stories",
+    title: "Healing Stories",
     featuredPlaylist: {
-      title: "About Iboga",
+      title: "Healing Journey",
+      href: "https://www.youtube.com/playlist?list=PLRRVgL5-YYRVyA1R_XzJXOZGf0_BhZh_k",
+    },
+    videos: [
+      {
+        title: "In Waves and War",
+        href: "https://ambio.life/",
+        description:
+          "Home of the Netflix (2025) film following three U.S. veterans through ibogaine treatment and the limits of conventional care that drove them to seek it.",
+        source: "Ambio Life Sciences",
+      },
+      {
+        title: "We Are Bwitiful: documentary roundup",
+        href: "https://wearebwitiful.com/research/",
+        description:
+          "A curated roundup of iboga documentaries: initiation films, the opioid-crisis investigation Cure for a Crisis, and elder-wisdom features: in one place.",
+        source: "We Are Bwitiful",
+      },
+    ],
+  },
+  {
+    id: "about-iboga",
+    title: "About Iboga in Gabon",
+    featuredPlaylist: {
+      title: "About Iboga in Gabon",
       href: "https://www.youtube.com/playlist?list=UUQz_zD73FpfRbhvSXpljtZA",
     },
     videos: [
@@ -287,30 +353,6 @@ export const VIDEO_PLAYLISTS: VideoPlaylist[] = [
         description:
           "A practical, question-by-question guide to interviewing a clinic or facilitator before you commit, written to help you walk away from the wrong ones.",
         source: "InnerVision Ibogaine",
-      },
-    ],
-  },
-  {
-    id: "healing-stories",
-    title: "Healing Stories",
-    featuredPlaylist: {
-      title: "Healing Journey",
-      href: "https://www.youtube.com/playlist?list=PLRRVgL5-YYRVyA1R_XzJXOZGf0_BhZh_k",
-    },
-    videos: [
-      {
-        title: "In Waves and War",
-        href: "https://ambio.life/",
-        description:
-          "Home of the Netflix (2025) film following three U.S. veterans through ibogaine treatment and the limits of conventional care that drove them to seek it.",
-        source: "Ambio Life Sciences",
-      },
-      {
-        title: "We Are Bwitiful: documentary roundup",
-        href: "https://wearebwitiful.com/research/",
-        description:
-          "A curated roundup of iboga documentaries: initiation films, the opioid-crisis investigation Cure for a Crisis, and elder-wisdom features: in one place.",
-        source: "We Are Bwitiful",
       },
     ],
   },
@@ -911,10 +953,59 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
     ],
   },
   {
+    id: "economic",
+    title: "Economic",
+    header: "Markets, clinics, and Nagoya-aligned reciprocity in the iboga trade.",
+    articles: [
+      {
+        title: "National Geographic: fair-trade root",
+        href: "https://www.nationalgeographic.com/animals/article/ibogaine-pschedelic-drug-root-fair-trade-gabon",
+        description:
+          "How the first legal export under the Nagoya Protocol aimed to fund rural Gabonese and protect the plant rather than strip it.",
+        source: "National Geographic",
+      },
+      {
+        title: "Global ibogaine subculture ethnography",
+        href: "https://link.springer.com/article/10.1057/s41285-025-00220-1",
+        description:
+          "An ethnography of the global ibogaine subculture and how its grassroots safety knowledge formed where official research wouldn't.",
+        source: "Springer",
+      },
+      {
+        title: "Blessings of the Forest and Nagoya",
+        href: "https://www.etheridgefoundation.org/educational-blog/what-is-ibogaine",
+        description:
+          "How Blessings of the Forest became the first group to apply Nagoya to a psychedelic, routing clinic revenue back to farming villages.",
+        source: "Etheridge Foundation",
+      },
+    ],
+  },
+  {
     id: "legal",
     title: "Legal Status & Policy",
     header: "Where iboga and ibogaine stand: and the fast-moving 2026 policy shifts.",
     articles: [
+      {
+        title: "Nagoya and indigenous reciprocity",
+        href: "https://www.law.georgetown.edu/international-law-journal/blog/the-promise-of-nagoya-indigenous-reciprocity-in-the-psychedelic-renaissance/",
+        description:
+          "The legal case for using Nagoya to ensure the Bwiti benefit from iboga's commercialization rather than being cut out of it.",
+        source: "Georgetown Law",
+      },
+      {
+        title: "Gabon 2026 law restructuring",
+        href: "https://jonathandickinson.substack.com/p/gabon-to-restructure-iboga-and-ibogaine",
+        description:
+          "Inside Gabon's 2026 move to tighten iboga/ibogaine law: anti-poaching enforcement, benefit-sharing, and a response to surging U.S. interest.",
+        source: "Jonathan Dickinson",
+      },
+      {
+        title: "Texas $50M ibogaine clinical trials",
+        href: "https://www.texastribune.org/2026/03/31/texas-ibogaine-research-clinical-trials-psychedelics/",
+        description:
+          "Texas launching its own research program after drug companies failed to meet the state's terms for partnership on FDA-track ibogaine development.",
+        source: "Texas Tribune",
+      },
       {
         title: "CBS: psychedelic research executive order",
         href: "https://www.cbsnews.com/news/trump-administration-executive-order-psychedelic-drug-ibogaine/",
@@ -998,10 +1089,11 @@ export const ARTICLE_CATEGORIES: ArticleCategory[] = [
 
 /** Trunk fill colors for the hierarchical map */
 export const TRUNK_COLORS: Record<string, { fill: string; stroke: string; leaf: string }> = {
-  lineage: { fill: "#8a6e35", stroke: "#5c4a24", leaf: "#c5a059" },
-  land: { fill: "#2d4a22", stroke: "#0a2418", leaf: "#3d6a32" },
+  tradition: { fill: "#8a6e35", stroke: "#5c4a24", leaf: "#c5a059" },
+  roots: { fill: "#2d4a22", stroke: "#0a2418", leaf: "#3d6a32" },
   medicine: { fill: "#0a2418", stroke: "#2d4a22", leaf: "#1a3828" },
-  exchange: { fill: "#b66a3e", stroke: "#8a4a28", leaf: "#c5a059" },
+  economic: { fill: "#b66a3e", stroke: "#8a4a28", leaf: "#c5a059" },
+  legal: { fill: "#5c4033", stroke: "#3d2818", leaf: "#8a6e35" },
 };
 
 export const GAINE_ICON = "/gaine-token.png";

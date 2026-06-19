@@ -65,7 +65,7 @@ export function SacredBroadcastsCarousel({ playlists }: { playlists: VideoPlayli
                   </svg>
                 </div>
                 <div className="absolute bottom-5 left-5">
-                  <div className="text-[10px] font-semibold tracking-widest uppercase text-gold mb-1">
+                  <div className="hidden">
                     Playlist {String(index + 1).padStart(2, "0")}
                   </div>
                   <div className="font-serif text-2xl italic">{playlist.title}</div>

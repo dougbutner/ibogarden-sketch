@@ -49,8 +49,8 @@ function Gaine() {
           </h2>
           <div className="mt-4 max-w-3xl space-y-4 leading-relaxed" style={{ color: "var(--gaine-muted)" }}>
             <p>
-              Unlike traditional impact funds, GAINE is designed to make investors insane returns by providing
-              real (boring) financial services.
+              Ibogabon is directly investing in farms to connect the world to the Holy Root, while GAINE gains
+              by providing connective financial services in the digital realm.
             </p>
             <p>
               GAINE keeps your investment liquid, no lock-up period, while routing transfer fees to the

@@ -395,3 +395,64 @@
   border-bottom-color: var(--surface-border-active) !important;
   border-bottom-width: 2px !important;
 }
+
+/* Surface boxes: iboga photo texture on hover / active (one global layer) */
+:where(tr.iboga-surface-row),
+:where(div, article, section, li, .gaine-surface-card):where(
+  [class*="rounded-lg"],
+  [class*="rounded-xl"],
+  [class*="rounded-2xl"],
+  [class*="rounded-3xl"],
+  .gaine-surface-card
+):where([class*="border"], .gaine-surface-card):where(
+  [class*="bg-white"],
+  [class*="bg-bone"],
+  .gaine-surface-card
+):not(
+  [data-no-texture],
+  [class*="bg-bone/"],
+  [class*="rounded-full"],
+  [class*="rounded-sm"],
+  [class*="border-0"],
+  [class*="border-none"],
+  [class*="border-b"],
+  [class*="border-t"],
+  [class*="border-l"],
+  [class*="border-r"],
+  [class*="border-x"],
+  [class*="border-y"],
+  input,
+  textarea,
+  select,
+  a,
+  button:not(.gaine-surface-card)
+) {
+  position: relative;
+  isolation: isolate;
+  --iboga-texture: url("./assets/textures/5.jpg");
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--iboga-texture) center / cover no-repeat;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  &:hover::before {
+    opacity: 0.12;
+  }
+
+  &:is(:active, [data-state=active], [aria-current="page"], [aria-selected="true"], [data-active="true"])::before {
+    opacity: 0.22;
+  }
+}
+
+tr.iboga-surface-row td {
+  position: relative;
+  z-index: 1;
+}

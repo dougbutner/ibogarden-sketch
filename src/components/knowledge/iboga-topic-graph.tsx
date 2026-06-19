@@ -43,10 +43,11 @@ function layoutMap(width: number, height: number) {
   const leafDist = Math.min(width, height) * 0.38;
 
   const trunkAngles: Record<string, number> = {
-    lineage: -Math.PI / 2,
-    exchange: 0,
-    medicine: Math.PI / 2,
-    land: Math.PI,
+    tradition: -Math.PI / 2,
+    economic: -Math.PI / 2 + (2 * Math.PI) / 5,
+    medicine: -Math.PI / 2 + (4 * Math.PI) / 5,
+    legal: -Math.PI / 2 + (6 * Math.PI) / 5,
+    roots: -Math.PI / 2 + (8 * Math.PI) / 5,
   };
 
   const nodes: PlacedNode[] = [{ kind: "root", x: cx, y: cy, r: rootR }];
@@ -123,11 +124,13 @@ function drawNodeShape(
 
   const shape: NodeShape =
     d.kind === "trunk"
-      ? d.trunk.id === "land"
+      ? d.trunk.id === "roots"
         ? "hexagon"
         : d.trunk.id === "medicine"
           ? "diamond"
-          : "circle"
+          : d.trunk.id === "legal"
+            ? "rect"
+            : "circle"
       : d.leaf.shape;
 
   const fill = d.kind === "trunk" ? colors.fill : colors.leaf;
@@ -240,11 +243,11 @@ function SelectionPanel({ selection }: { selection: TopicMapSelection }) {
 }
 
 const LEGEND = [
-  { shape: "circle" as const, label: "Lineage" },
-  { shape: "hexagon" as const, label: "Land" },
+  { shape: "circle" as const, label: "Tradition" },
+  { shape: "hexagon" as const, label: "Roots" },
   { shape: "diamond" as const, label: "Medicine" },
-  { shape: "gaine" as const, label: "Exchange / GAINE" },
-  { shape: "rect" as const, label: "Law & policy" },
+  { shape: "gaine" as const, label: "Economic / GAINE" },
+  { shape: "rect" as const, label: "Legal" },
 ];
 
 function LegendIcon({ shape }: { shape: NodeShape | "circle" }) {
@@ -408,17 +411,18 @@ export function IbogaTopicGraph() {
   }, []);
 
   return (
-    <section className="w-full rounded-3xl border border-forest/10 bg-white overflow-hidden">
+    <section data-no-texture className="w-full rounded-3xl border border-forest/10 bg-white overflow-hidden">
       <div className="px-6 py-5 md:px-8 md:py-6 border-b border-forest/10 bg-bone/40">
         <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-deep">
           Before the articles
         </span>
         <h3 className="font-serif text-2xl md:text-3xl italic text-forest mt-2">Explore Iboga by topic</h3>
         <p className="text-sm text-forest/70 mt-2 max-w-3xl leading-relaxed">
-          Four trunks branch from the root: <strong className="font-semibold text-forest">Lineage</strong>,{" "}
-          <strong className="font-semibold text-forest">Land</strong>,{" "}
-          <strong className="font-semibold text-forest">Medicine</strong>, and{" "}
-          <strong className="font-semibold text-forest">Exchange</strong>. Shape tells you which trunk; the GAINE coin
+          Five trunks branch from the root: <strong className="font-semibold text-forest">Tradition</strong>,{" "}
+          <strong className="font-semibold text-forest">Roots</strong>,{" "}
+          <strong className="font-semibold text-forest">Medicine</strong>,{" "}
+          <strong className="font-semibold text-forest">Economic</strong>, and{" "}
+          <strong className="font-semibold text-forest">Legal</strong>. Shape tells you which trunk; the GAINE coin
           marks trade and tokenized reciprocity.
         </p>
         <ul className="flex flex-wrap gap-x-5 gap-y-2 mt-4">

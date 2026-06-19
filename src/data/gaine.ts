@@ -27,7 +27,7 @@ export function gainePoolOrcaUrl(poolAddress: string) {
 
 export const GAINE_MAX_SUPPLY = "999,369";
 export const GAINE_LAUNCH_PRICE = "$1.00+";
-export const GAINE_LAUNCH_PRICE_NOTE = "~ in USD, EUR, GBP, CHF, AUD, BRL and gold.";
+export const GAINE_LAUNCH_PRICE_NOTE = "in USD, EUR, GBP, CHF, AUD, BRL and gold.";
 export const GAINE_TRANSFER_FEE = "2%";
 export const GAINE_TRANSFER_FEE_LABEL = "Transfer Fee Money Model";
 export const GAINE_PROGRAM = "Token-2022";

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { FOOTER_LEGAL_PARAGRAPHS } from "@/data/legal";
+import { FooterLegalDisclaimer } from "@/components/footer-legal-disclaimer";
 
 const LAUNCH_LINKS = [
   { to: "/marketplace", label: "Marketplace" },
@@ -19,7 +19,7 @@ const MORE_LINKS = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-forest text-earth pt-20 pb-16 px-6 mt-12">
+    <footer className="bg-forest text-earth pt-20 pb-16 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           <div className="md:col-span-2">
@@ -27,20 +27,7 @@ export function SiteFooter() {
             <p className="text-earth/60 max-w-sm mb-6 italic leading-relaxed">
               Ethical Iboga sourcing. Tokenized reciprocity. Rooted in Gabon.
             </p>
-            <div className="text-sm text-earth/50 leading-relaxed max-w-lg space-y-3">
-              {FOOTER_LEGAL_PARAGRAPHS.map((paragraph, index) => (
-                <p key={index}>
-                  {index === 0 ? (
-                    <>
-                      <strong className="text-earth/70">Important:</strong>{" "}
-                      <span className="gaine-word gaine-word-sm">GAINE</span> {paragraph}
-                    </>
-                  ) : (
-                    paragraph
-                  )}
-                </p>
-              ))}
-            </div>
+            <FooterLegalDisclaimer />
           </div>
           <div>
             <h4 className="font-bold uppercase tracking-widest text-xs mb-5 text-gold">Launch</h4>

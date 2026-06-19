@@ -101,7 +101,7 @@ export function GainePoolsTable() {
         </p>
       </div>
 
-      <div className="gaine-surface-card overflow-hidden">
+      <div className="gaine-surface-card overflow-hidden" data-no-texture>
         <div
           className="flex items-center gap-3 px-5 py-4 border-b"
           style={{ borderColor: "var(--gaine-border)" }}
@@ -180,7 +180,7 @@ export function GainePoolsTable() {
                 return (
                   <TableRow
                     key={pool.address}
-                    className="border-b hover:bg-white/[0.02]"
+                    className="iboga-surface-row border-b hover:bg-white/[0.02]"
                     style={{ borderColor: "var(--gaine-border)" }}
                   >
                     <TableCell>

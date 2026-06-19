@@ -21,14 +21,14 @@ export function GaineStatRow() {
         {STATS.map(({ value, label, ...rest }) => (
           <div key={label} className="gaine-surface-card px-5 py-6 text-center">
             <dd className="gaine-display text-2xl md:text-3xl tracking-tight">{value}</dd>
+            <dt className="mt-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: "var(--gaine-muted)" }}>
+              {label}
+            </dt>
             {"note" in rest && rest.note ? (
               <p className="mt-1 text-[10px] leading-snug" style={{ color: "var(--gaine-muted)" }}>
                 {rest.note}
               </p>
             ) : null}
-            <dt className="mt-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: "var(--gaine-muted)" }}>
-              {label}
-            </dt>
           </div>
         ))}
       </dl>

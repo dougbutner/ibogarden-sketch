@@ -139,7 +139,7 @@ function HorizontalPanel({
           open ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
-        <div className="text-[10px] uppercase tracking-[0.25em] text-gold/80">Playlist</div>
+        <div className="hidden">Playlist</div>
         <div className="flex flex-1 items-center justify-center">
           <div className="size-12 rounded-full bg-gold/90 text-forest grid place-items-center shadow-lg">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -162,7 +162,7 @@ function HorizontalPanel({
         }`}
       >
         <div className="shrink-0 border-b border-earth/10 px-5 py-4">
-          <div className="text-[10px] uppercase tracking-[0.25em] text-gold mb-1">Playlist</div>
+          <div className="hidden">Playlist</div>
           <h3 className="font-serif italic text-2xl text-earth">{playlist.title}</h3>
         </div>
 
