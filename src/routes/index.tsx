@@ -93,7 +93,7 @@ function Home() {
         </div>
         <div className="relative z-10 max-w-4xl text-earth">
           <span className="inline-block px-4 py-1 mb-6 rounded-full border border-gold/40 bg-forest/40 backdrop-blur-sm text-gold text-[11px] font-medium tracking-[0.22em] uppercase">
-            Gabon First · Nagoya Protocol · Bwiti Respected
+            Gabon Decree 0239 Regulated · DeFi Money Model · Facilitator connection · Traditional Approach
           </span>
           <h1 className="font-serif text-5xl md:text-7xl text-earth mb-6 leading-[1.05] italic text-balance">
             Ethically Sourced Iboga.<br />

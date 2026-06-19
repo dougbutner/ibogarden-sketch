@@ -1,19 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { FooterLegalDisclaimer } from "@/components/footer-legal-disclaimer";
 
-const LAUNCH_LINKS = [
-  { to: "/marketplace", label: "Marketplace" },
+const TRUNK_LINKS = [
+  { to: "/learn", label: "Knowledge" },
   { to: "/gaine", label: <>GAINE Token</>, gaine: true },
+  { to: "/marketplace", label: "Marketplace" },
   { to: "/source", label: "Source Consultation" },
 ] as const;
 
-const MORE_LINKS = [
-  { to: "/about", label: "About" },
-  { to: "/learn", label: "Knowledge" },
-  { to: "/share", label: "Share" },
+const BRANCH_LINKS = [
   { to: "/find", label: "Find" },
+  { to: "/about", label: "About" },
   { to: "/network", label: "Network" },
   { to: "/impact", label: "Impact" },
+  { to: "/share", label: "Share" },
   { to: "/community", label: "Community" },
 ] as const;
 
@@ -30,9 +30,9 @@ export function SiteFooter() {
             <FooterLegalDisclaimer />
           </div>
           <div>
-            <h4 className="font-bold uppercase tracking-widest text-xs mb-5 text-gold">Launch</h4>
+            <h4 className="font-bold uppercase tracking-widest text-xs mb-5 text-gold">Trunk</h4>
             <ul className="space-y-3 text-sm text-earth/70">
-              {LAUNCH_LINKS.map((item) => (
+              {TRUNK_LINKS.map((item) => (
                 <li key={item.to}>
                   {"external" in item && item.external ? (
                     <a href={item.to} className="hover:text-gold">
@@ -52,9 +52,9 @@ export function SiteFooter() {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold uppercase tracking-widest text-xs mb-5 text-gold">More</h4>
+            <h4 className="font-bold uppercase tracking-widest text-xs mb-5 text-gold">Branches</h4>
             <ul className="space-y-3 text-sm text-earth/70">
-              {MORE_LINKS.map((item) => (
+              {BRANCH_LINKS.map((item) => (
                 <li key={item.to}>
                   <Link to={item.to} className="hover:text-gold">
                     {item.label}

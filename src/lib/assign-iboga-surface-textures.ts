@@ -6,6 +6,7 @@ const BORDER_ONLY = ["border-b", "border-t", "border-l", "border-r", "border-x",
 function isIbogaSurface(el: Element): boolean {
   if (!(el instanceof HTMLElement)) return false;
   if (el.hasAttribute("data-no-texture")) return false;
+  if (el.hasAttribute("data-iboga-static-panel")) return false;
   if (el.classList.contains("iboga-surface-row")) return true;
   if (el.classList.contains("gaine-surface-card")) return true;
   if (["INPUT", "TEXTAREA", "SELECT", "BUTTON", "A"].includes(el.tagName)) return false;

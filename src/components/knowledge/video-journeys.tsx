@@ -110,6 +110,7 @@ function HorizontalPanel({
 
   return (
     <div
+      data-iboga-static-panel
       className={`relative min-w-0 h-full overflow-hidden rounded-2xl ring-1 ring-gold/20 transition-[flex] duration-500 ease-[cubic-bezier(0.55,0,0.1,1)] ${
         open ? "flex-[4]" : "flex-[0.55] cursor-pointer"
       }`}

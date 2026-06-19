@@ -410,6 +410,7 @@
   .gaine-surface-card
 ):not(
   [data-no-texture],
+  [data-iboga-static-panel],
   [class*="bg-bone/"],
   [class*="rounded-full"],
   [class*="rounded-sm"],
