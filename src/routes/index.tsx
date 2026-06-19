@@ -4,7 +4,7 @@ import ibogaRoot from "@/assets/iboga-root.jpg";
 import gabonFarm from "@/assets/gabon-farm.jpg";
 import seedling from "@/assets/seedling.jpg";
 import ceremonySpace from "@/assets/ceremony-space.jpg";
-import { useHoverParallax, useParallax } from "@/hooks/useParallax";
+import { useElementParallax, useHoverParallax, useParallax } from "@/hooks/useParallax";
 import { SacredBroadcastsCarousel } from "@/components/knowledge/sacred-broadcasts-carousel";
 import { VIDEO_PLAYLISTS } from "@/data/knowledge-iboga";
 import { GAINE_JUPITER_TOKEN_URL } from "@/data/gaine";
@@ -73,7 +73,7 @@ function MarketplaceCard({
 
 function Home() {
   const heroParallax = useParallax(0.4);
-  const impactParallax = useParallax(0.35);
+  const impactParallax = useElementParallax(0.35);
 
   return (
     <>
@@ -329,7 +329,7 @@ function Home() {
             </Link>
           </div>
           <div className="grid md:grid-cols-2 gap-10 items-center">
-            <div className="overflow-hidden rounded-3xl">
+            <div className="overflow-hidden rounded-3xl aspect-[4/3] relative">
               <img
                 src={gabonFarm}
                 alt="Iboga farm in Gabon"
@@ -337,7 +337,7 @@ function Home() {
                 ref={impactParallax.ref}
                 style={impactParallax.style}
                 data-parallax-speed={impactParallax["data-parallax-speed"]}
-                className="rounded-3xl aspect-[4/3] object-cover w-full scale-105"
+                className="absolute inset-x-0 w-full h-[220%] object-cover object-center"
               />
             </div>
             <div>

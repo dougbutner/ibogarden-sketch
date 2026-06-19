@@ -21,13 +21,24 @@ function isIbogaSurface(el: Element): boolean {
   return cn.includes("bg-white") || (cn.includes("bg-bone") && !cn.includes("bg-bone/"));
 }
 
-function randomTexture(): string {
-  return IBOGA_TEXTURES[Math.floor(Math.random() * IBOGA_TEXTURES.length)]!;
+function shuffledTextures() {
+  const pool = [...IBOGA_TEXTURES];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j]!, pool[i]!];
+  }
+  return pool;
 }
 
 export function assignIbogaSurfaceTextures(root: ParentNode = document) {
-  root.querySelectorAll("div, article, section, li, tr.iboga-surface-row, .gaine-surface-card").forEach((el) => {
-    if (!isIbogaSurface(el)) return;
-    el.style.setProperty("--iboga-texture", `url("${randomTexture()}")`);
+  const surfaces = [...root.querySelectorAll("div, article, section, li, tr.iboga-surface-row, .gaine-surface-card")].filter(
+    isIbogaSurface,
+  );
+  const pool = shuffledTextures();
+
+  surfaces.forEach((el, index) => {
+    if (!(el instanceof HTMLElement)) return;
+    el.setAttribute("data-iboga-texture", "");
+    el.style.setProperty("--iboga-texture", `url("${pool[index % pool.length]}")`);
   });
 }

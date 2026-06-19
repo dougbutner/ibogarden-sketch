@@ -1,15 +1,17 @@
 "use client";
 
 import { Link } from "@tanstack/react-router";
-import { Wallet } from "lucide-react";
+import { RefreshCw, Wallet } from "lucide-react";
 
 import { useWallet } from "@/contexts/wallet-context";
-import { GAINE_TOKEN_IMAGE } from "@/data/gaine";
+import { GAINE_JUPITER_TOKEN_URL, GAINE_TOKEN_IMAGE } from "@/data/gaine";
+import { jupiterPortfolioUrl } from "@/lib/solana-wallet";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 export function WalletButton() {
   const {
+    address,
     connected,
     connecting,
     truncatedAddress,
@@ -17,6 +19,7 @@ export function WalletButton() {
     hasGaine,
     balanceLoading,
     error,
+    walletName,
     connect,
     disconnect,
     refreshBalance,
@@ -43,14 +46,36 @@ export function WalletButton() {
           ) : null}
         </button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-72 border-forest/15 bg-earth p-4">
+      <PopoverContent align="end" className="relative w-72 border-forest/15 bg-earth p-4">
+        {connected ? (
+          <button
+            type="button"
+            aria-label="Refresh balance"
+            onClick={() => void refreshBalance()}
+            disabled={balanceLoading}
+            className="absolute top-3 right-3 flex size-7 items-center justify-center rounded-full text-forest/45 transition-colors hover:bg-forest/5 hover:text-forest disabled:opacity-40"
+          >
+            <RefreshCw className={`size-3.5 ${balanceLoading ? "animate-spin" : ""}`} />
+          </button>
+        ) : null}
+
         <div className="space-y-4">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pr-8">
             <img src={GAINE_TOKEN_IMAGE} alt="" className="size-6 rounded-full" width={24} height={24} />
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-forest/60">Solana wallet</p>
-              {connected && truncatedAddress ? (
-                <p className="font-mono text-sm text-forest">{truncatedAddress}</p>
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-widest text-forest/60">
+                {walletName ? `${walletName} wallet` : "Solana wallet"}
+              </p>
+              {connected && truncatedAddress && address ? (
+                <a
+                  href={jupiterPortfolioUrl(address)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-sm text-forest hover:text-gold underline-offset-2 hover:underline"
+                  title="View on Jupiter"
+                >
+                  {truncatedAddress}
+                </a>
               ) : (
                 <p className="text-sm text-forest/70">Not connected</p>
               )}
@@ -81,14 +106,14 @@ export function WalletButton() {
             {connected ? (
               <>
                 <Button
-                  type="button"
-                  variant="outline"
+                  asChild
                   size="sm"
-                  className="w-full border-forest/15"
-                  onClick={() => void refreshBalance()}
-                  disabled={balanceLoading}
+                  className="btn-gaine w-full rounded-full text-xs font-bold uppercase tracking-widest hover:opacity-90"
+                  style={{ background: "var(--gaine-primary)", color: "var(--gaine-bg)" }}
                 >
-                  Refresh balance
+                  <a href={GAINE_JUPITER_TOKEN_URL} target="_blank" rel="noopener noreferrer">
+                    Buy GAINE
+                  </a>
                 </Button>
                 {hasGaine ? (
                   <Button asChild size="sm" className="w-full bg-forest text-earth hover:bg-moss">
@@ -96,13 +121,7 @@ export function WalletButton() {
                       Open Community
                     </Link>
                   </Button>
-                ) : (
-                  <Button asChild size="sm" className="w-full bg-gold text-forest hover:bg-gold/90">
-                    <Link to="/gaine" onClick={() => setPanelOpen(false)}>
-                      Get GAINE
-                    </Link>
-                  </Button>
-                )}
+                ) : null}
                 <Button
                   type="button"
                   variant="ghost"

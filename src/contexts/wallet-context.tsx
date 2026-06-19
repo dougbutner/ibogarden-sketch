@@ -11,7 +11,9 @@ import {
 } from "react";
 
 import { getGaineBalance } from "@/lib/api/gaine.functions";
+import { getWalletProvider, JUPITER_WALLET_INSTALL_URL } from "@/lib/solana-wallet";
 import { truncateAddress } from "@/lib/solana";
+import type { SolanaWalletProvider } from "@/types/solana-wallet";
 
 type WalletContextValue = {
   address: string | null;
@@ -22,6 +24,7 @@ type WalletContextValue = {
   balanceLoading: boolean;
   panelOpen: boolean;
   error: string | null;
+  walletName: string | null;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   refreshBalance: () => Promise<void>;
@@ -32,9 +35,8 @@ type WalletContextValue = {
 
 const WalletContext = createContext<WalletContextValue | null>(null);
 
-function getWalletProvider() {
-  if (typeof window === "undefined") return null;
-  return window.solana?.isPhantom ? window.solana : window.solana ?? null;
+function activeProviderRef(): SolanaWalletProvider | null {
+  return getWalletProvider()?.provider ?? null;
 }
 
 export function WalletProvider({ children }: { children: ReactNode }) {
@@ -44,6 +46,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [balanceLoading, setBalanceLoading] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [walletName, setWalletName] = useState<string | null>(null);
 
   const refreshBalance = useCallback(async () => {
     if (!address) {
@@ -65,18 +68,19 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   }, [address]);
 
   const connect = useCallback(async () => {
-    const provider = getWalletProvider();
-    if (!provider) {
-      setError("Install Phantom or another Solana wallet.");
-      window.open("https://phantom.app/", "_blank", "noopener,noreferrer");
+    const wallet = getWalletProvider();
+    if (!wallet) {
+      setError("Install Jupiter Wallet or another Solana wallet.");
+      window.open(JUPITER_WALLET_INSTALL_URL, "_blank", "noopener,noreferrer");
       return;
     }
 
     setConnecting(true);
     setError(null);
     try {
-      const response = await provider.connect();
+      const response = await wallet.provider.connect();
       setAddress(response.publicKey.toString());
+      setWalletName(wallet.name);
       setPanelOpen(true);
     } catch {
       setError("Wallet connection was cancelled.");
@@ -86,7 +90,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const disconnect = useCallback(async () => {
-    const provider = getWalletProvider();
+    const provider = activeProviderRef();
     try {
       await provider?.disconnect();
     } catch {
@@ -94,37 +98,46 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     }
     setAddress(null);
     setGaineBalance(null);
+    setWalletName(null);
     setError(null);
   }, []);
 
   useEffect(() => {
-    const provider = getWalletProvider();
-    if (!provider) return;
+    const syncFromProvider = () => {
+      const wallet = getWalletProvider();
+      const provider = wallet?.provider;
+      if (!provider) return;
 
-    if (provider.publicKey) {
-      setAddress(provider.publicKey.toString());
-    }
+      if (provider.publicKey) {
+        setAddress(provider.publicKey.toString());
+        setWalletName(wallet.name);
+      }
 
-    const onConnect = (...args: unknown[]) => {
-      const key = args[0] as { publicKey?: { toString(): string } } | undefined;
-      const next = key?.publicKey?.toString() ?? provider.publicKey?.toString() ?? null;
-      setAddress(next);
+      const onConnect = (...args: unknown[]) => {
+        const key = args[0] as { publicKey?: { toString(): string } } | undefined;
+        const next = key?.publicKey?.toString() ?? provider.publicKey?.toString() ?? null;
+        setAddress(next);
+        if (next) setWalletName(getWalletProvider()?.name ?? wallet.name);
+      };
+
+      const onDisconnect = () => {
+        setAddress(null);
+        setGaineBalance(null);
+        setWalletName(null);
+      };
+
+      provider.on("connect", onConnect);
+      provider.on("disconnect", onDisconnect);
+      provider.on("accountChanged", onConnect);
+
+      return () => {
+        provider.removeListener("connect", onConnect);
+        provider.removeListener("disconnect", onDisconnect);
+        provider.removeListener("accountChanged", onConnect);
+      };
     };
 
-    const onDisconnect = () => {
-      setAddress(null);
-      setGaineBalance(null);
-    };
-
-    provider.on("connect", onConnect);
-    provider.on("disconnect", onDisconnect);
-    provider.on("accountChanged", onConnect);
-
-    return () => {
-      provider.removeListener("connect", onConnect);
-      provider.removeListener("disconnect", onDisconnect);
-      provider.removeListener("accountChanged", onConnect);
-    };
+    return syncFromProvider();
   }, []);
 
   useEffect(() => {
@@ -141,6 +154,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       balanceLoading,
       panelOpen,
       error,
+      walletName,
       connect,
       disconnect,
       refreshBalance,
@@ -155,6 +169,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       balanceLoading,
       panelOpen,
       error,
+      walletName,
       connect,
       disconnect,
       refreshBalance,

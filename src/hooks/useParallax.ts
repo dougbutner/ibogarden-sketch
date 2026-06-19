@@ -62,6 +62,13 @@ function parallaxTransform(y: number, speed: number) {
   return `translateY(${y * speed}px)`;
 }
 
+function elementParallaxTransform(el: HTMLElement, speed: number) {
+  const rect = el.getBoundingClientRect();
+  const viewH = window.innerHeight;
+  const offset = (viewH / 2 - (rect.top + rect.height / 2)) * speed * 0.45;
+  return `translate3d(0, calc(-50% + ${offset}px), 0)`;
+}
+
 export function useParallax(speed: number): ParallaxProps {
   const isMobile = useIsMobile();
   const clampedSpeed = clampSpeed(speed);
@@ -95,6 +102,52 @@ export function useParallax(speed: number): ParallaxProps {
   return {
     ref,
     style: isMobile ? {} : { willChange: "transform" },
+    "data-parallax-speed": clampedSpeed,
+  };
+}
+
+/** Viewport-relative parallax for mid-page and footer bands (avoids global scroll drift). */
+export function useElementParallax(speed: number): ParallaxProps {
+  const isMobile = useIsMobile();
+  const clampedSpeed = clampSpeed(speed);
+  const elementRef = useRef<HTMLElement | null>(null);
+  const speedRef = useRef(clampedSpeed);
+  speedRef.current = clampedSpeed;
+
+  const update = useCallback(
+    (_y: number) => {
+      const el = elementRef.current;
+      if (!el || isMobile) return;
+      el.style.transform = elementParallaxTransform(el, speedRef.current);
+    },
+    [isMobile],
+  );
+
+  useEffect(() => {
+    if (isMobile) {
+      if (elementRef.current) elementRef.current.style.transform = "";
+      return;
+    }
+
+    const unsubScroll = subscribeScroll(update);
+    window.addEventListener("resize", update, { passive: true });
+    return () => {
+      unsubScroll();
+      window.removeEventListener("resize", update);
+    };
+  }, [isMobile, update]);
+
+  const ref = useCallback<RefCallback<HTMLElement>>(
+    (node) => {
+      elementRef.current = node;
+      if (node && !isMobile) update(scrollY);
+    },
+    [isMobile, update],
+  );
+
+  return {
+    ref,
+    style: isMobile ? {} : { willChange: "transform", top: "50%" },
     "data-parallax-speed": clampedSpeed,
   };
 }

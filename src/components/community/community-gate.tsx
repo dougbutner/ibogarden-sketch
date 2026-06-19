@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Link } from "@tanstack/react-router";
+import { RefreshCw } from "lucide-react";
 
 import { useWallet } from "@/contexts/wallet-context";
-import { GAINE_TOKEN_IMAGE } from "@/data/gaine";
+import { GAINE_JUPITER_TOKEN_URL, GAINE_TOKEN_IMAGE } from "@/data/gaine";
+import { jupiterPortfolioUrl } from "@/lib/solana-wallet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -81,13 +82,33 @@ function CommunityWaitlist() {
 }
 
 function CommunityNoGaine() {
-  const { truncatedAddress, gaineBalance, refreshBalance, balanceLoading } = useWallet();
+  const { address, truncatedAddress, gaineBalance, refreshBalance, balanceLoading } = useWallet();
 
   return (
-    <div className="max-w-lg mx-auto bg-white border border-forest/10 rounded-3xl p-8 md:p-10 text-center">
+    <div className="max-w-lg mx-auto bg-white border border-forest/10 rounded-3xl p-8 md:p-10 text-center relative">
+      <button
+        type="button"
+        aria-label="Refresh balance"
+        onClick={() => void refreshBalance()}
+        disabled={balanceLoading}
+        className="absolute top-4 right-4 flex size-7 items-center justify-center rounded-full text-forest/45 transition-colors hover:bg-forest/5 hover:text-forest disabled:opacity-40"
+      >
+        <RefreshCw className={`size-3.5 ${balanceLoading ? "animate-spin" : ""}`} />
+      </button>
       <img src={GAINE_TOKEN_IMAGE} alt="" className="size-10 rounded-full mx-auto mb-4" width={40} height={40} />
       <h2 className="font-serif text-3xl italic text-forest mb-3">Wallet connected</h2>
-      <p className="font-mono text-sm text-forest/60 mb-4">{truncatedAddress}</p>
+      {address ? (
+        <a
+          href={jupiterPortfolioUrl(address)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono text-sm text-forest/60 hover:text-gold underline-offset-2 hover:underline inline-block mb-4"
+        >
+          {truncatedAddress}
+        </a>
+      ) : (
+        <p className="font-mono text-sm text-forest/60 mb-4">{truncatedAddress}</p>
+      )}
       <p className="text-forest/70 leading-relaxed mb-2">
         Your wallet holds{" "}
         <strong className="text-forest">{balanceLoading ? "…" : (gaineBalance ?? 0).toLocaleString()}</strong>{" "}
@@ -96,26 +117,21 @@ function CommunityNoGaine() {
       <p className="text-forest/65 text-sm mb-6">
         Hold any amount of GAINE to unlock the holder community.
       </p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Button asChild className="bg-gold text-forest hover:bg-gold/90">
-          <Link to="/gaine">Get GAINE</Link>
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          className="border-forest/15"
-          onClick={() => void refreshBalance()}
-          disabled={balanceLoading}
-        >
-          Refresh balance
-        </Button>
-      </div>
+      <Button
+        asChild
+        className="btn-gaine w-full sm:w-auto rounded-full text-xs font-bold uppercase tracking-widest hover:opacity-90"
+        style={{ background: "var(--gaine-primary)", color: "var(--gaine-bg)" }}
+      >
+        <a href={GAINE_JUPITER_TOKEN_URL} target="_blank" rel="noopener noreferrer">
+          Buy GAINE
+        </a>
+      </Button>
     </div>
   );
 }
 
 function CommunityChatPlaceholder() {
-  const { truncatedAddress, gaineBalance } = useWallet();
+  const { address, truncatedAddress, gaineBalance } = useWallet();
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -127,7 +143,18 @@ function CommunityChatPlaceholder() {
           <h2 className="font-serif text-3xl italic text-forest mt-2">The inner garden</h2>
         </div>
         <div className="text-right text-xs text-forest/55">
-          <p className="font-mono">{truncatedAddress}</p>
+          {address ? (
+            <a
+              href={jupiterPortfolioUrl(address)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono hover:text-gold underline-offset-2 hover:underline"
+            >
+              {truncatedAddress}
+            </a>
+          ) : (
+            <p className="font-mono">{truncatedAddress}</p>
+          )}
           <p>
             {(gaineBalance ?? 0).toLocaleString()} <span className="gaine-word gaine-word-sm">GAINE</span>
           </p>

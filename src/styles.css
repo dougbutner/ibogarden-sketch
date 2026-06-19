@@ -430,9 +430,8 @@
 ) {
   position: relative;
   isolation: isolate;
-  --iboga-texture: url("./assets/textures/5.jpg");
 
-  &::before {
+  &[data-iboga-texture]::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -444,11 +443,11 @@
     transition: opacity 0.25s ease;
   }
 
-  &:hover::before {
+  &[data-iboga-texture]:hover::before {
     opacity: 0.12;
   }
 
-  &:is(:active, [data-state=active], [aria-current="page"], [aria-selected="true"], [data-active="true"])::before {
+  &[data-iboga-texture]:is(:active, [data-state=active], [aria-current="page"], [aria-selected="true"], [data-active="true"])::before {
     opacity: 0.22;
   }
 }

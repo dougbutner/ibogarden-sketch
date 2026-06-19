@@ -8,3 +8,7 @@ import t7 from "./textures/7.jpg";
 import t8 from "./textures/8.jpg";
 
 export const IBOGA_TEXTURES = [t1, t2, t3, t4, t5, t6, t7, t8] as const;
+
+export function randomIbogaTexture(): string {
+  return IBOGA_TEXTURES[Math.floor(Math.random() * IBOGA_TEXTURES.length)]!;
+}

@@ -66,7 +66,7 @@ function Gaine() {
         <GainePanels panels={GAINE_INFO_PANELS} />
       </section>
 
-      <section className="px-6 py-20 max-w-7xl mx-auto w-full space-y-12">
+      <section id="jupiter" className="px-6 py-20 max-w-7xl mx-auto w-full space-y-12 scroll-mt-24">
         <GaineJupiterSwap />
 
         <div className="gaine-surface-card p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">

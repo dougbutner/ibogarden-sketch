@@ -1,12 +1,15 @@
 export {};
 
-interface SolanaPublicKey {
+export interface SolanaPublicKey {
   toString(): string;
   toBase58(): string;
 }
 
-interface SolanaWalletProvider {
+export interface SolanaWalletProvider {
   isPhantom?: boolean;
+  isJupiter?: boolean;
+  isSolflare?: boolean;
+  isBackpack?: boolean;
   publicKey: SolanaPublicKey | null;
   connect: (options?: { onlyIfTrusted?: boolean }) => Promise<{ publicKey: SolanaPublicKey }>;
   disconnect: () => Promise<void>;
@@ -20,5 +23,8 @@ interface SolanaWalletProvider {
 declare global {
   interface Window {
     solana?: SolanaWalletProvider;
+    phantom?: { solana?: SolanaWalletProvider };
+    solflare?: SolanaWalletProvider;
+    backpack?: SolanaWalletProvider;
   }
 }
