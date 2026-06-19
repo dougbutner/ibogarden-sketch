@@ -7,6 +7,7 @@ import ceremonySpace from "@/assets/ceremony-space.jpg";
 import { useHoverParallax, useParallax } from "@/hooks/useParallax";
 import { SacredBroadcastsCarousel } from "@/components/knowledge/sacred-broadcasts-carousel";
 import { VIDEO_PLAYLISTS } from "@/data/knowledge-iboga";
+import { GAINE_JUPITER_TOKEN_URL } from "@/data/gaine";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -104,9 +105,14 @@ function Home() {
             sourcing, network-verified listings, and on-chain traceability.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
-            <Link to="/gaine" className="btn-gaine bg-gold text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/90 transition-colors">
+            <a
+              href={GAINE_JUPITER_TOKEN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-gaine bg-gold text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/90 transition-colors"
+            >
               Buy GAINE
-            </Link>
+            </a>
             <Link to="/marketplace" className="border border-earth/30 text-earth px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-earth/10 transition-colors">
               Explore Marketplace
             </Link>
@@ -254,9 +260,14 @@ function Home() {
                 ))}
               </ul>
               <div className="mt-10 flex flex-wrap gap-3">
-                <Link to="/gaine" className="btn-gaine bg-forest text-earth px-8 py-3.5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-moss transition-colors">
+                <a
+                  href={GAINE_JUPITER_TOKEN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-gaine bg-forest text-earth px-8 py-3.5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-moss transition-colors"
+                >
                   Buy GAINE
-                </Link>
+                </a>
                 <Link to="/gaine" className="border border-forest/20 text-forest px-8 py-3.5 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-forest hover:text-earth transition-colors">
                   Redirect Your Yield
                 </Link>

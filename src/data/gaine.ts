@@ -21,6 +21,14 @@ export const GAINE_MIN_EXPECTED_POOLS = 20;
 
 export const GAINE_ORCA_URL = "https://www.orca.so";
 
+export const SOL_MINT = "So11111111111111111111111111111111111111112";
+
+/** Verified GAINE token page on Jupiter (chart + research). */
+export const GAINE_JUPITER_TOKEN_URL = `https://jup.ag/tokens/${GAINE_CONTRACT_ADDRESS}`;
+
+/** Direct SOL → GAINE swap on Jupiter. */
+export const GAINE_JUPITER_SWAP_URL = `https://jup.ag/swap/SOL-${GAINE_CONTRACT_ADDRESS}`;
+
 export function gainePoolOrcaUrl(poolAddress: string) {
   return `https://www.orca.so/pools/${poolAddress}`;
 }

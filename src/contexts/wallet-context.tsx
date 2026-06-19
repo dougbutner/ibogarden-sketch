@@ -10,7 +10,8 @@ import {
   type ReactNode,
 } from "react";
 
-import { fetchGaineBalance, truncateAddress } from "@/lib/solana";
+import { getGaineBalance } from "@/lib/api/gaine.functions";
+import { truncateAddress } from "@/lib/solana";
 
 type WalletContextValue = {
   address: string | null;
@@ -52,7 +53,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
     setBalanceLoading(true);
     try {
-      const balance = await fetchGaineBalance(address);
+      const balance = await getGaineBalance({ data: { address } });
       setGaineBalance(balance);
       setError(null);
     } catch {

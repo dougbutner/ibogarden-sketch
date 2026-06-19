@@ -1,4 +1,4 @@
-import { GAINE_ORCA_URL, GAINE_TOKEN_IMAGE } from "@/data/gaine";
+import { GAINE_TOKEN_IMAGE } from "@/data/gaine";
 import { GaineDraggableToken } from "./gaine-draggable-token";
 import { GaineMoneyModel } from "./gaine-money-model";
 
@@ -31,9 +31,7 @@ export function GaineHero() {
 
       <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
         <a
-          href={GAINE_ORCA_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#buy-gaine"
           className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full text-sm font-semibold uppercase tracking-widest transition-opacity hover:opacity-90"
           style={{ background: "var(--gaine-primary)", color: "var(--gaine-bg)" }}
         >

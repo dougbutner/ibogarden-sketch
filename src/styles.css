@@ -457,3 +457,26 @@ tr.iboga-surface-row td {
   position: relative;
   z-index: 1;
 }
+
+/* Jupiter swap embed on GAINE page */
+.gaine-jupiter-swap {
+  --jupiter-plugin-primary: 47, 180, 119;
+  --jupiter-plugin-background: 14, 27, 18;
+  --jupiter-plugin-primaryText: 244, 239, 230;
+  --jupiter-plugin-warning: 232, 178, 58;
+  --jupiter-plugin-interactive: 20, 36, 26;
+  --jupiter-plugin-module: 20, 36, 26;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: var(--gaine-radius);
+}
+
+/* Shadow host must fill the mount point or the plugin collapses and clips token search */
+.gaine-jupiter-swap .gaine-jupiter-mount,
+.gaine-jupiter-swap #jupiter-plugin-instance,
+.gaine-jupiter-swap #jupiter-plugin-instance > div {
+  height: 100%;
+  width: 100%;
+  min-height: inherit;
+}

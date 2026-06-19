@@ -5,6 +5,7 @@ import { GaineHero } from "@/components/gaine/gaine-hero";
 import { GainePanels } from "@/components/gaine/gaine-panels";
 import { GaineReflection } from "@/components/gaine/gaine-reflection";
 import { GainePoolsTable } from "@/components/gaine/gaine-pools-table";
+import { GaineJupiterSwap } from "@/components/gaine/gaine-jupiter-swap";
 import { GaineStatRow } from "@/components/gaine/gaine-stat-row";
 import { GAINE_INFO_PANELS } from "@/data/gaine";
 
@@ -66,6 +67,8 @@ function Gaine() {
       </section>
 
       <section className="px-6 py-20 max-w-7xl mx-auto w-full space-y-12">
+        <GaineJupiterSwap />
+
         <div className="gaine-surface-card p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
             <h2 className="gaine-display text-2xl mb-2">Legal framework</h2>
