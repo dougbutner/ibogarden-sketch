@@ -14,6 +14,7 @@ import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { FooterParallax } from "../components/footer-parallax";
 import { IbogaSurfaceTextures } from "../components/iboga-surface-textures";
+import { WalletProvider } from "../contexts/wallet-context";
 
 function NotFoundComponent() {
   return (
@@ -114,15 +115,17 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <IbogaSurfaceTextures />
-      <div className="min-h-screen flex flex-col bg-earth text-forest">
-        <SiteHeader />
-        <main className="flex-1">
-          <Outlet />
-        </main>
-        <FooterParallax />
-        <SiteFooter />
-      </div>
+      <WalletProvider>
+        <IbogaSurfaceTextures />
+        <div className="min-h-screen flex flex-col bg-earth text-forest">
+          <SiteHeader />
+          <main className="flex-1">
+            <Outlet />
+          </main>
+          <FooterParallax />
+          <SiteFooter />
+        </div>
+      </WalletProvider>
     </QueryClientProvider>
   );
 }

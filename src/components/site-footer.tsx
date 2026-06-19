@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { FooterLegalDisclaimer } from "@/components/footer-legal-disclaimer";
+import { GAINE_TOKEN_IMAGE } from "@/data/gaine";
 
 const TRUNK_LINKS = [
   { to: "/learn", label: "Knowledge" },
@@ -14,7 +15,7 @@ const BRANCH_LINKS = [
   { to: "/network", label: "Network" },
   { to: "/impact", label: "Impact" },
   { to: "/share", label: "Share" },
-  { to: "/community", label: "Community" },
+  { to: "/community", label: "Community", gaineIcon: true },
 ] as const;
 
 export function SiteFooter() {
@@ -56,7 +57,10 @@ export function SiteFooter() {
             <ul className="space-y-3 text-sm text-earth/70">
               {BRANCH_LINKS.map((item) => (
                 <li key={item.to}>
-                  <Link to={item.to} className="hover:text-gold">
+                  <Link to={item.to} className="inline-flex items-center gap-2 hover:text-gold">
+                    {"gaineIcon" in item && item.gaineIcon ? (
+                      <img src={GAINE_TOKEN_IMAGE} alt="" className="size-4 rounded-full" width={16} height={16} />
+                    ) : null}
                     {item.label}
                   </Link>
                 </li>
