@@ -53,7 +53,7 @@ export function SiteFooter() {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold uppercase tracking-widest text-xs mb-5 text-gold">Branches</h4>
+            <h4 className="font-bold uppercase tracking-widest text-xs mb-5 text-gold">Roots</h4>
             <ul className="space-y-3 text-sm text-earth/70">
               {BRANCH_LINKS.map((item) => (
                 <li key={item.to}>

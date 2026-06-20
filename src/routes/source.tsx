@@ -127,9 +127,8 @@ function Source() {
               <div className="p-8 md:p-10">
                 <p className="text-sm text-earth/75 leading-relaxed mb-8">
                   Benny was in finance in his former life; now he&apos;s frequently on the ground in Gabon, with
-                  relationships with dozens of Gabonese growers, Bwiti shaman including Moughenda, Cameroon
-                  connections, and large-scale corporate sourcing options in accordance with Gabon Decree 0239: no
-                  intermediaries, fastest turnaround.
+                  relationships with dozens of Gabonese growers, Bwiti shamans, Cameroon connections, and large-scale
+                  corporate sourcing options in accordance with Gabon Decree 0239: no intermediaries, fastest turnaround.
                 </p>
                 <ul className="space-y-3.5">
                   {CONSULTATION_AREAS.map((item) => (

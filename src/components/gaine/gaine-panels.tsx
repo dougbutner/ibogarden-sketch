@@ -42,11 +42,24 @@ function PanelTag({ label, href }: { label: string; href?: string }) {
   );
 }
 
+function renderEmphasizedText(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i} className="font-semibold" style={{ color: "var(--gaine-text)" }}>
+        {part.slice(2, -2)}
+      </strong>
+    ) : (
+      part
+    ),
+  );
+}
+
 function PanelParagraph({ paragraph }: { paragraph: GainePanel["paragraphs"][number] }) {
   if (typeof paragraph === "string") {
     return (
       <p className="text-sm md:text-base leading-relaxed" style={{ color: "color-mix(in srgb, var(--gaine-text) 75%, transparent)" }}>
-        {paragraph}
+        {renderEmphasizedText(paragraph)}
       </p>
     );
   }
@@ -63,7 +76,7 @@ function PanelParagraph({ paragraph }: { paragraph: GainePanel["paragraphs"][num
           ))}
         </div>
         <p className="text-sm md:text-base leading-relaxed" style={{ color: "color-mix(in srgb, var(--gaine-text) 75%, transparent)" }}>
-          {paragraph.bio}
+          {renderEmphasizedText(paragraph.bio)}
         </p>
       </div>
     );

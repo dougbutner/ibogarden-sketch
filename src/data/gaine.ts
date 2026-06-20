@@ -94,11 +94,11 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
     title: "What",
     image: "gaine-token",
     paragraphs: [
-      "An impact token with gains, backed by FIAT + gold.",
-      "Smart liquidity bonding with 100% of supply placed at ranges from $1 per GAINE to $10M per GAINE.",
-      "This formula creates full backing at $1 in USD, EUR, GBP, CHF, AUD, BRL and physical gold, with the token price able to grow above a dollar.",
-      "25% goes to Ibogabon for operations, salaries, and investment in sustainable, regulated production and export of Tabernanthe Iboga. 25% goes to market making, pairing GAINE with more assets that will generate more revenue, explained in the next section.",
-      "The remaining 50% goes to holder-directed initiatives within our network, or, if undirected, to our current impact or investment focus.",
+      "A **network financial system** living **spirit of Iboga** in a token.",
+      "Smart liquidity bonding with **100% of supply** placed at ranges from $1 per GAINE to $10M per GAINE.",
+      "This formula creates **full backing at $1** in USD, EUR, GBP, CHF, AUD, BRL and physical gold, with the token price able to grow above a dollar.",
+      "**25%** goes to Ibogabon for operations, salaries, and investment in sustainable, regulated production and export of Tabernanthe Iboga. **25%** goes to market making, pairing GAINE with more assets that will generate more revenue, explained in the next section.",
+      "The remaining **50%** goes to holder-directed initiatives within our network, or, if undirected, to our current impact or investment focus.",
     ],
   },
   {
@@ -106,10 +106,10 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
     title: "How",
     image: "iboga-root",
     paragraphs: [
-      "Numbers, not narrative.",
-      "GAINE operates a money changing service that runs 24/7, 365.",
-      "We have something the markets want: liquidity.",
-      "Arbitrage bots will always pay our 2% fee to use our liquidity if they can make money. They'll even pay us hundreds of dollars in a single transaction to make a few pennies themselves.",
+      "**Numbers, not narrative.**",
+      "GAINE operates a money changing service that runs **24/7, 365**.",
+      "We have something the markets want: **liquidity**.",
+      "Arbitrage bots will always pay our **2% fee** to use our liquidity if they can make money. They'll even pay us hundreds of dollars in a single transaction to make a few pennies themselves.",
       "This model is not an experiment: it's an evolution of the most successful stable-bonded token launched by the architect of GAINE in May 2025.",
       {
         type: "link",
@@ -125,11 +125,11 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
     title: "Why",
     image: "gabon-farm",
     paragraphs: [
-      "Impact with interest for investors.",
-      "You know the power Iboga has to heal: whether from the videos on this site, or a personal story of a family member who broke their addiction ripping apart relationships.",
+      "**Impact with interest** for investors.",
+      "You know the **power Iboga has to heal**: whether from the videos on this site, or a personal story of a family member who broke their addiction ripping apart relationships.",
       "You hold GAINE because:",
-      "1. You trust (and verify) it's going up in price.",
-      "2. You feel good you're helping to bring the medicine the world needs to the masses the entire time you hold, with no extra effort.",
+      "1. You **trust (and verify)** it's going up in price.",
+      "2. You feel good you're helping to bring the **medicine the world needs** to the masses the entire time you hold, with no extra effort.",
     ],
   },
   {
@@ -149,6 +149,7 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
         tags: [
           { label: "EASY", href: "https://www.flex.town" },
           { label: "cXc.world", href: "https://cxc.world" },
+          { label: "Aquarius Academy", href: "https://aquarius.academy" },
         ],
         bio: "Is the tokenomic innovator at the cutting edge of crypto, designing swap pools before Uniswap existed for his crypto music app launched in 2018. In 2025 Douglas perfected the \"Pure Liquid\" token design, and created the first reflection (interest to wallet) token that allowed users to pick what rewards they got for holding. Douglas has microdosed iboga hundreds of times, but has yet to visit Gabon for a flood dose in ceremony.",
       },
@@ -165,16 +166,16 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
     title: "When",
     image: "gabon-farm",
     paragraphs: [
-      "Now.",
+      "**Now.**",
       {
         type: "link",
         text: "The Play: You buy GAINE early, close to 1 USD here",
         href: GAINE_ORCA_URL,
         suffix: ".",
       },
-      "The closer to $1 per GAINE you get in, the more gains you see.",
-      "The whole time you hold it, the dollars backing your tokens provide the liquidity that makes profit in the pool: profit flows to impact you choose on this page.",
-      "GAINE builds on this market understanding to create a New Earth finance model. For the first time, you have the ability to provide lasting impact without your assets leaving your hand.",
+      "The closer to **$1 per GAINE** you get in, the more gains you see.",
+      "The whole time you hold it, the dollars backing your tokens provide the liquidity that makes profit in the pool: profit flows to **impact you choose** on this page.",
+      "GAINE builds on this market understanding to create a **New Earth finance model**. For the first time, you have the ability to provide lasting impact **without your assets leaving your hand**.",
     ],
   },
 ];

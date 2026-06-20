@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHeader } from "@/components/page-header";
 import { NetworkApplicationForm } from "@/components/network/network-application-form";
@@ -33,6 +34,8 @@ const LISTINGS = [
 ];
 
 function Marketplace() {
+  const [showApplication, setShowApplication] = useState(false);
+
   return (
     <>
       <PageHeader
@@ -105,27 +108,40 @@ function Marketplace() {
               <div>
                 <h3 className="font-semibold text-forest mb-2">🇬🇦 Access Markets at scale</h3>
                 <p className="text-sm text-forest/65 leading-relaxed">
-                  As a marketplace member, you get to open connections to buyers, pathways to legal export and
+                  As a marketplace member, you open connections to buyers, pathways to legal export and
                   investment.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold text-forest mb-2">🇬🇦 Iboga root bark and more</h3>
+                <h3 className="font-semibold text-forest mb-2">🇬🇦 Quality inner root bark and derivatives</h3>
                 <p className="text-sm text-forest/65 leading-relaxed">
-                  As a buyer, you get access to a network of producers, proven sourcing, and high quality product
+                  As a buyer, you get access to a network of producers, proven sourcing of a high quality product
                   shipped globally, within legal limits.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold text-forest mb-2">🤝 Shake hands</h3>
                 <p className="text-sm text-forest/65 leading-relaxed">
-                  We&apos;re hand-selecting merchants able to comply with the order from May 22, 2026. Book a sourcing
-                  consultation to discuss ethical procurement, farm investment, and other opportunities in the network.
+                  We&apos;re hand-selecting merchants able to comply with the order from May 22, 2026. Buyers need not
+                  apply, click request consultation for info on legal procurement from our network of farmers, farm
+                  investment, and other opportunities in the network.
                 </p>
               </div>
             </div>
 
-            <NetworkApplicationForm className="mb-10 !p-6 md:!p-8" />
+            {showApplication ? (
+              <NetworkApplicationForm className="mb-10 !p-6 md:!p-8" />
+            ) : (
+              <div className="text-center mb-10">
+                <button
+                  type="button"
+                  onClick={() => setShowApplication(true)}
+                  className="inline-block bg-gold text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold-deep transition-colors"
+                >
+                  Iboga Market: Request Invite
+                </button>
+              </div>
+            )}
 
             <div className="text-center border-t border-forest/10 pt-8 space-y-6">
               <p className="text-sm text-forest/65 leading-relaxed">

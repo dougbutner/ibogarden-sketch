@@ -66,7 +66,7 @@ function CommunityWaitlist() {
           />
         </div>
         <Button type="submit" variant="outline" className="w-full border-forest/15">
-          {saved ? "Email saved — thank you" : "Save my email"}
+          {saved ? "Email saved. Thank you" : "Save my email"}
         </Button>
       </form>
 

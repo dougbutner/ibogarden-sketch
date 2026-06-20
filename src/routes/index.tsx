@@ -12,10 +12,10 @@ import { GAINE_JUPITER_TOKEN_URL } from "@/data/gaine";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ibo.garden: GAINE Token & Ethical Iboga Marketplace" },
-      { name: "description", content: "GAINE SPL token and marketplace for ethically sourced Iboga. Nagoya Protocol-aligned sourcing, network-verified listings, and on-chain traceability." },
-      { property: "og:title", content: "ibo.garden: GAINE Token & Ethical Iboga Marketplace" },
-      { property: "og:description", content: "GAINE SPL token and marketplace for ethically sourced Iboga. Nagoya Protocol-aligned sourcing, network-verified listings, and on-chain traceability." },
+      { title: "ibo.garden: Gabon Iboga · GAINE Token · IBOGABON Production" },
+      { name: "description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
+      { property: "og:title", content: "ibo.garden: Gabon Iboga · GAINE Token · IBOGABON Production" },
+      { property: "og:description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
       { property: "og:image", content: heroForest },
       { name: "twitter:image", content: heroForest },
     ],
@@ -94,15 +94,17 @@ function Home() {
         </div>
         <div className="relative z-10 max-w-4xl text-earth">
           <span className="inline-block px-4 py-1 mb-6 rounded-full border border-gold/40 bg-forest/40 backdrop-blur-sm text-gold text-[11px] font-medium tracking-[0.22em] uppercase">
-            Gabon Decree 0239 Regulated · DeFi Money Model · Facilitator connection · Traditional Approach
+            Gabon Decree 0239 Regulated · DeFi Money Model · Network-rooted
           </span>
           <h1 className="font-serif text-5xl md:text-7xl text-earth mb-6 leading-[1.05] italic text-balance">
-            Ethically Sourced Iboga.<br />
+            Gabon-Grown Iboga.<br />
             <span className="text-gold not-italic">Tokenized on Solana.</span>
           </h1>
           <p className="text-base md:text-xl text-earth/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Marketplace and <span className="gaine-word gaine-word-sm">GAINE</span> token platform for ethical Iboga
-            sourcing, network-verified listings, and on-chain traceability.
+            ibo.garden is a network of <strong className="font-semibold text-earth">certified farms, facilitators, and clinics</strong>, connecting{" "}
+            <strong className="font-semibold text-earth">Gabonese Iboga</strong> to healers and buyers worldwide.{" "}
+            <span className="gaine-word gaine-word-sm">GAINE</span> powers <strong className="font-semibold text-earth">ethical sourcing</strong>, traceability, and reciprocal
+            rewards under Gabon Decree 0239.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
@@ -127,23 +129,21 @@ function Home() {
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
-            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">The Root of Connection</span>
-            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 mb-8 italic leading-tight">Iboga Tabernanthe</h2>
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Tabernanthe Iboga</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 mb-8 italic leading-tight">The Sacred Shrub</h2>
             <p className="text-lg leading-relaxed mb-6 text-forest/80">
-              Eating pure Tabernanthe Iboga root cleans and prepares the neural network to grow new connections, allowing addicts to heal and become healthy loving family members who uplift their community.
+              Tabernanthe Iboga is a shrub of the Apocynaceae family, native to Africa&apos;s equatorial forests. Rich in
+              indole-monoterpene alkaloids, chiefly <strong className="font-semibold text-forest">ibogaine</strong>, it has been used in traditional medicine for centuries:
+              chewing the root or bark for stimulating, regenerative effect.
             </p>
             <p className="text-lg leading-relaxed mb-6 text-forest/80">
-              There&apos;s a fast layer of receptor binding that lasts hours, and a slow layer of gene-expression and structural change, quieting the circuits worn thin by trauma and habits, flooding pathways that have gone dark.
-            </p>
-            <p className="text-lg leading-relaxed mb-6 text-forest/80">
-              Bringing the Holy Wood to the world is the will of the root according to Mougahenda Mikala, 10th-generation Bwiti Shaman.
+              The plant reaches maturity in <strong className="font-semibold text-forest">five years</strong>, and alkaloid quality increases the longer it grows. Iboga&apos;s
+              unique mechanism of action works across a range of brain receptors, with the potential to fundamentally
+              change addiction treatment and address the <strong className="font-semibold text-forest">global opioid crisis</strong>.
             </p>
             <p className="text-lg leading-relaxed mb-8 text-forest/80">
-              Designed by renowned coder{' '}
-              <a href="https://github.com/dougbutner/web-4" target="_blank" rel="noopener noreferrer" className="text-gold underline hover:text-gold/80">
-                Gudasol
-              </a>
-              , GAINE flows reciprocal rewards back to the people. Ibogarden funnels the world&apos;s attention to the plant, materializing organic interest with rapidly materializing supply chains to heal a planet for a new, more connected age of humanity.
+              Through the ibo.garden network, this <strong className="font-semibold text-forest">Holy Root</strong> reaches the world with traceable supply, Gabonese
+              benefit-sharing, and the reciprocal economics of <span className="gaine-word gaine-word-sm">GAINE</span>.
             </p>
             <Link to="/learn" className="inline-flex items-center text-gold font-semibold tracking-wider uppercase text-sm group">
               Learn the Full Story
@@ -169,6 +169,109 @@ function Home() {
         </div>
       </section>
 
+      {/* PARTNERS NETWORK */}
+      <section className="py-24 px-6 bg-bone">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-3xl mb-14">
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Partners Network</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 italic leading-tight">Plant Roots in the Garden</h2>
+            <p className="text-forest/70 mt-5 text-lg leading-relaxed">
+              Facilities, practitioners, and farms <strong className="font-semibold text-forest">apply once</strong>. Approved partners gain marketplace access,{" "}
+              <span className="gaine-word gaine-word-sm">GAINE</span> rewards, and direct community visibility, all
+              reviewed under <strong className="font-semibold text-forest">Gabon Decree 0239</strong> and the Nagoya Protocol.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5 mb-10">
+            {[
+              { t: "Facilities", d: "Clinical centers, retreat centers, and recovery programs seeking verified sourcing and patient pathways." },
+              { t: "Practitioners", d: "Facilitators, Bwiti ngangas, integration coaches, and medical staff serving ceremony and clinical care." },
+              { t: "Farms", d: "Iboga growers, ethical sourcing operations, and reforestation organizations rooted in Gabon." },
+            ].map((c) => (
+              <div key={c.t} className="bg-earth border border-forest/10 rounded-3xl p-7">
+                <h3 className="font-serif text-2xl italic text-forest mb-2">{c.t}</h3>
+                <p className="text-sm text-forest/65 leading-relaxed">{c.d}</p>
+              </div>
+            ))}
+          </div>
+          <div className="grid md:grid-cols-2 gap-px bg-forest/10 border border-forest/10 rounded-2xl overflow-hidden mb-10">
+            {[
+              { t: "Network-verified", d: "Every listing reviewed before publishing. Buyers and healers see certification, jurisdiction, and sourcing lineage." },
+              { t: "Marketplace access", d: "Treatments, ceremonies, training, products, and donations: hand-selected merchants aligned with Decree 0239." },
+              { t: "GAINE rewards", d: "Partners earn visibility and holder-directed yield from the token economy powering ethical supply." },
+              { t: "Community gate", d: "Hold GAINE to access the private community, sourcing intelligence, and quarterly field reports from Gabon." },
+            ].map((item) => (
+              <div key={item.t} className="bg-earth p-8">
+                <h4 className="font-semibold text-forest mb-2">{item.t}</h4>
+                <p className="text-sm text-forest/65 leading-relaxed">{item.d}</p>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link to="/network" className="bg-forest text-earth px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-moss transition-colors">
+              Register in Network →
+            </Link>
+            <Link to="/marketplace" className="border border-forest/20 text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-forest hover:text-earth transition-colors">
+              Explore Marketplace
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* IBOGABON */}
+      <section className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-16 items-start">
+          <div>
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">IBOGABON Assets</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 mb-8 italic leading-tight">
+              51,600 Plants in Gabon
+            </h2>
+            <p className="text-lg leading-relaxed mb-6 text-forest/80">
+              IBOGABON operates a large plantation at Bibasse/Oyem: <strong className="font-semibold text-forest">13 hectares</strong> under cultivation across a 20-hectare
+              site with room to expand. Plants are tracked by age and expected yield, ensuring <strong className="font-semibold text-forest">predictable, certified supply</strong> for global partners.
+            </p>
+            <ul className="space-y-3 text-sm text-forest/75 mb-8">
+              <li className="flex gap-3">
+                <span className="text-gold mt-0.5">◆</span>
+                Network of local planters for raw material purchase
+              </li>
+              <li className="flex gap-3">
+                <span className="text-gold mt-0.5">◆</span>
+                Bolokoboue GRAINE village for training and nursery setup
+              </li>
+              <li className="flex gap-3">
+                <span className="text-gold mt-0.5">◆</span>
+                Made in Gabon processing house certified to AGASA standards
+              </li>
+            </ul>
+            <Link to="/about" className="inline-flex items-center text-gold font-semibold tracking-wider uppercase text-sm group">
+              Learn about IBOGABON
+              <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { age: "7 years", area: "5 ha", plants: "19,200", yield: "7,680 kg bark" },
+              { age: "6 years", area: "3 ha", plants: "12,800", yield: "5,120 kg bark" },
+              { age: "4½ years", area: "3 ha", plants: "9,600", yield: "3,840 kg bark" },
+              { age: "3½ years", area: "2 ha", plants: "10,000", yield: "4,000 kg bark" },
+            ].map((plot) => (
+              <div key={plot.age} className="bg-bone border border-forest/10 rounded-2xl p-5">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gold-deep mb-2">{plot.age} old</p>
+                <p className="font-serif text-xl italic text-forest mb-3">{plot.plants} plants</p>
+                <p className="text-xs text-forest/60">{plot.area} · expected {plot.yield}</p>
+              </div>
+            ))}
+            <div className="col-span-2 bg-forest text-earth rounded-2xl p-6 flex justify-between items-center">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gold mb-1">Total plantation</p>
+                <p className="font-serif text-3xl italic">51,600 plants</p>
+              </div>
+              <p className="text-sm text-earth/70 text-right">13 ha cultivated<br />20 ha total site</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* VIDEO CAROUSEL */}
       <section className="py-20 bg-forest text-earth overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 mb-10 flex justify-between items-end">
@@ -187,7 +290,9 @@ function Home() {
           <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Mission</span>
           <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 italic leading-tight">Healing Planetary Addiction</h2>
           <p className="text-forest/70 mt-5 text-lg leading-relaxed">
-            Addiction is not only substances. It is emotion, consumption, and the false stories we tell about ourselves. We work upstream: through research, free access, education, and certification of farms and care.
+            Addiction is not only substances. It is the <strong className="font-semibold text-forest">global opioid crisis</strong>, trauma, and the false stories we tell
+            about ourselves. Iboga&apos;s unique receptor action offers a path to <strong className="font-semibold text-forest">fundamental change</strong>. We work upstream:
+            certified Gabon production, research partnerships, and access pathways for those who need it.
           </p>
         </div>
         <div className="grid md:grid-cols-4 gap-px bg-forest/10 border border-forest/10 rounded-2xl overflow-hidden">
@@ -240,8 +345,8 @@ function Home() {
                 The <span className="gaine-word">GAINE</span> Advantage
               </h2>
               <p className="text-forest/75 mt-6 leading-relaxed">
-                Our SPL token on Solana powers ethical sourcing. A 2% reflection on every transaction is converted to
-                USDC and directed: by you: to Gabon reforestation, traditional communities, or clinical research.
+                Our SPL token on Solana powers ethical sourcing. A <strong className="font-semibold text-forest">2% reflection</strong> on every transaction is converted to
+                USDC and directed, <strong className="font-semibold text-forest">by you</strong>, to Gabon reforestation, traditional communities, or clinical research.
               </p>
               <ul className="mt-8 space-y-5">
                 {[
@@ -317,9 +422,10 @@ function Home() {
             <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Impact in Gabon</span>
             <h2 className="font-serif text-4xl md:text-5xl mt-4 italic">Rooted in Gabon</h2>
             <p className="text-earth/60 mt-6 max-w-2xl mx-auto leading-relaxed">
-              Committed to Gabon Presidential Decree 0239 (22 May 2026): sovereign regulation of Iboga access,
-              export certification, community benefit-sharing, and traditional knowledge protection. Every
-              transaction supports reforestation and fair returns to Gabonese communities.
+              The network operates under <strong className="font-semibold text-earth">Gabon Presidential Decree 0239</strong>: sovereign regulation, export certification,
+              community benefit-sharing, and traditional knowledge protection. Every{" "}
+              <span className="gaine-word gaine-word-sm">GAINE</span> transaction supports reforestation and fair
+              returns to Gabonese communities.
             </p>
             <Link
               to="/decree"
@@ -342,11 +448,11 @@ function Home() {
             </div>
             <div>
               <p className="text-lg text-earth/80 leading-relaxed mb-8">
-                For every wild root ethically harvested, new iboga trees are planted in cooperation with Gabonese
-                smallholders. Plot coordinates recorded. Verification open.
+                For every root <strong className="font-semibold text-earth">ethically harvested</strong>, new iboga trees are planted in cooperation with Gabonese smallholders
+                and partner nursery networks across the region. Plot coordinates recorded. <strong className="font-semibold text-earth">Verification open</strong>.
               </p>
-              <Link to="/impact" className="inline-flex items-center text-gold font-semibold tracking-wider uppercase text-sm border-b border-gold/40 pb-1">
-                Learn about our Gabon work →
+              <Link to="/network" className="inline-flex items-center text-gold font-semibold tracking-wider uppercase text-sm border-b border-gold/40 pb-1 mr-6">
+                Join the network →
               </Link>
             </div>
           </div>
