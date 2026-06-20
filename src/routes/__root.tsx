@@ -10,11 +10,13 @@ import {
 import type { ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { DEFAULT_OG_IMAGE } from "@/lib/site";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { FooterParallax } from "../components/footer-parallax";
 import { IbogaSurfaceTextures } from "../components/iboga-surface-textures";
 import { WalletProvider } from "../contexts/wallet-context";
+import { JourneyTracker } from "../components/journey-tracker";
 
 function NotFoundComponent() {
   return (
@@ -81,8 +83,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "ibo.garden: Gabon Iboga · GAINE Token · IBOGABON Production" },
       { name: "twitter:description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a2a7676d-6923-4c9f-84ef-0ca0c4d2da34/id-preview-8d9f478c--cb0a761f-7cfd-4846-9011-00acb9741abe.lovable.app-1781442611467.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a2a7676d-6923-4c9f-84ef-0ca0c4d2da34/id-preview-8d9f478c--cb0a761f-7cfd-4846-9011-00acb9741abe.lovable.app-1781442611467.png" },
+      { property: "og:image", content: DEFAULT_OG_IMAGE },
+      { name: "twitter:image", content: DEFAULT_OG_IMAGE },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -116,6 +118,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <WalletProvider>
+        <JourneyTracker />
         <IbogaSurfaceTextures />
         <div className="min-h-screen flex flex-col bg-earth text-forest">
           <SiteHeader />

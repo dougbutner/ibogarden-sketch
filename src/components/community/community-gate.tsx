@@ -1,34 +1,46 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { RefreshCw } from "lucide-react";
 
 import { useWallet } from "@/contexts/wallet-context";
+import { joinCommunityWaitlist } from "@/lib/api/waitlist.functions";
+import { isGoogleOAuthEnabled } from "@/lib/api/auth.functions";
 import { GAINE_JUPITER_TOKEN_URL, GAINE_TOKEN_IMAGE } from "@/data/gaine";
 import { jupiterPortfolioUrl } from "@/lib/solana-wallet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const WAITLIST_KEY = "ibogarden-community-waitlist";
-
-function saveWaitlistEmail(email: string) {
-  const existing = JSON.parse(localStorage.getItem(WAITLIST_KEY) ?? "[]") as string[];
-  if (!existing.includes(email)) {
-    localStorage.setItem(WAITLIST_KEY, JSON.stringify([...existing, email]));
-  }
-}
+const WAITLIST_EMAIL_KEY = "ibogarden-waitlist-email";
 
 function CommunityWaitlist() {
   const { connect, openPanel } = useWallet();
   const [email, setEmail] = useState("");
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [googleEnabled, setGoogleEnabled] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent) {
+  useEffect(() => {
+    void isGoogleOAuthEnabled().then((r) => setGoogleEnabled(r.enabled));
+  }, []);
+
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const trimmed = email.trim();
     if (!trimmed) return;
-    saveWaitlistEmail(trimmed);
-    setSaved(true);
+
+    setSubmitting(true);
+    setError(null);
+    try {
+      await joinCommunityWaitlist({ data: { email: trimmed, source: "community_page" } });
+      sessionStorage.setItem(WAITLIST_EMAIL_KEY, trimmed);
+      setSaved(true);
+    } catch {
+      setError("Could not save email. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   async function handleLogin() {
@@ -47,10 +59,10 @@ function CommunityWaitlist() {
       <h2 className="font-serif text-3xl italic text-forest mb-4">Connect to enter</h2>
       <p className="text-forest/70 leading-relaxed mb-6">
         Community chat is token-gated for <span className="gaine-word gaine-word-sm">GAINE</span> holders.
-        Leave your email for updates, then connect your Solana wallet to verify access.
+        Leave your email for updates, then sign in with Google or connect your Solana wallet.
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-4 mb-6">
+      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4 mb-6">
         <div>
           <label htmlFor="community-email" className="sr-only">
             Email
@@ -65,18 +77,29 @@ function CommunityWaitlist() {
             className="border-forest/15 bg-bone/30"
           />
         </div>
-        <Button type="submit" variant="outline" className="w-full border-forest/15">
-          {saved ? "Email saved. Thank you" : "Save my email"}
+        <Button type="submit" variant="outline" className="w-full border-forest/15" disabled={submitting}>
+          {saved ? "Email saved — thank you" : submitting ? "Saving…" : "Save my email"}
         </Button>
+        {error ? <p className="text-sm text-red-700">{error}</p> : null}
       </form>
 
-      <Button
-        type="button"
-        className="w-full bg-forest text-earth hover:bg-moss"
-        onClick={() => void handleLogin()}
-      >
-        Login with wallet
-      </Button>
+      <div className="space-y-3">
+        {googleEnabled ? (
+          <a
+            href="/api/auth/google"
+            className="flex w-full items-center justify-center gap-2 border border-forest/15 rounded-full py-3 text-xs font-bold uppercase tracking-widest text-forest hover:bg-bone/50 transition-colors"
+          >
+            Continue with Google
+          </a>
+        ) : null}
+        <Button
+          type="button"
+          className="w-full bg-forest text-earth hover:bg-moss"
+          onClick={() => void handleLogin()}
+        >
+          Login with wallet
+        </Button>
+      </div>
     </div>
   );
 }
@@ -211,3 +234,5 @@ export function CommunityGate() {
 
   return <CommunityChatPlaceholder />;
 }
+
+export { WAITLIST_EMAIL_KEY };

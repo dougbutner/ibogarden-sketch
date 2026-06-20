@@ -1,0 +1,2 @@
+-- Incremental migrations go here (e.g. 0002_add_column.sql).
+-- Canonical full model: ../schema.sql

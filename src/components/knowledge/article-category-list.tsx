@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import type { ArticleCategory } from "@/data/knowledge-iboga";
+import { findArticleByHref } from "@/lib/knowledge-articles";
 
 const INITIAL = 3;
 const LOAD_STEP = 5;
@@ -53,26 +55,29 @@ function ArticleCategoryBox({ category }: { category: ArticleCategory }) {
         <div className="overflow-hidden">
           <div className="px-5 md:px-6 pb-5 md:pb-6 border-t border-forest/10">
             <ul className="space-y-3 pt-4">
-              {shown.map((article, i) => (
-                <li key={`${article.href}-${i}`}>
-                  <a
-                    href={article.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block rounded-xl border border-forest/8 bg-bone/40 px-4 py-3 hover:border-gold/40 transition-colors"
-                  >
-                    <span className="font-medium text-forest text-sm group-hover:text-gold-deep transition-colors">
-                      {article.title}
-                    </span>
-                    <p className="text-sm text-forest/65 mt-2 leading-relaxed">{article.description}</p>
-                    {article.source && (
-                      <span className="block text-[11px] text-forest/45 mt-2 uppercase tracking-wider">
-                        {article.source}
+              {shown.map((article, i) => {
+                const entry = findArticleByHref(category.id, article.href);
+                if (!entry) return null;
+                return (
+                  <li key={`${article.href}-${i}`}>
+                    <Link
+                      to="/learn/$categoryId/$articleSlug"
+                      params={{ categoryId: entry.categoryId, articleSlug: entry.slug }}
+                      className="group block rounded-xl border border-forest/8 bg-bone/40 px-4 py-3 hover:border-gold/40 transition-colors"
+                    >
+                      <span className="font-medium text-forest text-sm group-hover:text-gold-deep transition-colors">
+                        {article.title}
                       </span>
-                    )}
-                  </a>
-                </li>
-              ))}
+                      <p className="text-sm text-forest/65 mt-2 leading-relaxed">{article.description}</p>
+                      {article.source && (
+                        <span className="block text-[11px] text-forest/45 mt-2 uppercase tracking-wider">
+                          {article.source}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
             <div className="flex justify-end mt-4 min-h-[1.25rem]">
               {open && canLoadMore && (

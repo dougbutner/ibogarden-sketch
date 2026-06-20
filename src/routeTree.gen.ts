@@ -22,6 +22,11 @@ import { Route as DecreeRouteImport } from './routes/decree'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as LearnCategoryIdArticleSlugRouteImport } from './routes/learn/$categoryId/$articleSlug'
+import { Route as ApiAuthGoogleRouteImport } from './routes/api/auth/google'
+import { Route as ApiAuthGoogleCallbackRouteImport } from './routes/api/auth/google/callback'
 
 const SourceRoute = SourceRouteImport.update({
   id: '/source',
@@ -88,6 +93,32 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnCategoryIdArticleSlugRoute =
+  LearnCategoryIdArticleSlugRouteImport.update({
+    id: '/$categoryId/$articleSlug',
+    path: '/$categoryId/$articleSlug',
+    getParentRoute: () => LearnRoute,
+  } as any)
+const ApiAuthGoogleRoute = ApiAuthGoogleRouteImport.update({
+  id: '/api/auth/google',
+  path: '/api/auth/google',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthGoogleCallbackRoute = ApiAuthGoogleCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => ApiAuthGoogleRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -97,12 +128,17 @@ export interface FileRoutesByFullPath {
   '/find': typeof FindRoute
   '/gaine': typeof GaineRoute
   '/impact': typeof ImpactRoute
-  '/learn': typeof LearnRoute
+  '/learn': typeof LearnRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/network': typeof NetworkRoute
   '/share': typeof ShareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/source': typeof SourceRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/': typeof AdminIndexRoute
+  '/api/auth/google': typeof ApiAuthGoogleRouteWithChildren
+  '/learn/$categoryId/$articleSlug': typeof LearnCategoryIdArticleSlugRoute
+  '/api/auth/google/callback': typeof ApiAuthGoogleCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -112,12 +148,17 @@ export interface FileRoutesByTo {
   '/find': typeof FindRoute
   '/gaine': typeof GaineRoute
   '/impact': typeof ImpactRoute
-  '/learn': typeof LearnRoute
+  '/learn': typeof LearnRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/network': typeof NetworkRoute
   '/share': typeof ShareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/source': typeof SourceRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin': typeof AdminIndexRoute
+  '/api/auth/google': typeof ApiAuthGoogleRouteWithChildren
+  '/learn/$categoryId/$articleSlug': typeof LearnCategoryIdArticleSlugRoute
+  '/api/auth/google/callback': typeof ApiAuthGoogleCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -128,12 +169,17 @@ export interface FileRoutesById {
   '/find': typeof FindRoute
   '/gaine': typeof GaineRoute
   '/impact': typeof ImpactRoute
-  '/learn': typeof LearnRoute
+  '/learn': typeof LearnRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/network': typeof NetworkRoute
   '/share': typeof ShareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/source': typeof SourceRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/': typeof AdminIndexRoute
+  '/api/auth/google': typeof ApiAuthGoogleRouteWithChildren
+  '/learn/$categoryId/$articleSlug': typeof LearnCategoryIdArticleSlugRoute
+  '/api/auth/google/callback': typeof ApiAuthGoogleCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +197,11 @@ export interface FileRouteTypes {
     | '/share'
     | '/sitemap.xml'
     | '/source'
+    | '/admin/login'
+    | '/admin/'
+    | '/api/auth/google'
+    | '/learn/$categoryId/$articleSlug'
+    | '/api/auth/google/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,6 +217,11 @@ export interface FileRouteTypes {
     | '/share'
     | '/sitemap.xml'
     | '/source'
+    | '/admin/login'
+    | '/admin'
+    | '/api/auth/google'
+    | '/learn/$categoryId/$articleSlug'
+    | '/api/auth/google/callback'
   id:
     | '__root__'
     | '/'
@@ -181,6 +237,11 @@ export interface FileRouteTypes {
     | '/share'
     | '/sitemap.xml'
     | '/source'
+    | '/admin/login'
+    | '/admin/'
+    | '/api/auth/google'
+    | '/learn/$categoryId/$articleSlug'
+    | '/api/auth/google/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -191,12 +252,15 @@ export interface RootRouteChildren {
   FindRoute: typeof FindRoute
   GaineRoute: typeof GaineRoute
   ImpactRoute: typeof ImpactRoute
-  LearnRoute: typeof LearnRoute
+  LearnRoute: typeof LearnRouteWithChildren
   MarketplaceRoute: typeof MarketplaceRoute
   NetworkRoute: typeof NetworkRoute
   ShareRoute: typeof ShareRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SourceRoute: typeof SourceRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  ApiAuthGoogleRoute: typeof ApiAuthGoogleRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -292,8 +356,65 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/$categoryId/$articleSlug': {
+      id: '/learn/$categoryId/$articleSlug'
+      path: '/$categoryId/$articleSlug'
+      fullPath: '/learn/$categoryId/$articleSlug'
+      preLoaderRoute: typeof LearnCategoryIdArticleSlugRouteImport
+      parentRoute: typeof LearnRoute
+    }
+    '/api/auth/google': {
+      id: '/api/auth/google'
+      path: '/api/auth/google'
+      fullPath: '/api/auth/google'
+      preLoaderRoute: typeof ApiAuthGoogleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/google/callback': {
+      id: '/api/auth/google/callback'
+      path: '/callback'
+      fullPath: '/api/auth/google/callback'
+      preLoaderRoute: typeof ApiAuthGoogleCallbackRouteImport
+      parentRoute: typeof ApiAuthGoogleRoute
+    }
   }
 }
+
+interface LearnRouteChildren {
+  LearnCategoryIdArticleSlugRoute: typeof LearnCategoryIdArticleSlugRoute
+}
+
+const LearnRouteChildren: LearnRouteChildren = {
+  LearnCategoryIdArticleSlugRoute: LearnCategoryIdArticleSlugRoute,
+}
+
+const LearnRouteWithChildren = LearnRoute._addFileChildren(LearnRouteChildren)
+
+interface ApiAuthGoogleRouteChildren {
+  ApiAuthGoogleCallbackRoute: typeof ApiAuthGoogleCallbackRoute
+}
+
+const ApiAuthGoogleRouteChildren: ApiAuthGoogleRouteChildren = {
+  ApiAuthGoogleCallbackRoute: ApiAuthGoogleCallbackRoute,
+}
+
+const ApiAuthGoogleRouteWithChildren = ApiAuthGoogleRoute._addFileChildren(
+  ApiAuthGoogleRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -303,12 +424,15 @@ const rootRouteChildren: RootRouteChildren = {
   FindRoute: FindRoute,
   GaineRoute: GaineRoute,
   ImpactRoute: ImpactRoute,
-  LearnRoute: LearnRoute,
+  LearnRoute: LearnRouteWithChildren,
   MarketplaceRoute: MarketplaceRoute,
   NetworkRoute: NetworkRoute,
   ShareRoute: ShareRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SourceRoute: SourceRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  ApiAuthGoogleRoute: ApiAuthGoogleRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

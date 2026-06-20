@@ -1,0 +1,30 @@
+---
+description: Keep database/schema.sql in sync with all data model changes
+globs: database/**,src/server/db/**
+alwaysApply: false
+---
+
+# Database schema source of truth
+
+`database/schema.sql` is the **canonical** MariaDB model for ibo.garden.
+
+## When changing the data model
+
+1. **Update `database/schema.sql` first** — every new/altered table, column, index, or FK.
+2. **Mirror in Drizzle** — update matching files under `src/server/db/schema/`.
+3. **Update seeds if needed** — taxonomy or reference data goes in `database/seeds.sql`.
+4. **Live databases** — add `database/migrations/NNNN_description.sql` for incremental changes; do not re-run full `schema.sql` on production.
+
+## Do not
+
+- Add tables only in Drizzle without updating `schema.sql`.
+- Use SQLite or Postgres types — this project is **MariaDB on cPanel**.
+- Store secrets in SQL files.
+
+## Taxonomy pattern
+
+Prefer `taxonomy_domains` + `taxonomy_terms` over hardcoded ENUMs for categories, certs, jurisdictions, and tags.
+
+## Related env vars
+
+`DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `USER_SESSION_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`

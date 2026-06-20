@@ -6,11 +6,13 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
 
 import { getGaineBalance } from "@/lib/api/gaine.functions";
+import { verifyHolderSession } from "@/lib/api/auth.functions";
 import { getWalletProvider, JUPITER_WALLET_INSTALL_URL } from "@/lib/solana-wallet";
 import { truncateAddress } from "@/lib/solana";
 import type { SolanaWalletProvider } from "@/types/solana-wallet";
@@ -47,6 +49,33 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [panelOpen, setPanelOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [walletName, setWalletName] = useState<string | null>(null);
+  const verifiedAddressRef = useRef<string | null>(null);
+
+  const syncServerSession = useCallback(
+    async (walletAddress: string, balance: number, providerName: string | null) => {
+      if (balance <= 0) return;
+      if (verifiedAddressRef.current === walletAddress) return;
+
+      const waitlistEmail =
+        typeof sessionStorage !== "undefined"
+          ? sessionStorage.getItem("ibogarden-waitlist-email") ?? undefined
+          : undefined;
+
+      try {
+        await verifyHolderSession({
+          data: {
+            address: walletAddress,
+            email: waitlistEmail,
+            walletProvider: providerName ?? undefined,
+          },
+        });
+        verifiedAddressRef.current = walletAddress;
+      } catch {
+        /* DB unavailable should not block wallet UI */
+      }
+    },
+    [],
+  );
 
   const refreshBalance = useCallback(async () => {
     if (!address) {
@@ -59,13 +88,16 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       const balance = await getGaineBalance({ data: { address } });
       setGaineBalance(balance);
       setError(null);
+      if (balance > 0) {
+        await syncServerSession(address, balance, walletName);
+      }
     } catch {
       setGaineBalance(null);
       setError("Could not load GAINE balance.");
     } finally {
       setBalanceLoading(false);
     }
-  }, [address]);
+  }, [address, walletName, syncServerSession]);
 
   const connect = useCallback(async () => {
     const wallet = getWalletProvider();
@@ -100,6 +132,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     setGaineBalance(null);
     setWalletName(null);
     setError(null);
+    verifiedAddressRef.current = null;
   }, []);
 
   useEffect(() => {

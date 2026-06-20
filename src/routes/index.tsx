@@ -8,6 +8,7 @@ import { useElementParallax, useHoverParallax, useParallax } from "@/hooks/usePa
 import { SacredBroadcastsCarousel } from "@/components/knowledge/sacred-broadcasts-carousel";
 import { VIDEO_PLAYLISTS } from "@/data/knowledge-iboga";
 import { GAINE_JUPITER_TOKEN_URL } from "@/data/gaine";
+import { DEFAULT_OG_IMAGE } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -16,8 +17,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
       { property: "og:title", content: "ibo.garden: Gabon Iboga · GAINE Token · IBOGABON Production" },
       { property: "og:description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
-      { property: "og:image", content: heroForest },
-      { name: "twitter:image", content: heroForest },
+      { property: "og:image", content: DEFAULT_OG_IMAGE },
+      { name: "twitter:image", content: DEFAULT_OG_IMAGE },
     ],
   }),
   component: Home,
