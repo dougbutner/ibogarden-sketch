@@ -3,6 +3,7 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { RefreshCw } from "lucide-react";
 
+import { CommunityChat } from "@/components/community/community-chat";
 import { useWallet } from "@/contexts/wallet-context";
 import { joinCommunityWaitlist } from "@/lib/api/waitlist.functions";
 import { isGoogleOAuthEnabled } from "@/lib/api/auth.functions";
@@ -153,66 +154,6 @@ function CommunityNoGaine() {
   );
 }
 
-function CommunityChatPlaceholder() {
-  const { address, truncatedAddress, gaineBalance } = useWallet();
-
-  return (
-    <div className="max-w-3xl mx-auto">
-      <div className="flex items-center justify-between gap-4 mb-6">
-        <div>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-deep">
-            Holder chat
-          </span>
-          <h2 className="font-serif text-3xl italic text-forest mt-2">The inner garden</h2>
-        </div>
-        <div className="text-right text-xs text-forest/55">
-          {address ? (
-            <a
-              href={jupiterPortfolioUrl(address)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono hover:text-gold underline-offset-2 hover:underline"
-            >
-              {truncatedAddress}
-            </a>
-          ) : (
-            <p className="font-mono">{truncatedAddress}</p>
-          )}
-          <p>
-            {(gaineBalance ?? 0).toLocaleString()} <span className="gaine-word gaine-word-sm">GAINE</span>
-          </p>
-        </div>
-      </div>
-
-      <div className="bg-white border border-forest/10 rounded-3xl overflow-hidden min-h-[420px] flex flex-col">
-        <div className="flex-1 px-6 py-10 flex items-center justify-center text-center">
-          <div className="max-w-sm">
-            <img
-              src={GAINE_TOKEN_IMAGE}
-              alt=""
-              className="size-12 rounded-full mx-auto mb-4 opacity-80"
-              width={48}
-              height={48}
-            />
-            <p className="font-serif text-xl italic text-forest mb-2">Chat coming soon</p>
-            <p className="text-sm text-forest/60 leading-relaxed">
-              You&apos;re verified as a GAINE holder. Real-time community chat will appear here.
-            </p>
-          </div>
-        </div>
-        <div className="border-t border-forest/10 px-4 py-4 bg-bone/30">
-          <div className="flex gap-2 opacity-50 pointer-events-none">
-            <Input disabled placeholder="Message the community…" className="border-forest/10 bg-white" />
-            <Button disabled className="bg-forest text-earth shrink-0">
-              Send
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function CommunityGate() {
   const { connected, hasGaine, balanceLoading, connecting } = useWallet();
 
@@ -232,7 +173,7 @@ export function CommunityGate() {
     return <CommunityNoGaine />;
   }
 
-  return <CommunityChatPlaceholder />;
+  return <CommunityChat />;
 }
 
 export { WAITLIST_EMAIL_KEY };

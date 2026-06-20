@@ -23,8 +23,8 @@ import { Route as CommunityRouteImport } from './routes/community'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as LearnCategoryIdArticleSlugRouteImport } from './routes/learn/$categoryId/$articleSlug'
+import { Route as ApiReflectionRoutingRouteImport } from './routes/api/reflection/routing'
 import { Route as ApiAuthGoogleRouteImport } from './routes/api/auth/google'
 import { Route as ApiAuthGoogleCallbackRouteImport } from './routes/api/auth/google/callback'
 
@@ -98,17 +98,17 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin/login',
-  path: '/admin/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LearnCategoryIdArticleSlugRoute =
   LearnCategoryIdArticleSlugRouteImport.update({
     id: '/$categoryId/$articleSlug',
     path: '/$categoryId/$articleSlug',
     getParentRoute: () => LearnRoute,
   } as any)
+const ApiReflectionRoutingRoute = ApiReflectionRoutingRouteImport.update({
+  id: '/api/reflection/routing',
+  path: '/api/reflection/routing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthGoogleRoute = ApiAuthGoogleRouteImport.update({
   id: '/api/auth/google',
   path: '/api/auth/google',
@@ -134,9 +134,9 @@ export interface FileRoutesByFullPath {
   '/share': typeof ShareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/source': typeof SourceRoute
-  '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
   '/api/auth/google': typeof ApiAuthGoogleRouteWithChildren
+  '/api/reflection/routing': typeof ApiReflectionRoutingRoute
   '/learn/$categoryId/$articleSlug': typeof LearnCategoryIdArticleSlugRoute
   '/api/auth/google/callback': typeof ApiAuthGoogleCallbackRoute
 }
@@ -154,9 +154,9 @@ export interface FileRoutesByTo {
   '/share': typeof ShareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/source': typeof SourceRoute
-  '/admin/login': typeof AdminLoginRoute
   '/admin': typeof AdminIndexRoute
   '/api/auth/google': typeof ApiAuthGoogleRouteWithChildren
+  '/api/reflection/routing': typeof ApiReflectionRoutingRoute
   '/learn/$categoryId/$articleSlug': typeof LearnCategoryIdArticleSlugRoute
   '/api/auth/google/callback': typeof ApiAuthGoogleCallbackRoute
 }
@@ -175,9 +175,9 @@ export interface FileRoutesById {
   '/share': typeof ShareRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/source': typeof SourceRoute
-  '/admin/login': typeof AdminLoginRoute
   '/admin/': typeof AdminIndexRoute
   '/api/auth/google': typeof ApiAuthGoogleRouteWithChildren
+  '/api/reflection/routing': typeof ApiReflectionRoutingRoute
   '/learn/$categoryId/$articleSlug': typeof LearnCategoryIdArticleSlugRoute
   '/api/auth/google/callback': typeof ApiAuthGoogleCallbackRoute
 }
@@ -197,9 +197,9 @@ export interface FileRouteTypes {
     | '/share'
     | '/sitemap.xml'
     | '/source'
-    | '/admin/login'
     | '/admin/'
     | '/api/auth/google'
+    | '/api/reflection/routing'
     | '/learn/$categoryId/$articleSlug'
     | '/api/auth/google/callback'
   fileRoutesByTo: FileRoutesByTo
@@ -217,9 +217,9 @@ export interface FileRouteTypes {
     | '/share'
     | '/sitemap.xml'
     | '/source'
-    | '/admin/login'
     | '/admin'
     | '/api/auth/google'
+    | '/api/reflection/routing'
     | '/learn/$categoryId/$articleSlug'
     | '/api/auth/google/callback'
   id:
@@ -237,9 +237,9 @@ export interface FileRouteTypes {
     | '/share'
     | '/sitemap.xml'
     | '/source'
-    | '/admin/login'
     | '/admin/'
     | '/api/auth/google'
+    | '/api/reflection/routing'
     | '/learn/$categoryId/$articleSlug'
     | '/api/auth/google/callback'
   fileRoutesById: FileRoutesById
@@ -258,9 +258,9 @@ export interface RootRouteChildren {
   ShareRoute: typeof ShareRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SourceRoute: typeof SourceRoute
-  AdminLoginRoute: typeof AdminLoginRoute
   AdminIndexRoute: typeof AdminIndexRoute
   ApiAuthGoogleRoute: typeof ApiAuthGoogleRouteWithChildren
+  ApiReflectionRoutingRoute: typeof ApiReflectionRoutingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -363,19 +363,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/login': {
-      id: '/admin/login'
-      path: '/admin/login'
-      fullPath: '/admin/login'
-      preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/learn/$categoryId/$articleSlug': {
       id: '/learn/$categoryId/$articleSlug'
       path: '/$categoryId/$articleSlug'
       fullPath: '/learn/$categoryId/$articleSlug'
       preLoaderRoute: typeof LearnCategoryIdArticleSlugRouteImport
       parentRoute: typeof LearnRoute
+    }
+    '/api/reflection/routing': {
+      id: '/api/reflection/routing'
+      path: '/api/reflection/routing'
+      fullPath: '/api/reflection/routing'
+      preLoaderRoute: typeof ApiReflectionRoutingRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/google': {
       id: '/api/auth/google'
@@ -430,9 +430,9 @@ const rootRouteChildren: RootRouteChildren = {
   ShareRoute: ShareRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SourceRoute: SourceRoute,
-  AdminLoginRoute: AdminLoginRoute,
   AdminIndexRoute: AdminIndexRoute,
   ApiAuthGoogleRoute: ApiAuthGoogleRouteWithChildren,
+  ApiReflectionRoutingRoute: ApiReflectionRoutingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

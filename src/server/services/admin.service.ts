@@ -3,10 +3,10 @@ import { getDb } from "@/server/db/client";
 import { safeEqual } from "@/server/lib/crypto";
 import { sql } from "drizzle-orm";
 
-export function verifyAdminCredentials(email: string, password: string): boolean {
-  const { adminEmail, adminPassword } = getServerConfig();
-  if (!adminPassword) return false;
-  return safeEqual(email.trim().toLowerCase(), adminEmail.trim().toLowerCase()) && safeEqual(password, adminPassword);
+export function isAdminDevWallet(address: string): boolean {
+  const { adminDevWallet } = getServerConfig();
+  if (!adminDevWallet) return false;
+  return safeEqual(address.trim(), adminDevWallet.trim());
 }
 
 export async function checkDatabaseHealth() {

@@ -4,11 +4,6 @@ import { getServerConfig } from "@/lib/config.server";
 
 const SESSION_MAX_AGE = 60 * 60 * 24 * 14;
 
-export type AdminSessionData = {
-  email: string;
-  role: "super";
-};
-
 export type UserSessionData = {
   userId: number;
   isHolder: boolean;
@@ -19,16 +14,6 @@ export type UserSessionData = {
 function requireSecret(value: string | undefined, name: string): string {
   if (!value) throw new Error(`${name} is not configured`);
   return value;
-}
-
-export function getAdminSessionConfig(): SessionConfig {
-  const { adminSessionSecret } = getServerConfig();
-  return {
-    name: "ibogarden-admin",
-    password: requireSecret(adminSessionSecret, "ADMIN_SESSION_SECRET"),
-    maxAge: SESSION_MAX_AGE,
-    cookie: { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/" },
-  };
 }
 
 export function getOAuthStateSessionConfig(): SessionConfig {

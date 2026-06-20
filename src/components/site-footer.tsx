@@ -10,7 +10,7 @@ const TRUNK_LINKS = [
 ] as const;
 
 const BRANCH_LINKS = [
-  { to: "/find", label: "Find" },
+  { to: "/find", label: "Find a Facilitator" },
   { to: "/about", label: "About" },
   { to: "/network", label: "Network" },
   { to: "/impact", label: "Impact" },

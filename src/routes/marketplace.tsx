@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHeader } from "@/components/page-header";
 import { NetworkApplicationForm } from "@/components/network/network-application-form";
@@ -34,8 +33,6 @@ const LISTINGS = [
 ];
 
 function Marketplace() {
-  const [showApplication, setShowApplication] = useState(false);
-
   return (
     <>
       <PageHeader
@@ -129,19 +126,7 @@ function Marketplace() {
               </div>
             </div>
 
-            {showApplication ? (
-              <NetworkApplicationForm className="mb-10 !p-6 md:!p-8" />
-            ) : (
-              <div className="text-center mb-10">
-                <button
-                  type="button"
-                  onClick={() => setShowApplication(true)}
-                  className="inline-block bg-gold text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold-deep transition-colors"
-                >
-                  Iboga Market: Request Invite
-                </button>
-              </div>
-            )}
+            <NetworkApplicationForm className="mb-10" />
 
             <div className="text-center border-t border-forest/10 pt-8 space-y-6">
               <p className="text-sm text-forest/65 leading-relaxed">

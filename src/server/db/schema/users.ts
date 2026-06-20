@@ -11,6 +11,8 @@ export const userAccounts = mysqlTable(
     primaryWalletId: bigint("primary_wallet_id", { mode: "number", unsigned: true }),
     holderStatus: mysqlEnum("holder_status", ["none", "active", "lapsed"]).notNull().default("none"),
     reflectionDirectionId: bigint("reflection_direction_id", { mode: "number", unsigned: true }),
+    reflectionProjectId: bigint("reflection_project_id", { mode: "number", unsigned: true }),
+    reflectionUpdatedAt: datetime("reflection_updated_at"),
     countryCode: char("country_code", { length: 2 }),
     timezone: varchar("timezone", { length: 64 }),
     marketingOptIn: tinyint("marketing_opt_in").notNull().default(0),

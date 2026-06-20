@@ -40,24 +40,10 @@ export const GAINE_TRANSFER_FEE = "2%";
 export const GAINE_TRANSFER_FEE_LABEL = "Transfer Fee Money Model";
 export const GAINE_PROGRAM = "Token-2022";
 
-export const GAINE_REFLECTION_DIRECTIONS = [
-  {
-    key: "Sourcing",
-    desc: "Ethical Gabon farms & supply-chain traceability",
-  },
-  {
-    key: "Conservation",
-    desc: "Reforestation & smallholder working capital",
-  },
-  {
-    key: "Gabon Communities",
-    desc: "Benefit-sharing under Decree 0239",
-  },
-  {
-    key: "Specific Project",
-    desc: "USDC sent to an approved project wallet",
-  },
-] as const;
+export {
+  GAINE_REFLECTION_DIRECTIONS,
+  GAINE_REFLECTION_MIN_BALANCE,
+} from "@/data/reflection-destinations";
 
 export const GAINE_DISCLAIMER =
   "GAINE is a reciprocating utility token, not an investment opportunity. Iboga and ibogaine carry serious health risks and may be illegal in many jurisdictions. Nothing here is medical, legal, therapeutic, or investment advice. You must be 21+ to use. Committed to Gabon Decree 0239 & Nagoya Protocol.";

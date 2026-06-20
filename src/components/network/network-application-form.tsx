@@ -74,7 +74,10 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
           credentials: form.credentials.trim() || undefined,
           gabonFirstSourcing: form.gabonFirstSourcing,
           southeastAfrica: form.southeastAfrica,
-          solanaWallet: form.solanaWallet.trim() || undefined,
+          solanaWallet: (() => {
+            const wallet = form.solanaWallet.trim();
+            return wallet.length >= 32 && wallet.length <= 44 ? wallet : undefined;
+          })(),
         },
       });
       setSubmitted(true);

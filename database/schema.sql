@@ -53,6 +53,8 @@ CREATE TABLE IF NOT EXISTS user_accounts (
   primary_wallet_id       BIGINT UNSIGNED NULL,
   holder_status           ENUM('none','active','lapsed') NOT NULL DEFAULT 'none',
   reflection_direction_id BIGINT UNSIGNED NULL,
+  reflection_project_id   BIGINT UNSIGNED NULL,
+  reflection_updated_at   DATETIME        NULL,
   country_code            CHAR(2)         NULL,
   timezone                VARCHAR(64)     NULL,
   marketing_opt_in        TINYINT(1)      NOT NULL DEFAULT 0,
@@ -91,6 +93,25 @@ ALTER TABLE user_accounts
 ALTER TABLE user_accounts
   ADD CONSTRAINT fk_user_accounts_reflection_direction
     FOREIGN KEY (reflection_direction_id) REFERENCES taxonomy_terms (id)
+    ON DELETE SET NULL ON UPDATE CASCADE;
+
+CREATE TABLE IF NOT EXISTS impact_projects (
+  id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  slug          VARCHAR(96)     NOT NULL,
+  name          VARCHAR(192)    NOT NULL,
+  description   TEXT            NULL,
+  solana_wallet VARCHAR(44)     NOT NULL,
+  sort_order    INT             NOT NULL DEFAULT 0,
+  is_active     TINYINT(1)      NOT NULL DEFAULT 1,
+  created_at    DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_impact_projects_slug (slug),
+  KEY idx_impact_projects_active (is_active, sort_order)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE user_accounts
+  ADD CONSTRAINT fk_user_accounts_reflection_project
+    FOREIGN KEY (reflection_project_id) REFERENCES impact_projects (id)
     ON DELETE SET NULL ON UPDATE CASCADE;
 
 CREATE TABLE IF NOT EXISTS oauth_identities (

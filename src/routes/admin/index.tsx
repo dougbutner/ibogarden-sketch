@@ -1,35 +1,42 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
+import { AdminGate } from "@/components/admin/admin-gate";
+import { AdminApplicationsPanel } from "@/components/admin/admin-applications-panel";
+import { useAdminWallet } from "@/components/admin/admin-wallet-context";
 import {
   adminGetApplications,
   adminGetHealth,
   adminGetHolders,
+  adminGetReflectionPreferences,
   adminGetWaitlist,
-  adminLogout,
-  getAdminSession,
 } from "@/lib/api/admin.functions";
 
 export const Route = createFileRoute("/admin/")({
-  beforeLoad: async () => {
-    const session = await getAdminSession();
-    if (!session.authenticated) {
-      throw redirect({ to: "/admin/login" });
-    }
-  },
-  component: AdminDashboard,
+  component: AdminPage,
 });
+
+function AdminPage() {
+  return (
+    <AdminGate>
+      <AdminDashboard />
+    </AdminGate>
+  );
+}
 
 type WaitlistRow = Awaited<ReturnType<typeof adminGetWaitlist>>[number];
 type HolderRow = Awaited<ReturnType<typeof adminGetHolders>>[number];
 type ApplicationRow = Awaited<ReturnType<typeof adminGetApplications>>[number];
+type ReflectionRow = Awaited<ReturnType<typeof adminGetReflectionPreferences>>[number];
 
 function AdminDashboard() {
-  const [tab, setTab] = useState<"waitlist" | "holders" | "applications">("waitlist");
+  const wallet = useAdminWallet();
+  const [tab, setTab] = useState<"waitlist" | "holders" | "applications" | "reflections">("waitlist");
   const [search, setSearch] = useState("");
   const [waitlist, setWaitlist] = useState<WaitlistRow[]>([]);
   const [holders, setHolders] = useState<HolderRow[]>([]);
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
+  const [reflections, setReflections] = useState<ReflectionRow[]>([]);
   const [dbConnected, setDbConnected] = useState<boolean | null>(null);
   const [taxonomyTerms, setTaxonomyTerms] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -39,15 +46,17 @@ function AdminDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [waitlistRows, holderRows, applicationRows, health] = await Promise.all([
-        adminGetWaitlist({ data: { search: search || undefined } }),
-        adminGetHolders(),
-        adminGetApplications({ data: { search: search || undefined } }),
-        adminGetHealth(),
+      const [waitlistRows, holderRows, applicationRows, reflectionRows, health] = await Promise.all([
+        adminGetWaitlist({ data: { wallet, search: search || undefined } }),
+        adminGetHolders({ data: { wallet } }),
+        adminGetApplications({ data: { wallet, search: search || undefined } }),
+        adminGetReflectionPreferences({ data: { wallet } }),
+        adminGetHealth({ data: { wallet } }),
       ]);
       setWaitlist(waitlistRows);
       setHolders(holderRows);
       setApplications(applicationRows);
+      setReflections(reflectionRows);
       setDbConnected(health.connected);
       setTaxonomyTerms(health.taxonomyTerms);
     } catch {
@@ -60,16 +69,11 @@ function AdminDashboard() {
 
   useEffect(() => {
     void load();
-  }, []);
+  }, [wallet]);
 
   async function handleSearch(event: React.FormEvent) {
     event.preventDefault();
     await load();
-  }
-
-  async function handleLogout() {
-    await adminLogout();
-    window.location.href = "/admin/login";
   }
 
   return (
@@ -77,20 +81,11 @@ function AdminDashboard() {
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="font-serif text-4xl italic text-forest">Admin dashboard</h1>
-          <p className="text-sm text-forest/60 mt-1">Waitlist, holders, and network applications</p>
+          <p className="text-sm text-forest/60 mt-1">Waitlist, holders, applications, and reward directions</p>
         </div>
-        <div className="flex gap-3">
-          <Link to="/" className="text-xs font-semibold uppercase tracking-widest text-forest/60 hover:text-gold">
-            Site
-          </Link>
-          <button
-            type="button"
-            onClick={() => void handleLogout()}
-            className="text-xs font-semibold uppercase tracking-widest text-forest/60 hover:text-gold"
-          >
-            Logout
-          </button>
-        </div>
+        <Link to="/" className="text-xs font-semibold uppercase tracking-widest text-forest/60 hover:text-gold">
+          Site
+        </Link>
       </div>
 
       {dbConnected !== null ? (
@@ -105,7 +100,7 @@ function AdminDashboard() {
       ) : null}
 
       <div className="flex gap-2 mb-6 flex-wrap">
-        {(["waitlist", "holders", "applications"] as const).map((key) => (
+        {(["waitlist", "holders", "applications", "reflections"] as const).map((key) => (
           <button
             key={key}
             type="button"
@@ -201,35 +196,39 @@ function AdminDashboard() {
       ) : null}
 
       {!loading && tab === "applications" ? (
+        <AdminApplicationsPanel applications={applications} wallet={wallet} onChanged={() => void load()} />
+      ) : null}
+
+      {!loading && tab === "reflections" ? (
         <div className="overflow-x-auto bg-white border border-forest/10 rounded-2xl">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-forest/10 text-left text-[11px] uppercase tracking-widest text-forest/50">
-                <th className="p-4">Organization</th>
+                <th className="p-4">Wallet</th>
                 <th className="p-4">Email</th>
-                <th className="p-4">Type</th>
-                <th className="p-4">Country</th>
-                <th className="p-4">Gabon-first</th>
-                <th className="p-4">Status</th>
-                <th className="p-4">Submitted</th>
+                <th className="p-4">GAINE</th>
+                <th className="p-4">Direction</th>
+                <th className="p-4">Project</th>
+                <th className="p-4">Saved</th>
               </tr>
             </thead>
             <tbody>
-              {applications.map((row) => (
-                <tr key={row.id} className="border-b border-forest/5">
-                  <td className="p-4">{row.organizationName}</td>
-                  <td className="p-4">{row.email}</td>
-                  <td className="p-4">{row.partnerType}</td>
-                  <td className="p-4">{row.country}</td>
-                  <td className="p-4">{row.gabonFirstSourcing ? "Yes" : "No"}</td>
-                  <td className="p-4 capitalize">{row.status}</td>
-                  <td className="p-4">{row.createdAt ? new Date(row.createdAt).toLocaleString() : "—"}</td>
+              {reflections.map((row) => (
+                <tr key={`${row.walletAddress}-${row.reflectionUpdatedAt}`} className="border-b border-forest/5">
+                  <td className="p-4 font-mono text-xs">{row.walletAddress ?? "—"}</td>
+                  <td className="p-4">{row.email ?? "—"}</td>
+                  <td className="p-4">{row.lastGaineBalance ?? "—"}</td>
+                  <td className="p-4">{row.directionLabel ?? row.directionSlug ?? "—"}</td>
+                  <td className="p-4">{row.projectName ?? "—"}</td>
+                  <td className="p-4">
+                    {row.reflectionUpdatedAt ? new Date(row.reflectionUpdatedAt).toLocaleString() : "—"}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {applications.length === 0 ? (
-            <p className="p-6 text-forest/50 text-sm">No network applications yet.</p>
+          {reflections.length === 0 ? (
+            <p className="p-6 text-forest/50 text-sm">No saved reward directions yet.</p>
           ) : null}
         </div>
       ) : null}

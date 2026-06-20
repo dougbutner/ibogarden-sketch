@@ -19,12 +19,25 @@ export const submitNetworkApplicationFn = createServerFn({ method: "POST" })
       credentials: z.string().max(5000).optional(),
       gabonFirstSourcing: z.boolean(),
       southeastAfrica: z.boolean(),
-      solanaWallet: z.string().min(32).max(44).optional().or(z.literal("")),
+      solanaWallet: z
+        .string()
+        .optional()
+        .transform((value) => {
+          const trimmed = value?.trim() ?? "";
+          if (!trimmed) return undefined;
+          if (trimmed.length >= 32 && trimmed.length <= 44) return trimmed;
+          return undefined;
+        }),
     }),
   )
   .handler(async ({ data }) => {
-    return submitNetworkApplication({
-      ...data,
-      solanaWallet: data.solanaWallet || undefined,
-    });
+    try {
+      return await submitNetworkApplication({
+        ...data,
+        solanaWallet: data.solanaWallet || undefined,
+      });
+    } catch (error) {
+      console.error("[submitNetworkApplicationFn]", error);
+      throw error;
+    }
   });
