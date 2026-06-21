@@ -80,7 +80,7 @@ VALUES
   ),
   (
     'ibogabon-farm-network',
-    'Ibogabon Farm Network',
+    'Gabon Farm Network',
     'Direct support for certified Gabon farms and traceable supply chains.',
     'PLACEprojFarmWa11etP1aceho1derxxxxxxxxxx1',
     3

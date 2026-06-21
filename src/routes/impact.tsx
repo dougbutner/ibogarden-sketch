@@ -43,9 +43,9 @@ function Impact() {
         <div>
           <h2 className="font-serif text-4xl italic text-forest mb-5">Investing in farms</h2>
           <p className="text-forest/75 leading-relaxed mb-6">
-            We are not abstract impact reporting. Ibogabon and ibo.garden put capital and attention where
+            We are not abstract impact reporting. ibo.garden puts capital and attention where
             the root actually grows: working farms, nursery stock, harvest practices, and the people who have
-            stewarded Tabernanthe Iboga for generations.
+            stewarded Tabernanthe iboga for generations.
           </p>
           <p className="text-forest/75 leading-relaxed mb-6">
             For growers already in the network, we help with coordination, traceability, and the paperwork
@@ -83,7 +83,7 @@ function Impact() {
           <p className="text-forest/75 leading-relaxed mb-6">
             Through the ordinary movements of markets, arbitrage, and pooled liquidity, value can travel across
             borders in ways that traditional aid never could. A butterfly effect: capital circulating on-chain,
-            fees routing toward Ibogabon and holder-chosen impact, and more of the world&apos;s attention and
+            fees routing toward Gabon farm operations and holder-chosen impact, and more of the world&apos;s attention and
             resources bending toward Gabon.
           </p>
           <p className="text-forest/75 leading-relaxed mb-6">

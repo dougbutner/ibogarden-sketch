@@ -16,6 +16,7 @@ import { SiteFooter } from "../components/site-footer";
 import { FooterParallax } from "../components/footer-parallax";
 import { IbogaSurfaceTextures } from "../components/iboga-surface-textures";
 import { WalletProvider } from "../contexts/wallet-context";
+import { LocaleProvider } from "../contexts/locale-context";
 import { JourneyTracker } from "../components/journey-tracker";
 
 function NotFoundComponent() {
@@ -75,14 +76,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "ibo.garden: Gabon Iboga · GAINE Token · IBOGABON Production" },
-      { name: "description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
-      { property: "og:title", content: "ibo.garden: Gabon Iboga · GAINE Token · IBOGABON Production" },
-      { property: "og:description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
+      { title: "ibo.garden: Gabon Iboga · GAINE Token · Ethical Sourcing" },
+      { name: "description", content: "Ethical Iboga sourcing from Gabon. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
+      { property: "og:title", content: "ibo.garden: Gabon Iboga · GAINE Token · Ethical Sourcing" },
+      { property: "og:description", content: "Ethical Iboga sourcing from Gabon. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "ibo.garden: Gabon Iboga · GAINE Token · IBOGABON Production" },
-      { name: "twitter:description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
+      { name: "twitter:title", content: "ibo.garden: Gabon Iboga · GAINE Token · Ethical Sourcing" },
+      { name: "twitter:description", content: "Ethical Iboga sourcing from Gabon. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
       { property: "og:image", content: DEFAULT_OG_IMAGE },
       { name: "twitter:image", content: DEFAULT_OG_IMAGE },
     ],
@@ -117,18 +118,20 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <WalletProvider>
-        <JourneyTracker />
-        <IbogaSurfaceTextures />
-        <div className="min-h-screen flex flex-col bg-earth text-forest">
-          <SiteHeader />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <FooterParallax />
-          <SiteFooter />
-        </div>
-      </WalletProvider>
+      <LocaleProvider>
+        <WalletProvider>
+          <JourneyTracker />
+          <IbogaSurfaceTextures />
+          <div className="min-h-screen flex flex-col bg-earth text-forest">
+            <SiteHeader />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <FooterParallax />
+            <SiteFooter />
+          </div>
+        </WalletProvider>
+      </LocaleProvider>
     </QueryClientProvider>
   );
 }

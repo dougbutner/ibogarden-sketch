@@ -83,7 +83,7 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
       "A **network financial system** living **spirit of Iboga** in a token.",
       "Smart liquidity bonding with **100% of supply** placed at ranges from $1 per GAINE to $10M per GAINE.",
       "This formula creates **full backing at $1** in USD, EUR, GBP, CHF, AUD, BRL and physical gold, with the token price able to grow above a dollar.",
-      "**25%** goes to Ibogabon for operations, salaries, and investment in sustainable, regulated production and export of Tabernanthe Iboga. **25%** goes to market making, pairing GAINE with more assets that will generate more revenue, explained in the next section.",
+      "**25%** goes to regulated farm operations in Gabon: salaries, sustainable production, and compliant export of Tabernanthe iboga. **25%** goes to market making, pairing GAINE with more assets that will generate more revenue, explained in the next section.",
       "The remaining **50%** goes to holder-directed initiatives within our network, or, if undirected, to our current impact or investment focus.",
     ],
   },
@@ -126,7 +126,7 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
       {
         type: "person",
         name: "Benny Friedmann",
-        tags: [{ label: "Ibogabon" }],
+        tags: [],
         bio: "Has spent years on the ground in Gabon, and his network extends to dozens of farmers, as well as generational shaman like Moughenda Mikala. His past experience in hedge funds, and fun open personality makes him the perfect connector Gabon needs. Benny has been in many Iboga ceremonies and sourcing relationships on the ground.",
       },
       {

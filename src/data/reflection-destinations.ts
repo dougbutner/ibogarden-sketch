@@ -94,7 +94,7 @@ export const IMPACT_PROJECT_FALLBACK: ImpactProject[] = [
   },
   {
     slug: "ibogabon-farm-network",
-    name: "Ibogabon Farm Network",
+    name: "Gabon Farm Network",
     description: "Direct support for certified Gabon farms and traceable supply chains.",
     solanaWallet: "PLACEprojFarmWa11etP1aceho1derxxxxxxxxxx1",
   },

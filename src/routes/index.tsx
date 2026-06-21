@@ -9,14 +9,15 @@ import { SacredBroadcastsCarousel } from "@/components/knowledge/sacred-broadcas
 import { VIDEO_PLAYLISTS } from "@/data/knowledge-iboga";
 import { GAINE_JUPITER_TOKEN_URL } from "@/data/gaine";
 import { DEFAULT_OG_IMAGE } from "@/lib/site";
+import { useLocale } from "@/contexts/locale-context";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ibo.garden: Gabon Iboga · GAINE Token · IBOGABON Production" },
-      { name: "description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
-      { property: "og:title", content: "ibo.garden: Gabon Iboga · GAINE Token · IBOGABON Production" },
-      { property: "og:description", content: "Certified Gabon Iboga from IBOGABON's 51,600-plant plantation. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
+      { title: "ibo.garden: Gabon Iboga · GAINE Token · Ethical Sourcing" },
+      { name: "description", content: "Ethical Iboga sourcing from Gabon. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
+      { property: "og:title", content: "ibo.garden: Gabon Iboga · GAINE Token · Ethical Sourcing" },
+      { property: "og:description", content: "Ethical Iboga sourcing from Gabon. GAINE token, marketplace access, and on-chain traceability under Decree 0239." },
       { property: "og:image", content: DEFAULT_OG_IMAGE },
       { name: "twitter:image", content: DEFAULT_OG_IMAGE },
     ],
@@ -75,6 +76,7 @@ function MarketplaceCard({
 function Home() {
   const heroParallax = useParallax(0.4);
   const impactParallax = useElementParallax(0.35);
+  const { t } = useLocale();
 
   return (
     <>
@@ -95,17 +97,15 @@ function Home() {
         </div>
         <div className="relative z-10 max-w-4xl text-earth">
           <span className="inline-block px-4 py-1 mb-6 rounded-full border border-gold/40 bg-forest/40 backdrop-blur-sm text-gold text-[11px] font-medium tracking-[0.22em] uppercase">
-            Gabon Decree 0239 Regulated · DeFi Money Model · Network-rooted
+            {t("home.badge")}
           </span>
           <h1 className="font-serif text-5xl md:text-7xl text-earth mb-6 leading-[1.05] italic text-balance">
-            Gabon-Grown Iboga.<br />
-            <span className="text-gold not-italic">Tokenized on Solana.</span>
+            {t("home.heroTitle")}<br />
+            <span className="text-gold not-italic">{t("home.heroSubtitle")}</span>
           </h1>
           <p className="text-base md:text-xl text-earth/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-            ibo.garden is a network of <strong className="font-semibold text-earth">certified farms, facilitators, and clinics</strong>, connecting{" "}
-            <strong className="font-semibold text-earth">Gabonese Iboga</strong> to healers and buyers worldwide.{" "}
-            <span className="gaine-word gaine-word-sm">GAINE</span> powers <strong className="font-semibold text-earth">ethical sourcing</strong>, traceability, and reciprocal
-            rewards under Gabon Decree 0239.
+            {t("home.heroLead")}{" "}
+            <span className="gaine-word gaine-word-sm">GAINE</span> {t("home.heroLeadTail")}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <a
@@ -114,14 +114,14 @@ function Home() {
               rel="noopener noreferrer"
               className="btn-gaine bg-gold text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-gold/90 transition-colors"
             >
-              Buy GAINE
+              {t("home.buyGaine")}
             </a>
             <Link to="/marketplace" className="border border-earth/30 text-earth px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-earth/10 transition-colors">
-              Explore Marketplace
+              {t("home.exploreMarketplace")}
             </Link>
           </div>
           <Link to="/source" className="mt-10 inline-flex items-center gap-3 text-sm text-gold/90 italic border-b border-gold/30 pb-1 hover:text-gold">
-            Sourcing Consultation with Benny Friedmann →
+            {t("home.bennyConsult")}
           </Link>
         </div>
       </section>
@@ -130,10 +130,10 @@ function Home() {
       <section className="py-24 px-6 max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
-            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">Tabernanthe Iboga</span>
-            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 mb-8 italic leading-tight">The Sacred Shrub</h2>
+            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">{t("home.sacredLabel")}</span>
+            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 mb-8 italic leading-tight">{t("home.sacredTitle")}</h2>
             <p className="text-lg leading-relaxed mb-6 text-forest/80">
-              Tabernanthe Iboga is a shrub of the Apocynaceae family, native to Africa&apos;s equatorial forests. Rich in
+              Tabernanthe iboga is a shrub of the Apocynaceae family, native to Africa&apos;s equatorial forests. Rich in
               indole-monoterpene alkaloids, chiefly <strong className="font-semibold text-forest">ibogaine</strong>, it has been used in traditional medicine for centuries:
               chewing the root or bark for stimulating, regenerative effect.
             </p>
@@ -218,61 +218,6 @@ function Home() {
         </div>
       </section>
 
-      {/* IBOGABON */}
-      <section className="py-24 px-6 max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-16 items-start">
-          <div>
-            <span className="text-gold text-[11px] font-semibold uppercase tracking-[0.25em]">IBOGABON Assets</span>
-            <h2 className="font-serif text-4xl md:text-5xl text-forest mt-4 mb-8 italic leading-tight">
-              51,600 Plants in Gabon
-            </h2>
-            <p className="text-lg leading-relaxed mb-6 text-forest/80">
-              IBOGABON operates a large plantation at Bibasse/Oyem: <strong className="font-semibold text-forest">13 hectares</strong> under cultivation across a 20-hectare
-              site with room to expand. Plants are tracked by age and expected yield, ensuring <strong className="font-semibold text-forest">predictable, certified supply</strong> for global partners.
-            </p>
-            <ul className="space-y-3 text-sm text-forest/75 mb-8">
-              <li className="flex gap-3">
-                <span className="text-gold mt-0.5">◆</span>
-                Network of local planters for raw material purchase
-              </li>
-              <li className="flex gap-3">
-                <span className="text-gold mt-0.5">◆</span>
-                Bolokoboue GRAINE village for training and nursery setup
-              </li>
-              <li className="flex gap-3">
-                <span className="text-gold mt-0.5">◆</span>
-                Made in Gabon processing house certified to AGASA standards
-              </li>
-            </ul>
-            <Link to="/about" className="inline-flex items-center text-gold font-semibold tracking-wider uppercase text-sm group">
-              Learn about IBOGABON
-              <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { age: "7 years", area: "5 ha", plants: "19,200", yield: "7,680 kg bark" },
-              { age: "6 years", area: "3 ha", plants: "12,800", yield: "5,120 kg bark" },
-              { age: "4½ years", area: "3 ha", plants: "9,600", yield: "3,840 kg bark" },
-              { age: "3½ years", area: "2 ha", plants: "10,000", yield: "4,000 kg bark" },
-            ].map((plot) => (
-              <div key={plot.age} className="bg-bone border border-forest/10 rounded-2xl p-5">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gold-deep mb-2">{plot.age} old</p>
-                <p className="font-serif text-xl italic text-forest mb-3">{plot.plants} plants</p>
-                <p className="text-xs text-forest/60">{plot.area} · expected {plot.yield}</p>
-              </div>
-            ))}
-            <div className="col-span-2 bg-forest text-earth rounded-2xl p-6 flex justify-between items-center">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gold mb-1">Total plantation</p>
-                <p className="font-serif text-3xl italic">51,600 plants</p>
-              </div>
-              <p className="text-sm text-earth/70 text-right">13 ha cultivated<br />20 ha total site</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* VIDEO CAROUSEL */}
       <section className="py-20 bg-forest text-earth overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 mb-10 flex justify-between items-end">
@@ -324,13 +269,41 @@ function Home() {
           </div>
           <div className="md:col-span-7 space-y-4">
             {[
-              { who: "A., 38 · Opioid recovery", q: "Five years of dependency lifted in a single ceremony. The integration since has been the real medicine." },
-              { who: "M., 45 · Depression", q: "I came back inside my own life. The forest stayed with me." },
-              { who: "S., 29 · PTSD", q: "I stopped running. I started living." },
+              {
+                id: "lotsof",
+                who: "Howard Lotsof · Heroin dependence",
+                q: "Where previously I had viewed heroin as a drug which gave me comfort, I now viewed heroin as a drug which emulated death. The very next thought into my mind was, 'I prefer life to death.'",
+                source: "Rolling Stone",
+                href: "https://qc.rollingstone.com/en/culture/he-took-a-psychedelic-to-cure-his-addiction-it-was-his-last-trip/",
+              },
+              {
+                id: "jesse",
+                who: "Jesse · Depression",
+                q: "After 10 years of battling depression and cycling through treatments that never worked, I finally found someone who truly listened — and it saved my life.",
+                source: "The Ibogaine Institute",
+                href: "https://theibogainstitute.org/success-stories/",
+              },
+              {
+                id: "flatley",
+                who: "Patrick Flatley · Green Beret veteran · PTSD",
+                q: "I went from being constantly angry and feeling alone, burdened by the trauma of war and the loss of 12 friends to suicide, to finding a renewed sense of hope and peace.",
+                source: "VETS",
+                href: "https://vetsolutions.org/news/veterans-exploring-treatment-solutions-vets-grant-recipients-participate-in-groundbreaking-stanford-study-on-ibogaine-treatment-for-ptsd-and-tbi/",
+              },
             ].map((s) => (
-              <figure key={s.who} className="bg-earth p-6 rounded-2xl border border-forest/10">
+              <figure key={s.id} className="bg-earth p-6 rounded-2xl border border-forest/10">
                 <blockquote className="font-serif italic text-xl text-forest leading-snug">"{s.q}"</blockquote>
-                <figcaption className="mt-3 text-xs uppercase tracking-widest text-gold-deep font-semibold">{s.who}</figcaption>
+                <figcaption className="mt-3 space-y-1">
+                  <div className="text-xs uppercase tracking-widest text-gold-deep font-semibold">{s.who}</div>
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] text-forest/55 hover:text-gold transition-colors underline underline-offset-2"
+                  >
+                    Source: {s.source}
+                  </a>
+                </figcaption>
               </figure>
             ))}
           </div>

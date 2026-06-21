@@ -40,7 +40,7 @@ export function GaineMoneyModel() {
           </li>
           <li>
             Every GAINE transfer carries a 2% fee via an audited Solana mechanism, redistributed transparently
-            to Ibogabon, market-making exposure, and iboga-focused initiatives, with philanthropic direction
+            to Gabon farm operations, market-making exposure, and iboga-focused initiatives, with philanthropic direction
             to exact projects registered on the marketplace and network.
           </li>
         </ol>

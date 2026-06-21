@@ -16,7 +16,7 @@ export const Route = createFileRoute("/gaine")({
       {
         name: "description",
         content:
-          "GAINE on Solana: digitized fiat routes, buy-to-mint backing from $1–$10M per token, and a 2% transfer fee directed to Ibogabon, market-making, and iboga-focused initiatives.",
+          "GAINE on Solana: digitized fiat routes, buy-to-mint backing from $1–$10M per token, and a 2% transfer fee directed to Gabon farm operations, market-making, and iboga-focused initiatives.",
       },
       { property: "og:title", content: "GAINE: Impact that stays. Investment that grows." },
       {
@@ -50,16 +50,16 @@ function Gaine() {
           </h2>
           <div className="mt-4 max-w-3xl space-y-4 leading-relaxed" style={{ color: "var(--gaine-muted)" }}>
             <p>
-              Ibogabon is directly investing in farms to connect the world to the Holy Root, while GAINE gains
-              by providing connective financial services in the digital realm.
+              ibo.garden connects certified Gabon farms to buyers worldwide, while GAINE provides connective
+              financial services in the digital realm.
             </p>
             <p>
               GAINE keeps your investment liquid, no lock-up period, while routing transfer fees to the
               Iboga-related causes you choose.
             </p>
             <p>
-              Ibogabon serves as the Gabon-first investment hub, using our revenue to directly invest in farms
-              in Gabon that comply with regulation.
+              Revenue from the token economy supports regulated farm production in Gabon and holder-directed
+              impact across the network.
             </p>
           </div>
         </div>
