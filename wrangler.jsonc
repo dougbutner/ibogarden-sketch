@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ibogarden",
+  "compatibility_date": "2026-06-20",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "src/server.ts",
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "DATABASE_TARGET": "live",
+    "VITE_SITE_URL": "https://ibo.garden"
+  }
+}

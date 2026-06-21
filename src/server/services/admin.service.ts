@@ -10,7 +10,7 @@ export function isAdminDevWallet(address: string): boolean {
 }
 
 export async function checkDatabaseHealth() {
-  const db = getDb();
+  const db = await getDb();
   const [row] = await db.execute<{ ok: number; taxonomyTerms: number }>(
     sql`SELECT 1 AS ok, (SELECT COUNT(*) FROM taxonomy_terms) AS taxonomyTerms`,
   );

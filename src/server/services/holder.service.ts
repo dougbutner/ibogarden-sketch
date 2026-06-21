@@ -22,7 +22,7 @@ export type VerifyHolderInput = {
 
 export async function verifyHolderLogin(input: VerifyHolderInput) {
   const balance = await fetchGaineBalance(input.address);
-  const db = getDb();
+  const db = await getDb();
   const now = new Date();
   const isHolder = balance > 0;
 
@@ -174,7 +174,7 @@ export async function upsertGoogleUser(profile: {
   displayName: string;
   avatarUrl?: string;
 }) {
-  const db = getDb();
+  const db = await getDb();
   const now = new Date();
   const email = normalizeEmail(profile.email);
 
@@ -253,7 +253,7 @@ export async function upsertGoogleUser(profile: {
 }
 
 export async function getUserById(userId: number) {
-  const db = getDb();
+  const db = await getDb();
   const [user] = await db.select().from(userAccounts).where(eq(userAccounts.id, userId)).limit(1);
   return user ?? null;
 }

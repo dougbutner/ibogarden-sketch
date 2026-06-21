@@ -6,7 +6,7 @@ import { userAccounts } from "@/server/db/schema/users";
 import { trackEvent } from "@/server/services/journey.service";
 
 export async function listCommunityMessages(limit = 50) {
-  const db = getDb();
+  const db = await getDb();
 
   const rows = await db
     .select({
@@ -27,7 +27,7 @@ export async function listCommunityMessages(limit = 50) {
 }
 
 export async function postCommunityMessage(userAccountId: number, body: string) {
-  const db = getDb();
+  const db = await getDb();
   const trimmed = body.trim();
   if (!trimmed) throw new Error("Message is required");
 

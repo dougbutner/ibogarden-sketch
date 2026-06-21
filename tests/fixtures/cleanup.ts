@@ -5,7 +5,7 @@ import { communityMemberships, communityMessages } from "@/server/db/schema/comm
 import { communityWaitlist, userAccounts, userEvents, userJourneyStats, walletProfiles } from "@/server/db/schema/users";
 
 export async function cleanupTestHolder(address: string, email: string) {
-  const db = getDb();
+  const db = await getDb();
 
   const [wallet] = await db.select().from(walletProfiles).where(eq(walletProfiles.address, address)).limit(1);
   const [user] = await db.select().from(userAccounts).where(eq(userAccounts.email, email)).limit(1);
@@ -29,6 +29,6 @@ export async function cleanupTestHolder(address: string, email: string) {
 }
 
 export async function cleanupWaitlistEmail(email: string) {
-  const db = getDb();
+  const db = await getDb();
   await db.delete(communityWaitlist).where(eq(communityWaitlist.email, email));
 }

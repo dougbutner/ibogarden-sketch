@@ -47,8 +47,16 @@ type OrcaTokenResponse = {
   data?: { priceUsdc?: string };
 };
 
-function getRpcUrl() {
-  return process.env.SOLANA_RPC_URL ?? DEFAULT_RPC_URL;
+function getPositionRpcUrls(): string[] {
+  const configured = [
+    process.env.SOLANA_RPC_URL,
+    process.env.SOLANA_RPC,
+    process.env.VITE_SOLANA_RPC,
+  ].filter((value): value is string => Boolean(value));
+
+  // fetchPositionsForOwner scans all token accounts; publicnode returns 403 for that.
+  const usable = configured.filter((url) => !/publicnode\.com/i.test(url));
+  return [...new Set([...usable, DEFAULT_RPC_URL])];
 }
 
 const ASSET_MAX_DECIMALS = 3;
@@ -157,21 +165,33 @@ async function fetchTokenPriceUsdc(mint: string, cache: Map<string, number>): Pr
 }
 
 async function fetchProjectLiquidityByPool(wallet: string) {
-  const rpc = createSolanaRpc(getRpcUrl());
-  const positions = await fetchPositionsForOwner(
-    rpc,
-    address(wallet),
-    WhirlpoolDeployment.mainnet,
-  );
+  let lastError: unknown;
 
-  const byPool = new Map<string, bigint>();
-  for (const position of positions) {
-    const poolAddress = position.data.whirlpool;
-    const liquidity = BigInt(position.data.liquidity);
-    byPool.set(poolAddress, (byPool.get(poolAddress) ?? 0n) + liquidity);
+  for (const rpcUrl of getPositionRpcUrls()) {
+    try {
+      const rpc = createSolanaRpc(rpcUrl);
+      const positions = await fetchPositionsForOwner(
+        rpc,
+        address(wallet),
+        WhirlpoolDeployment.mainnet,
+      );
+
+      const byPool = new Map<string, bigint>();
+      for (const position of positions) {
+        const poolAddress = position.data.whirlpool;
+        const liquidity = BigInt(position.data.liquidity);
+        byPool.set(poolAddress, (byPool.get(poolAddress) ?? 0n) + liquidity);
+      }
+
+      return byPool;
+    } catch (error) {
+      lastError = error;
+    }
   }
 
-  return byPool;
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Unable to load project liquidity positions");
 }
 
 function computeSharePercent(projectLiquidity: bigint, poolLiquidity: bigint): number {
@@ -288,10 +308,13 @@ function buildSummary(
 }
 
 export async function fetchGainePoolsData(): Promise<GainePoolsPayload> {
-  const [orcaPools, projectLiquidityByPool] = await Promise.all([
-    fetchOrcaPoolsForMint(GAINE_CONTRACT_ADDRESS),
-    fetchProjectLiquidityByPool(GAINE_PROJECT_WALLET),
-  ]);
+  const orcaPools = await fetchOrcaPoolsForMint(GAINE_CONTRACT_ADDRESS);
+  const projectLiquidityByPool = await fetchProjectLiquidityByPool(GAINE_PROJECT_WALLET).catch(
+    (error) => {
+      console.warn("Project liquidity unavailable:", error);
+      return new Map<string, bigint>();
+    },
+  );
 
   const priceCache = new Map<string, number>();
   const uniqueQuoteMints = [...new Set(orcaPools.map((pool) => getQuoteToken(pool).address))];

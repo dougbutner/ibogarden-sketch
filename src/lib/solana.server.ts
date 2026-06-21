@@ -7,6 +7,7 @@ const GAINE_MINT = new PublicKey(GAINE_CONTRACT_ADDRESS);
 
 export async function fetchGaineBalance(ownerAddress: string): Promise<number> {
   const rpc =
+    (process.env.SOLANA_RPC_URL as string | undefined) ??
     (process.env.VITE_SOLANA_RPC as string | undefined) ??
     (process.env.SOLANA_RPC as string | undefined) ??
     "https://api.mainnet-beta.solana.com";

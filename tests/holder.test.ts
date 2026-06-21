@@ -31,7 +31,7 @@ describe("test holder", () => {
     expect(result.isHolder).toBe(true);
     expect(result.balance).toBe(TEST_HOLDER.balance);
 
-    const db = getDb();
+    const db = await getDb();
 
     const [user] = await db.select().from(userAccounts).where(eq(userAccounts.id, result.userId)).limit(1);
     expect(user?.holderStatus).toBe("active");

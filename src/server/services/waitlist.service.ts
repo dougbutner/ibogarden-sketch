@@ -5,7 +5,7 @@ import { communityWaitlist } from "@/server/db/schema/users";
 import { normalizeEmail } from "@/server/lib/crypto";
 
 export async function joinWaitlist(email: string, source = "community_page") {
-  const db = getDb();
+  const db = await getDb();
   const normalized = normalizeEmail(email);
 
   const [existing] = await db
@@ -23,7 +23,7 @@ export async function joinWaitlist(email: string, source = "community_page") {
 }
 
 export async function linkWaitlistEmail(email: string, userAccountId: number, walletAddress?: string) {
-  const db = getDb();
+  const db = await getDb();
   const normalized = normalizeEmail(email);
 
   await db
@@ -37,7 +37,7 @@ export async function linkWaitlistEmail(email: string, userAccountId: number, wa
 }
 
 export async function listWaitlist(search?: string, limit = 100) {
-  const db = getDb();
+  const db = await getDb();
   const term = search?.trim();
 
   return db

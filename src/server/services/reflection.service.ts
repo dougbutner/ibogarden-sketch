@@ -31,7 +31,7 @@ function fallbackCategory(slug: ReflectionCategorySlug): ReflectionCategory | un
 
 export async function listReflectionCategories(): Promise<ReflectionCategory[]> {
   try {
-    const db = getDb();
+    const db = await getDb();
     const rows = await db
       .select({
         slug: taxonomyTerms.slug,
@@ -64,7 +64,7 @@ export async function listReflectionCategories(): Promise<ReflectionCategory[]> 
 
 export async function listImpactProjects(): Promise<ImpactProject[]> {
   try {
-    const db = getDb();
+    const db = await getDb();
     const rows = await db
       .select({
         slug: impactProjects.slug,
@@ -104,7 +104,7 @@ export async function getUserReflectionPreference(userId: number) {
   };
 
   try {
-    const db = getDb();
+    const db = await getDb();
     const [row] = await db
       .select({
         directionSlug: taxonomyTerms.slug,
@@ -132,7 +132,7 @@ export async function getUserReflectionPreference(userId: number) {
 }
 
 async function resolveDirectionId(directionSlug: ReflectionCategorySlug) {
-  const db = getDb();
+  const db = await getDb();
   const [row] = await db
     .select({ id: taxonomyTerms.id })
     .from(taxonomyTerms)
@@ -143,7 +143,7 @@ async function resolveDirectionId(directionSlug: ReflectionCategorySlug) {
 }
 
 async function resolveProjectId(projectSlug: string) {
-  const db = getDb();
+  const db = await getDb();
   const [row] = await db
     .select({ id: impactProjects.id })
     .from(impactProjects)
@@ -163,7 +163,7 @@ export async function saveUserReflectionPreference(input: {
     throw new Error(`Hold at least ${GAINE_REFLECTION_MIN_BALANCE} GAINE to direct rewards.`);
   }
 
-  const db = getDb();
+  const db = await getDb();
   const [wallet] = await db
     .select({ userAccountId: walletProfiles.userAccountId })
     .from(walletProfiles)
@@ -246,7 +246,7 @@ export async function listReflectionRouting() {
   const { categories, projects } = await getReflectionDestinations();
 
   try {
-    const db = getDb();
+    const db = await getDb();
     const rows = await db
       .select({
         holderWallet: walletProfiles.address,
@@ -287,7 +287,7 @@ export async function listReflectionRouting() {
 
 export async function listReflectionPreferencesForAdmin(limit = 200) {
   try {
-    const db = getDb();
+    const db = await getDb();
     return db
       .select({
         walletAddress: walletProfiles.address,

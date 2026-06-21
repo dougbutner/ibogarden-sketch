@@ -24,7 +24,7 @@ describe("community waitlist", () => {
     expect(first.alreadyExists).toBe(false);
     expect(first.id).toBeGreaterThan(0);
 
-    const db = getDb();
+    const db = await getDb();
     const [row] = await db
       .select()
       .from(communityWaitlist)
@@ -42,12 +42,12 @@ const TEST_NETWORK_EMAIL = "test-network-app@ibo.garden";
 
 describe("network application", () => {
   beforeEach(async () => {
-    const db = getDb();
+    const db = await getDb();
     await db.delete(networkApplications).where(eq(networkApplications.email, TEST_NETWORK_EMAIL));
   });
 
   afterEach(async () => {
-    const db = getDb();
+    const db = await getDb();
     await db.delete(networkApplications).where(eq(networkApplications.email, TEST_NETWORK_EMAIL));
   });
 
@@ -64,7 +64,7 @@ describe("network application", () => {
     expect(result.ok).toBe(true);
     expect(result.id).toBeGreaterThan(0);
 
-    const db = getDb();
+    const db = await getDb();
     const [row] = await db
       .select()
       .from(networkApplications)

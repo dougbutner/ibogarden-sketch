@@ -20,7 +20,7 @@ export type SubmitNetworkApplicationInput = {
 };
 
 export async function submitNetworkApplication(input: SubmitNetworkApplicationInput) {
-  const db = getDb();
+  const db = await getDb();
   const partnerTypeId = await getTermIdByDomainSlug("partner_type", input.partnerTypeSlug);
 
   if (!partnerTypeId) {
@@ -72,7 +72,7 @@ export async function submitNetworkApplication(input: SubmitNetworkApplicationIn
 }
 
 export async function listNetworkApplications(search?: string, limit = 100) {
-  const db = getDb();
+  const db = await getDb();
   const term = search?.trim();
 
   return db
@@ -105,7 +105,7 @@ export async function listNetworkApplications(search?: string, limit = 100) {
 }
 
 export async function deleteNetworkApplication(id: number) {
-  const db = getDb();
+  const db = await getDb();
   await db.delete(networkApplications).where(eq(networkApplications.id, id));
   return { ok: true as const };
 }

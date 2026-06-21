@@ -75,15 +75,16 @@ export function SiteFooter() {
             <a href="https://www.cbd.int/abs/" target="_blank" rel="noopener noreferrer" className="hover:text-gold">
               Nagoya Protocol
             </a>
-            <a href="#" className="hover:text-gold">Lab Testing & Quality</a>
-            <a href="#" className="hover:text-gold">Whitepaper</a>
+            <Link
+              to="/gaine"
+              className="hover:opacity-80 transition-opacity"
+              style={{ color: "var(--gaine-accent)" }}
+            >
+              Official GAINE
+            </Link>
           </div>
           <p className="text-xs text-earth/50">
-            <a href="#" className="hover:text-gold">Full Disclaimer & Terms of Service</a>
-            {" · "}
             Committed to Gabon Decree 0239 & Nagoya Protocol
-            {" · "}
-            <a href="#" className="hover:text-gold">Whitepaper</a>
           </p>
         </div>
 

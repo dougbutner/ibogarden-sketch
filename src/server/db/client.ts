@@ -4,36 +4,46 @@ import { drizzle, type MySql2Database } from "drizzle-orm/mysql2";
 import { getServerConfig } from "@/lib/config.server";
 import * as schema from "./schema";
 
-let pool: mysql.Pool | null = null;
-let db: MySql2Database<typeof schema> | null = null;
+type Db = MySql2Database<typeof schema>;
 
-export function getDbPool(): mysql.Pool {
+let pool: mysql.Pool | null = null;
+let pooledDb: Db | null = null;
+
+function isWorkerRuntime(): boolean {
+  return typeof navigator !== "undefined" && navigator.userAgent === "Cloudflare-Workers";
+}
+
+export async function getDb(): Promise<Db> {
+  const { databaseUrl, databasePoolSize } = getServerConfig();
+  if (!databaseUrl) {
+    throw new Error("DATABASE_URL is not configured");
+  }
+
+  // Cloudflare Workers: TCP per request (no global pool). Local Node keeps a pool.
+  if (isWorkerRuntime()) {
+    const connection = await mysql.createConnection({
+      uri: databaseUrl,
+      disableEval: true,
+    });
+    return drizzle(connection, { schema, mode: "default" });
+  }
+
   if (!pool) {
-    const { databaseUrl, databasePoolSize } = getServerConfig();
-    if (!databaseUrl) {
-      throw new Error("DATABASE_URL is not configured");
-    }
     pool = mysql.createPool({
       uri: databaseUrl,
       connectionLimit: databasePoolSize,
       waitForConnections: true,
     });
+    pooledDb = drizzle(pool, { schema, mode: "default" });
   }
-  return pool;
-}
-
-export function getDb(): MySql2Database<typeof schema> {
-  if (!db) {
-    db = drizzle(getDbPool(), { schema, mode: "default" });
-  }
-  return db;
+  return pooledDb;
 }
 
 export async function closeDb(): Promise<void> {
   if (pool) {
     await pool.end();
     pool = null;
-    db = null;
+    pooledDb = null;
   }
 }
 

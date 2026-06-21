@@ -4,7 +4,7 @@ import { getDb } from "@/server/db/client";
 import { taxonomyDomains, taxonomyTerms } from "@/server/db/schema/taxonomy";
 
 export async function getTermIdByDomainSlug(domainSlug: string, termSlug: string) {
-  const db = getDb();
+  const db = await getDb();
 
   const [domain] = await db
     .select()
@@ -24,7 +24,7 @@ export async function getTermIdByDomainSlug(domainSlug: string, termSlug: string
 }
 
 export async function listTermsByDomainSlug(domainSlug: string) {
-  const db = getDb();
+  const db = await getDb();
 
   const [domain] = await db
     .select()

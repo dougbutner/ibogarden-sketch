@@ -23,7 +23,7 @@ export type TrackEventInput = {
 };
 
 export async function trackEvent(input: TrackEventInput) {
-  const db = getDb();
+  const db = await getDb();
 
   await db.insert(userEvents).values({
     userAccountId: input.userAccountId ?? null,
@@ -50,7 +50,7 @@ export async function trackEvent(input: TrackEventInput) {
 }
 
 async function refreshJourneyStats(userAccountId: number, input: TrackEventInput) {
-  const db = getDb();
+  const db = await getDb();
   const now = new Date();
 
   const [existing] = await db
@@ -103,7 +103,7 @@ async function refreshJourneyStats(userAccountId: number, input: TrackEventInput
 }
 
 export async function listVerifiedHolders(limit = 100) {
-  const db = getDb();
+  const db = await getDb();
   return db
     .select({
       address: walletProfiles.address,
