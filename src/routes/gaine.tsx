@@ -91,12 +91,12 @@ function Gaine() {
           <div className="grid md:grid-cols-2 gap-4">
             {[
               {
-                title: "Marketplace Settlement",
-                body: "Use GAINE to purchase products, treatments, and verified listings on the marketplace.",
+                title: "Access Chat",
+                body: "Hidden area under the community tab for GAINE holders only. Access stakeholder signals in an intimate way.",
               },
               {
-                title: "Supplier Rewards",
-                body: "Certified farms and suppliers earn GAINE rewards for verified sourcing activity.",
+                title: "Support Initiatives",
+                body: "Hold 100+ GAINE to direct your support to unfurl the spirit of Iboga in a way you decide.",
               },
             ].map((item) => (
               <div key={item.title} className="gaine-surface-card p-7">

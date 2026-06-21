@@ -226,9 +226,12 @@ function Find() {
         <div className="mt-16 bg-bone border border-forest/10 rounded-3xl p-8 md:p-10">
           <h3 className="font-serif text-2xl italic text-forest mb-3 text-center">Safety baseline</h3>
           <p className="text-sm text-forest/65 text-center max-w-2xl mx-auto mb-6 leading-relaxed">
-            Centers listed here explicitly specialize in Iboga or Ibogaine with documented medical protocols.
-            Top-tier picks meet additional verification thresholds: recent reviews, licensed medical oversight, and
-            established operational history.
+            These are some known centers with roots. It is your responsibility to verify each center, and contact
+            multiple as they are very different. You can add reputable centers to our directory. It may be beneficial
+            to leave your country or culture to allow changes to take root.
+          </p>
+          <p className="text-xs text-forest/55 text-center max-w-2xl mx-auto mb-4 uppercase tracking-widest font-semibold">
+            Check for these things:
           </p>
           <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs text-forest/70 max-w-4xl mx-auto">
             {[
