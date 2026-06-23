@@ -4,7 +4,7 @@ import { resolveDatabaseUrl } from "./src/lib/config.server";
 
 const databaseUrl = resolveDatabaseUrl();
 if (!databaseUrl) {
-  throw new Error("Database URL is not configured. Set DB_* or LIVE_DB_* in .env.");
+  throw new Error("Database URL is not configured. Set DATABASE_URL in .env.");
 }
 
 export default defineConfig({

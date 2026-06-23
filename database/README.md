@@ -8,7 +8,7 @@ MariaDB schema for ibo.garden. **Canonical source of truth:** `database/schema.s
 2. Add credentials to `.env`:
 
 ```env
-DATABASE_URL=mysql://USER:PASSWORD@localhost:3306/DATABASE_NAME
+DATABASE_URL=mysql://USER:PASSWORD@127.0.0.1:5522/DATABASE_NAME
 ```
 
 3. Import schema and seeds:

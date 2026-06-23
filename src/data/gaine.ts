@@ -6,12 +6,10 @@ export const GAINE_TOKEN_IMAGE =
 
 export const GAINE_WHITEPAPER_URL = GAINE_METADATA_URL;
 
-/** GAINE token mint on Solana mainnet. Override with VITE_GAINE_MINT in env. */
+/** GAINE token mint on Solana mainnet. */
 export const GAINE_MINT_ADDRESS = "ibozy4AxS6TdsBDerGJN1ZKFFohEubFdHWGcyLxPLFL";
 
-/** Paste your Solana mint here, or set VITE_GAINE_MINT in env. */
-export const GAINE_CONTRACT_ADDRESS =
-  (import.meta.env.VITE_GAINE_MINT as string | undefined) || GAINE_MINT_ADDRESS;
+export const GAINE_CONTRACT_ADDRESS = GAINE_MINT_ADDRESS;
 
 /** Project wallet that holds GAINE liquidity positions on Orca. */
 export const GAINE_PROJECT_WALLET = "GAinSTufAma6Z53W1EveJPYSXh2bJySw4k2kZ1TMoLF3";

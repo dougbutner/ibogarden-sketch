@@ -6,13 +6,8 @@ export const SOLANA_RPC_FALLBACKS = [
 ] as const;
 
 export function getSolanaRpcUrls(): string[] {
-  const configured = [
-    process.env.SOLANA_RPC_URL,
-    process.env.SOLANA_RPC,
-    process.env.VITE_SOLANA_RPC,
-  ].filter((value): value is string => Boolean(value?.trim()));
-
-  return [...new Set([...configured, ...SOLANA_RPC_FALLBACKS])];
+  const configured = process.env.SOLANA_RPC_URL?.trim();
+  return [...new Set([...(configured ? [configured] : []), ...SOLANA_RPC_FALLBACKS])];
 }
 
 type RpcError = { code?: number; message?: string };

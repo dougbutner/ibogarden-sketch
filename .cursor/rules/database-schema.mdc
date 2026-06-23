@@ -27,4 +27,4 @@ Prefer `taxonomy_domains` + `taxonomy_terms` over hardcoded ENUMs for categories
 
 ## Related env vars
 
-`DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `USER_SESSION_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`
+`DATABASE_URL`, optional `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `USER_SESSION_SECRET`

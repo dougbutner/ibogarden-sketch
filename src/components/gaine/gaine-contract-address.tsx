@@ -116,10 +116,7 @@ export function GaineContractAddress() {
           className="gaine-surface-card w-full px-6 py-4 text-sm text-center"
           style={{ color: "var(--gaine-muted)" }}
         >
-          Mint address will be published at launch: set{" "}
-          <code className="font-mono text-xs" style={{ color: "var(--gaine-accent)" }}>
-            VITE_GAINE_MINT
-          </code>
+          Mint address will be published at launch.
         </div>
       )}
     </section>

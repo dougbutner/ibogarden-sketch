@@ -6,9 +6,5 @@
   "main": "src/server.ts",
   "observability": {
     "enabled": true
-  },
-  "vars": {
-    "DATABASE_TARGET": "live",
-    "VITE_SITE_URL": "https://ibo.garden"
   }
 }
