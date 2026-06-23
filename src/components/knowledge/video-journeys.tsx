@@ -3,9 +3,7 @@
 import { useState } from "react";
 import type { KnowledgeLink, VideoPlaylist } from "@/data/knowledge-iboga";
 import heroForest from "@/assets/hero-forest.jpg";
-import ceremonySpace from "@/assets/ceremony-space.jpg";
-import seedling from "@/assets/seedling.jpg";
-import ibogaRoot from "@/assets/iboga-root.jpg";
+import { PLAYLIST_COVER_PHOTOS } from "@/assets/iboga-photos";
 import {
   Dialog,
   DialogContent,
@@ -19,12 +17,7 @@ type EmbedTarget = {
   src: string;
 };
 
-export const PLAYLIST_IMAGES: Record<string, string> = {
-  "about-iboga": heroForest,
-  "iboga-facilitators": ceremonySpace,
-  "healing-stories": seedling,
-  "video-journeys": ibogaRoot,
-};
+export const PLAYLIST_IMAGES: Record<string, string> = PLAYLIST_COVER_PHOTOS;
 
 export function parseYouTubePlaylistEmbed(href: string): string | null {
   try {

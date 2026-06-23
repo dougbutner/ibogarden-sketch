@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
 import { RefreshCw } from "lucide-react";
 
 import { useWallet } from "@/contexts/wallet-context";
-import { getUserSession, verifyHolderSession } from "@/lib/api/auth.functions";
 import { getCommunityMessages, sendCommunityMessage } from "@/lib/api/community.functions";
 import { GAINE_TOKEN_IMAGE } from "@/data/gaine";
 import { jupiterPortfolioUrl } from "@/lib/solana-wallet";
@@ -16,86 +15,62 @@ type ChatMessage = Awaited<ReturnType<typeof getCommunityMessages>>[number];
 const POLL_MS = 12_000;
 
 export function CommunityChat() {
-  const { address, truncatedAddress, gaineBalance, walletName, refreshBalance, balanceLoading } = useWallet();
+  const { address, truncatedAddress, gaineBalance, balanceLoading } = useWallet();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
-  const [sessionReady, setSessionReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const waitlistEmail =
-    typeof sessionStorage !== "undefined" ? sessionStorage.getItem("ibogarden-waitlist-email") ?? undefined : undefined;
+  const addressRef = useRef(address);
+  addressRef.current = address;
+
+  const canChat = Boolean(address) && (gaineBalance ?? 0) > 0;
 
   const scrollToBottom = useCallback(() => {
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, []);
 
-  const ensureSession = useCallback(async () => {
-    if (!address) return false;
-
-    try {
-      await verifyHolderSession({
-        data: {
-          address,
-          email: waitlistEmail,
-          walletProvider: walletName ?? undefined,
-        },
-      });
-      const session = await getUserSession();
-      const ready = session.authenticated && session.isHolder;
-      setSessionReady(ready);
-      if (!ready) setError("Holder session could not be verified. Refresh your balance and try again.");
-      return ready;
-    } catch {
-      setSessionReady(false);
-      setError("Could not verify holder session. Check that the database and USER_SESSION_SECRET are configured.");
-      return false;
+  const loadMessages = useCallback(async (showLoading = false) => {
+    const walletAddress = addressRef.current;
+    if (!walletAddress) {
+      setLoading(false);
+      return;
     }
-  }, [address, waitlistEmail, walletName]);
 
-  const loadMessages = useCallback(async () => {
+    if (showLoading) setLoading(true);
     try {
-      const rows = await getCommunityMessages();
+      const rows = await getCommunityMessages({ data: { address: walletAddress } });
       setMessages(rows);
       setError(null);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Could not load messages.";
-      if (message.includes("Holder access")) {
-        const ok = await ensureSession();
-        if (ok) {
-          const rows = await getCommunityMessages();
-          setMessages(rows);
-          setError(null);
-          return;
-        }
-      }
-      setError(message);
+      setError(err instanceof Error ? err.message : "Could not load messages.");
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
-  }, [ensureSession]);
+  }, []);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function init() {
-      setLoading(true);
-      await ensureSession();
-      if (!cancelled) await loadMessages();
+    if (!address) {
+      setLoading(false);
+      return;
     }
 
-    void init();
+    let cancelled = false;
+    void (async () => {
+      if (!cancelled) await loadMessages(true);
+    })();
+
     const timer = window.setInterval(() => {
-      void loadMessages();
+      void loadMessages(false);
     }, POLL_MS);
 
     return () => {
       cancelled = true;
       window.clearInterval(timer);
     };
-  }, [ensureSession, loadMessages]);
+  }, [address, loadMessages]);
 
   useEffect(() => {
     scrollToBottom();
@@ -104,14 +79,14 @@ export function CommunityChat() {
   async function handleSend(event: FormEvent) {
     event.preventDefault();
     const text = draft.trim();
-    if (!text || sending || !sessionReady) return;
+    if (!text || sending || !canChat || !address) return;
 
     setSending(true);
     setError(null);
     try {
-      await sendCommunityMessage({ data: { body: text } });
+      await sendCommunityMessage({ data: { address, body: text } });
       setDraft("");
-      await loadMessages();
+      await loadMessages(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not send message.");
     } finally {
@@ -132,7 +107,7 @@ export function CommunityChat() {
           <button
             type="button"
             aria-label="Refresh chat"
-            onClick={() => void loadMessages()}
+            onClick={() => void loadMessages(false)}
             className="inline-flex items-center gap-1 mb-1 text-forest/45 hover:text-forest"
           >
             <RefreshCw className="size-3" />
@@ -209,31 +184,18 @@ export function CommunityChat() {
 
         <form onSubmit={(e) => void handleSend(e)} className="border-t border-forest/10 px-4 py-4 bg-bone/30">
           {error ? <p className="text-sm text-red-700 mb-3">{error}</p> : null}
-          {!sessionReady && !loading ? (
-            <div className="mb-3 flex flex-wrap gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={balanceLoading}
-                onClick={() => void refreshBalance().then(() => ensureSession())}
-              >
-                {balanceLoading ? "Verifying…" : "Retry holder verification"}
-              </Button>
-            </div>
-          ) : null}
           <div className="flex gap-2">
             <Input
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder={sessionReady ? "Message the community…" : "Verify holder access to send…"}
-              disabled={!sessionReady || sending}
+              placeholder={canChat ? "Message the community…" : "Connect a GAINE wallet to send…"}
+              disabled={!canChat || sending || balanceLoading}
               maxLength={2000}
               className="border-forest/10 bg-white"
             />
             <Button
               type="submit"
-              disabled={!sessionReady || sending || !draft.trim()}
+              disabled={!canChat || sending || balanceLoading || !draft.trim()}
               className="bg-forest text-earth shrink-0"
             >
               {sending ? "…" : "Send"}

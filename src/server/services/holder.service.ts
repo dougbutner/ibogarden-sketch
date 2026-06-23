@@ -20,6 +20,14 @@ export type VerifyHolderInput = {
   userAccountId?: number;
 };
 
+export async function requireWalletHolder(address: string): Promise<{ userId: number }> {
+  const result = await verifyHolderLogin({ address });
+  if (!result.isHolder) {
+    throw new Error("Holder access requires a GAINE balance.");
+  }
+  return { userId: result.userId };
+}
+
 export async function verifyHolderLogin(input: VerifyHolderInput) {
   const balance = await fetchGaineBalance(input.address);
   const db = await getDb();

@@ -1,106 +1,37 @@
 "use client";
 
-import { useState, useEffect, type FormEvent } from "react";
 import { RefreshCw } from "lucide-react";
 
 import { CommunityChat } from "@/components/community/community-chat";
 import { useWallet } from "@/contexts/wallet-context";
-import { joinCommunityWaitlist } from "@/lib/api/waitlist.functions";
-import { isGoogleOAuthEnabled } from "@/lib/api/auth.functions";
 import { GAINE_JUPITER_TOKEN_URL, GAINE_TOKEN_IMAGE } from "@/data/gaine";
 import { jupiterPortfolioUrl } from "@/lib/solana-wallet";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
-const WAITLIST_EMAIL_KEY = "ibogarden-waitlist-email";
-
-function CommunityWaitlist() {
+function CommunityConnect() {
   const { connect, openPanel } = useWallet();
-  const [email, setEmail] = useState("");
-  const [saved, setSaved] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [googleEnabled, setGoogleEnabled] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    void isGoogleOAuthEnabled().then((r) => setGoogleEnabled(r.enabled));
-  }, []);
-
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-    const trimmed = email.trim();
-    if (!trimmed) return;
-
-    setSubmitting(true);
-    setError(null);
-    try {
-      await joinCommunityWaitlist({ data: { email: trimmed, source: "community_page" } });
-      sessionStorage.setItem(WAITLIST_EMAIL_KEY, trimmed);
-      setSaved(true);
-    } catch {
-      setError("Could not save email. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function handleLogin() {
-    openPanel();
-    await connect();
-  }
 
   return (
-    <div className="max-w-lg mx-auto bg-white border border-forest/10 rounded-3xl p-8 md:p-10">
-      <div className="flex items-center gap-3 mb-5">
-        <img src={GAINE_TOKEN_IMAGE} alt="" className="size-8 rounded-full" width={32} height={32} />
-        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-deep">
-          Holder access
-        </span>
-      </div>
-      <h2 className="font-serif text-3xl italic text-forest mb-4">Connect to enter</h2>
-      <p className="text-forest/70 leading-relaxed mb-6">
-        Community chat is token-gated for <span className="gaine-word gaine-word-sm">GAINE</span> holders.
-        Leave your email for updates, then sign in with Google or connect your Solana wallet.
+    <div className="max-w-lg mx-auto bg-white border border-forest/10 rounded-3xl p-8 md:p-10 text-center">
+      <img src={GAINE_TOKEN_IMAGE} alt="" className="size-10 rounded-full mx-auto mb-4" width={40} height={40} />
+      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-deep">
+        Holder access
+      </span>
+      <h2 className="font-serif text-3xl italic text-forest mt-3 mb-4">Connect your wallet</h2>
+      <p className="text-forest/70 leading-relaxed mb-8">
+        Community chat is open to any Solana wallet holding{" "}
+        <span className="gaine-word gaine-word-sm">GAINE</span>. Connect to enter.
       </p>
-
-      <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4 mb-6">
-        <div>
-          <label htmlFor="community-email" className="sr-only">
-            Email
-          </label>
-          <Input
-            id="community-email"
-            type="email"
-            required
-            placeholder="you@email.com"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className="border-forest/15 bg-bone/30"
-          />
-        </div>
-        <Button type="submit" variant="outline" className="w-full border-forest/15" disabled={submitting}>
-          {saved ? "Email saved — thank you" : submitting ? "Saving…" : "Save my email"}
-        </Button>
-        {error ? <p className="text-sm text-red-700">{error}</p> : null}
-      </form>
-
-      <div className="space-y-3">
-        {googleEnabled ? (
-          <a
-            href="/api/auth/google"
-            className="flex w-full items-center justify-center gap-2 border border-forest/15 rounded-full py-3 text-xs font-bold uppercase tracking-widest text-forest hover:bg-bone/50 transition-colors"
-          >
-            Continue with Google
-          </a>
-        ) : null}
-        <Button
-          type="button"
-          className="w-full bg-forest text-earth hover:bg-moss"
-          onClick={() => void handleLogin()}
-        >
-          Login with wallet
-        </Button>
-      </div>
+      <Button
+        type="button"
+        className="w-full bg-forest text-earth hover:bg-moss"
+        onClick={() => {
+          openPanel();
+          void connect();
+        }}
+      >
+        Connect Solana wallet
+      </Button>
     </div>
   );
 }
@@ -158,13 +89,13 @@ export function CommunityGate() {
   const { connected, hasGaine, balanceLoading, connecting } = useWallet();
 
   if (!connected) {
-    return <CommunityWaitlist />;
+    return <CommunityConnect />;
   }
 
   if (balanceLoading || connecting) {
     return (
       <div className="max-w-lg mx-auto text-center py-16 text-forest/60">
-        Verifying <span className="gaine-word gaine-word-sm">GAINE</span> balance…
+        Checking <span className="gaine-word gaine-word-sm">GAINE</span> balance…
       </div>
     );
   }
@@ -175,5 +106,3 @@ export function CommunityGate() {
 
   return <CommunityChat />;
 }
-
-export { WAITLIST_EMAIL_KEY };

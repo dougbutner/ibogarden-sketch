@@ -1,6 +1,3 @@
-import { createSolanaRpc, address } from "@solana/kit";
-import { fetchPositionsForOwner, WhirlpoolDeployment } from "@orca-so/whirlpools";
-
 import {
   GAINE_CONTRACT_ADDRESS,
   GAINE_MIN_EXPECTED_POOLS,
@@ -8,12 +5,11 @@ import {
   gainePoolOrcaUrl,
 } from "@/data/gaine";
 import { getQuoteTokenMeta } from "@/lib/gaine-quote-tokens";
+import { getSolanaRpcUrls } from "@/lib/solana-rpc";
 import type { GainePoolRow, GainePoolsPayload, GainePoolsSummary } from "@/types/gaine-pools";
 
 const ORCA_POOLS_API = "https://api.orca.so/v2/solana/pools";
 const ORCA_TOKENS_API = "https://api.orca.so/v2/solana/tokens";
-const DEFAULT_RPC_URL = "https://api.mainnet-beta.solana.com";
-const TROY_OZ_TO_GRAMS = 31.1034768;
 const GOLD_GRAM_SYMBOLS = new Set(["XAUt0"]);
 const SILVER_GRAM_SYMBOLS = new Set(["SLVon"]);
 
@@ -48,15 +44,7 @@ type OrcaTokenResponse = {
 };
 
 function getPositionRpcUrls(): string[] {
-  const configured = [
-    process.env.SOLANA_RPC_URL,
-    process.env.SOLANA_RPC,
-    process.env.VITE_SOLANA_RPC,
-  ].filter((value): value is string => Boolean(value));
-
-  // fetchPositionsForOwner scans all token accounts; publicnode returns 403 for that.
-  const usable = configured.filter((url) => !/publicnode\.com/i.test(url));
-  return [...new Set([...usable, DEFAULT_RPC_URL])];
+  return getSolanaRpcUrls();
 }
 
 const ASSET_MAX_DECIMALS = 3;
@@ -165,6 +153,9 @@ async function fetchTokenPriceUsdc(mint: string, cache: Map<string, number>): Pr
 }
 
 async function fetchProjectLiquidityByPool(wallet: string) {
+  const [{ createSolanaRpc, address }, { fetchPositionsForOwner, WhirlpoolDeployment }] =
+    await Promise.all([import("@solana/kit"), import("@orca-so/whirlpools")]);
+
   let lastError: unknown;
 
   for (const rpcUrl of getPositionRpcUrls()) {

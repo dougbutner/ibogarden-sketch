@@ -1,5 +1,4 @@
 import { createServerFn } from "@tanstack/react-start";
-import { useSession } from "@tanstack/react-start/server";
 import { z } from "zod";
 
 import {
@@ -7,32 +6,34 @@ import {
   messageAuthorLabel,
   postCommunityMessage,
 } from "@/server/services/community.service";
-import { getUserSessionConfig, type UserSessionData } from "@/server/lib/session";
+import { requireWalletHolder } from "@/server/services/holder.service";
 
-export const getCommunityMessages = createServerFn({ method: "GET" }).handler(async () => {
-  const session = await useSession<UserSessionData>(getUserSessionConfig());
-  if (!session.data?.isHolder || !session.data.userId) {
-    throw new Error("Holder access required");
-  }
-
-  const rows = await listCommunityMessages();
-  return rows.map((row) => ({
-    id: row.id,
-    body: row.body,
-    author: messageAuthorLabel(row),
-    createdAt: row.createdAt?.toISOString() ?? new Date().toISOString(),
-    isMine: row.userAccountId === session.data!.userId,
-  }));
+const walletAddressInput = z.object({
+  address: z.string().min(32).max(44),
 });
 
-export const sendCommunityMessage = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ body: z.string().min(1).max(2000) }))
+export const getCommunityMessages = createServerFn({ method: "POST" })
+  .inputValidator(walletAddressInput)
   .handler(async ({ data }) => {
-    const session = await useSession<UserSessionData>(getUserSessionConfig());
-    if (!session.data?.isHolder || !session.data.userId) {
-      throw new Error("Holder access required");
-    }
+    const { userId } = await requireWalletHolder(data.address);
 
-    const result = await postCommunityMessage(session.data.userId, data.body);
-    return result;
+    const rows = await listCommunityMessages();
+    return rows.map((row) => ({
+      id: row.id,
+      body: row.body,
+      author: messageAuthorLabel(row),
+      createdAt: row.createdAt?.toISOString() ?? new Date().toISOString(),
+      isMine: row.userAccountId === userId,
+    }));
+  });
+
+export const sendCommunityMessage = createServerFn({ method: "POST" })
+  .inputValidator(
+    walletAddressInput.extend({
+      body: z.string().min(1).max(2000),
+    }),
+  )
+  .handler(async ({ data }) => {
+    const { userId } = await requireWalletHolder(data.address);
+    return postCommunityMessage(userId, data.body);
   });
