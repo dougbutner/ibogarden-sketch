@@ -9,6 +9,16 @@ export function isAdminDevWallet(address: string): boolean {
   return safeEqual(address.trim(), adminDevWallet.trim());
 }
 
+export function formatDatabaseError(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === "string" && error.trim()) {
+    return error.trim();
+  }
+  return "Unknown database error";
+}
+
 export async function checkDatabaseHealth() {
   const db = await getDb();
   const [row] = await db.execute<{ ok: number; taxonomyTerms: number }>(

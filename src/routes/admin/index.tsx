@@ -46,21 +46,28 @@ function AdminDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [waitlistRows, holderRows, applicationRows, reflectionRows, health] = await Promise.all([
+      const health = await adminGetHealth({ data: { wallet } });
+      setDbConnected(health.connected);
+      setTaxonomyTerms(health.taxonomyTerms);
+
+      if (!health.connected) {
+        setError(health.error ?? "Database unavailable.");
+        return;
+      }
+
+      const [waitlistRows, holderRows, applicationRows, reflectionRows] = await Promise.all([
         adminGetWaitlist({ data: { wallet, search: search || undefined } }),
         adminGetHolders({ data: { wallet } }),
         adminGetApplications({ data: { wallet, search: search || undefined } }),
         adminGetReflectionPreferences({ data: { wallet } }),
-        adminGetHealth({ data: { wallet } }),
       ]);
       setWaitlist(waitlistRows);
       setHolders(holderRows);
       setApplications(applicationRows);
       setReflections(reflectionRows);
-      setDbConnected(health.connected);
-      setTaxonomyTerms(health.taxonomyTerms);
-    } catch {
-      setError("Could not load admin data. Check database connection.");
+    } catch (err) {
+      const detail = err instanceof Error ? err.message : "Unknown error";
+      setError(`Could not load admin data: ${detail}`);
       setDbConnected(false);
     } finally {
       setLoading(false);
@@ -89,14 +96,19 @@ function AdminDashboard() {
       </div>
 
       {dbConnected !== null ? (
-        <p
-          className={`text-xs mb-6 px-3 py-2 rounded-lg inline-block ${
-            dbConnected ? "bg-gold/10 text-forest" : "bg-red-50 text-red-800"
+        <div
+          className={`text-xs mb-6 px-3 py-2 rounded-lg ${
+            dbConnected ? "bg-gold/10 text-forest inline-block" : "bg-red-50 text-red-800 block max-w-3xl"
           }`}
         >
-          Database {dbConnected ? "connected" : "unavailable"}
-          {dbConnected ? ` · ${taxonomyTerms} taxonomy terms` : null}
-        </p>
+          <p>
+            Database {dbConnected ? "connected" : "unavailable"}
+            {dbConnected ? ` · ${taxonomyTerms} taxonomy terms` : null}
+          </p>
+          {!dbConnected && error ? (
+            <p className="mt-2 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words">{error}</p>
+          ) : null}
+        </div>
       ) : null}
 
       <div className="flex gap-2 mb-6 flex-wrap">
@@ -132,7 +144,7 @@ function AdminDashboard() {
         </form>
       ) : null}
 
-      {error ? <p className="text-sm text-red-700 mb-4">{error}</p> : null}
+      {error && dbConnected !== false ? <p className="text-sm text-red-700 mb-4">{error}</p> : null}
       {loading ? <p className="text-sm text-forest/60">Loading…</p> : null}
 
       {!loading && tab === "waitlist" ? (

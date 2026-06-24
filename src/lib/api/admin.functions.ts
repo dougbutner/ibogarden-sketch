@@ -1,7 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-import { checkDatabaseHealth, isAdminDevWallet } from "@/server/services/admin.service";
+import {
+  checkDatabaseHealth,
+  formatDatabaseError,
+  isAdminDevWallet,
+} from "@/server/services/admin.service";
 import { listVerifiedHolders } from "@/server/services/journey.service";
 import { listNetworkApplications, deleteNetworkApplication } from "@/server/services/network.service";
 import { listReflectionPreferencesForAdmin } from "@/server/services/reflection.service";
@@ -89,8 +93,12 @@ export const adminGetHealth = createServerFn({ method: "GET" })
     try {
       const health = await checkDatabaseHealth();
       return { connected: true as const, taxonomyTerms: health.taxonomyTerms };
-    } catch {
-      return { connected: false as const, taxonomyTerms: 0 };
+    } catch (error) {
+      return {
+        connected: false as const,
+        taxonomyTerms: 0,
+        error: formatDatabaseError(error),
+      };
     }
   });
 
