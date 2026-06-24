@@ -17,15 +17,10 @@ export const GAINE_PROJECT_WALLET = "GAinSTufAma6Z53W1EveJPYSXh2bJySw4k2kZ1TMoLF
 /** Minimum expected Orca Whirlpool count: used to verify the feed is complete. */
 export const GAINE_MIN_EXPECTED_POOLS = 20;
 
-export const GAINE_ORCA_URL = "https://www.orca.so";
-
 export const SOL_MINT = "So11111111111111111111111111111111111111112";
 
-/** Verified GAINE token page on Jupiter (chart + research). */
+/** Verified GAINE token page on Jupiter (chart, research, and buy). */
 export const GAINE_JUPITER_TOKEN_URL = `https://jup.ag/tokens/${GAINE_CONTRACT_ADDRESS}`;
-
-/** Direct SOL → GAINE swap on Jupiter. */
-export const GAINE_JUPITER_SWAP_URL = `https://jup.ag/swap/SOL-${GAINE_CONTRACT_ADDRESS}`;
 
 export function gainePoolOrcaUrl(poolAddress: string) {
   return `https://www.orca.so/pools/${poolAddress}`;
@@ -154,7 +149,7 @@ export const GAINE_INFO_PANELS: GainePanel[] = [
       {
         type: "link",
         text: "The Play: You buy GAINE early, close to 1 USD here",
-        href: GAINE_ORCA_URL,
+        href: GAINE_JUPITER_TOKEN_URL,
         suffix: ".",
       },
       "The closer to **$1 per GAINE** you get in, the more gains you see.",

@@ -4,7 +4,6 @@ import { useEffect, useId } from "react";
 
 import {
   GAINE_CONTRACT_ADDRESS,
-  GAINE_JUPITER_SWAP_URL,
   GAINE_JUPITER_TOKEN_URL,
   GAINE_TOKEN_IMAGE,
   SOL_MINT,
@@ -106,7 +105,7 @@ export function GaineJupiterSwap() {
             Research on Jupiter
           </a>
           <a
-            href={GAINE_JUPITER_SWAP_URL}
+            href={GAINE_JUPITER_TOKEN_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-opacity hover:opacity-90"
