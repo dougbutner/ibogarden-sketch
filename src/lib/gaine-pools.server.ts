@@ -49,6 +49,7 @@ function getPositionRpcUrls(): string[] {
 
 const ASSET_MAX_DECIMALS = 3;
 const USD_MAX_DECIMALS = 2;
+const TROY_OZ_TO_GRAMS = 31.1034768;
 
 function formatAssetAmount(value: number, maxFractionDigits = ASSET_MAX_DECIMALS): string {
   if (!Number.isFinite(value) || value === 0) return "0";
@@ -110,6 +111,30 @@ function hasAssetBalance(value: number): boolean {
 
 function rawToAmount(raw: string, decimals: number): number {
   return Number(BigInt(raw)) / 10 ** decimals;
+}
+
+function isPrimaryPoolQuote(
+  quoteMeta: ReturnType<typeof getQuoteTokenMeta>,
+  symbol: string,
+): boolean {
+  return quoteMeta.isStablecoin || symbol === "SOL";
+}
+
+function resolveQuoteUsd(
+  quoteMeta: ReturnType<typeof getQuoteTokenMeta>,
+  quotePerGaine: number,
+  gaineUsdPrice: number,
+  orcaPrice: number,
+  isPrimaryQuote: boolean,
+): number {
+  if (quoteMeta.isUsdPegged) return 1;
+  if (!isPrimaryQuote && quotePerGaine > 0) return gaineUsdPrice / quotePerGaine;
+  return Number.isFinite(orcaPrice) && orcaPrice > 0 ? orcaPrice : 1;
+}
+
+function quotePerGaineFromPool(poolPrice: number, gaineIsA: boolean): number {
+  if (!Number.isFinite(poolPrice) || poolPrice <= 0) return 0;
+  return gaineIsA ? poolPrice : 1 / poolPrice;
 }
 
 async function fetchOrcaPoolsForMint(mint: string): Promise<OrcaPool[]> {
@@ -327,17 +352,27 @@ export async function fetchGainePoolsData(): Promise<GainePoolsPayload> {
     totalBackingUsd: 0,
   };
 
-  const pools: GainePoolRow[] = orcaPools
+  let otherBackingUsd = 0;
+
+  const allPools: GainePoolRow[] = orcaPools
     .map((pool) => {
       const projectLiquidity = projectLiquidityByPool.get(pool.address) ?? 0n;
       const poolLiquidity = BigInt(pool.liquidity || "0");
       const quoteToken = getQuoteToken(pool);
       const quoteMeta = getQuoteTokenMeta(quoteToken.address, quoteToken.symbol);
-      const poolPrice = Number(pool.price);
-      const quoteUsd = priceCache.get(quoteToken.address) ?? 1;
-      const gaineUsd = poolPrice * quoteUsd;
-
+      const isPrimaryQuote = isPrimaryPoolQuote(quoteMeta, quoteToken.symbol);
       const gaineIsA = pool.tokenMintA === GAINE_CONTRACT_ADDRESS;
+      const quotePerGaine = quotePerGaineFromPool(Number(pool.price), gaineIsA);
+      const orcaQuoteUsd = priceCache.get(quoteToken.address) ?? 1;
+      const quoteUsd = resolveQuoteUsd(
+        quoteMeta,
+        quotePerGaine,
+        gaineUsdPrice,
+        orcaQuoteUsd,
+        isPrimaryQuote,
+      );
+      const gaineUsd = quotePerGaine * quoteUsd;
+
       const gaineToken = gaineIsA ? pool.tokenA : pool.tokenB;
       const gaineBalanceRaw = gaineIsA ? pool.tokenBalanceA : pool.tokenBalanceB;
       const quoteBalanceRaw = gaineIsA ? pool.tokenBalanceB : pool.tokenBalanceA;
@@ -345,19 +380,23 @@ export async function fetchGainePoolsData(): Promise<GainePoolsPayload> {
       const quoteAmount = rawToAmount(quoteBalanceRaw, quoteToken.decimals);
 
       summaryAcc.totalGaine += gaineAmount;
-      accumulateBacking(
-        summaryAcc,
-        quoteToken.symbol,
-        quoteToken.address,
-        quoteMeta,
-        quoteAmount,
-        quoteUsd,
-      );
+      if (isPrimaryQuote) {
+        accumulateBacking(
+          summaryAcc,
+          quoteToken.symbol,
+          quoteToken.address,
+          quoteMeta,
+          quoteAmount,
+          quoteUsd,
+        );
+      } else {
+        otherBackingUsd += quoteAmount * quoteUsd;
+      }
 
       return {
         address: pool.address,
         priceUsd: formatUsdPrice(gaineUsd),
-        priceNative: quoteMeta.isUsdPegged ? null : formatNativePrice(poolPrice, quoteToken.symbol),
+        priceNative: quoteMeta.isUsdPegged ? null : formatNativePrice(quotePerGaine, quoteToken.symbol),
         feePercent: formatFeePercent(pool.feeRate),
         pairLabel: `${gaineToken.symbol} / ${quoteToken.symbol}`,
         quoteSymbol: quoteToken.symbol,
@@ -376,18 +415,33 @@ export async function fetchGainePoolsData(): Promise<GainePoolsPayload> {
         orcaUrl: gainePoolOrcaUrl(pool.address),
       };
     })
-    .toSorted((a, b) => {
+    .sort((a, b) => {
       const diff = BigInt(b.balanceARaw) - BigInt(a.balanceARaw);
       if (diff > 0n) return 1;
       if (diff < 0n) return -1;
       return 0;
     });
 
+  const isPrimaryPool = (pool: GainePoolRow) =>
+    pool.quoteIsStablecoin || pool.quoteSymbol === "SOL";
+
+  const pools = allPools.filter(isPrimaryPool);
+  const otherPoolRows = allPools.filter((pool) => !isPrimaryPool(pool));
+  const otherPools: GainePoolsPayload["otherPools"] =
+    otherPoolRows.length > 0
+      ? {
+          totalUsd: formatCompactUsd(otherBackingUsd),
+          symbols: [...new Set(otherPoolRows.map((pool) => pool.quoteSymbol))].join(", "),
+          pools: otherPoolRows,
+        }
+      : null;
+
   const totalCount = pools.length;
   const summary = buildSummary(summaryAcc, totalCount, gaineUsdPrice);
 
   return {
     pools,
+    otherPools,
     summary,
     totalCount,
     expectedMinCount: GAINE_MIN_EXPECTED_POOLS,

@@ -10,13 +10,26 @@ export function isAdminDevWallet(address: string): boolean {
 }
 
 export function formatDatabaseError(error: unknown): string {
+  let message: string;
   if (error instanceof Error) {
-    return error.message;
+    message = error.message;
+  } else if (typeof error === "string" && error.trim()) {
+    message = error.trim();
+  } else {
+    message = "Unknown database error";
   }
-  if (typeof error === "string" && error.trim()) {
-    return error.trim();
+
+  if (
+    message.includes("proxy request failed") &&
+    message.includes("cannot connect to the specified address")
+  ) {
+    message +=
+      "\n\nCloudflare Workers cannot reach localhost (127.0.0.1) or private IPs. " +
+      "Local dev uses an SSH tunnel on port 5522; production needs your cPanel MySQL hostname " +
+      "via Cloudflare Hyperdrive.";
   }
-  return "Unknown database error";
+
+  return message;
 }
 
 export async function checkDatabaseHealth() {

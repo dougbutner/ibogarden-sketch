@@ -53,4 +53,8 @@ export function getStablecoinTextColor(isStablecoin: boolean): string | undefine
   return isStablecoin ? STABLECOIN_TEXT_COLOR : undefined;
 }
 
+export function isProjectQuoteToken(mint: string, symbol: string): boolean {
+  return byMint.has(mint) || bySymbol.has(symbol.toUpperCase());
+}
+
 export { QUOTE_TOKEN_ROWS };

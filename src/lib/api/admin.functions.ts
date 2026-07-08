@@ -6,6 +6,10 @@ import {
   formatDatabaseError,
   isAdminDevWallet,
 } from "@/server/services/admin.service";
+import {
+  callRemoteAdminDataApi,
+  isRemoteAdminDataApiEnabled,
+} from "@/server/services/admin-data-api.server";
 import { listVerifiedHolders } from "@/server/services/journey.service";
 import { listNetworkApplications, deleteNetworkApplication } from "@/server/services/network.service";
 import { listReflectionPreferencesForAdmin } from "@/server/services/reflection.service";
@@ -26,6 +30,20 @@ export const adminGetWaitlist = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     assertAdminWallet(data.wallet);
 
+    if (isRemoteAdminDataApiEnabled()) {
+      return callRemoteAdminDataApi<
+        Array<{
+          id: number;
+          email: string;
+          source: string;
+          walletAddress: string | null;
+          userAccountId: number | null;
+          createdAt: string | null;
+          linkedAt: string | null;
+        }>
+      >("admin.waitlist", { search: data.search ?? null });
+    }
+
     const rows = await listWaitlist(data.search);
     return rows.map((row) => ({
       id: row.id,
@@ -42,6 +60,21 @@ export const adminGetHolders = createServerFn({ method: "GET" })
   .inputValidator(adminWalletSchema)
   .handler(async ({ data }) => {
     assertAdminWallet(data.wallet);
+
+    if (isRemoteAdminDataApiEnabled()) {
+      return callRemoteAdminDataApi<
+        Array<{
+          address: string;
+          email: string | null;
+          displayName: string | null;
+          firstGaineBalance: string | null;
+          lastGaineBalance: string | null;
+          firstVerifiedAt: string | null;
+          lastVerifiedAt: string | null;
+          holderStatus: string | null;
+        }>
+      >("admin.holders");
+    }
 
     const rows = await listVerifiedHolders();
     return rows.map((row) => ({
@@ -60,6 +93,24 @@ export const adminGetApplications = createServerFn({ method: "GET" })
   .inputValidator(adminWalletSchema.extend({ search: z.string().optional() }))
   .handler(async ({ data }) => {
     assertAdminWallet(data.wallet);
+
+    if (isRemoteAdminDataApiEnabled()) {
+      return callRemoteAdminDataApi<
+        Array<{
+          id: number;
+          organizationName: string;
+          email: string;
+          country: string;
+          partnerType: string | null;
+          credentials: string | null;
+          gabonFirstSourcing: boolean;
+          southeastAfrica: boolean;
+          solanaWallet: string | null;
+          status: string;
+          createdAt: string | null;
+        }>
+      >("admin.applications", { search: data.search ?? null });
+    }
 
     const rows = await listNetworkApplications(data.search);
     return rows.map((row) => ({
@@ -81,6 +132,11 @@ export const adminDeleteApplication = createServerFn({ method: "POST" })
   .inputValidator(adminWalletSchema.extend({ id: z.number().int().positive() }))
   .handler(async ({ data }) => {
     assertAdminWallet(data.wallet);
+
+    if (isRemoteAdminDataApiEnabled()) {
+      return callRemoteAdminDataApi<{ ok: true }>("admin.deleteApplication", { id: data.id });
+    }
+
     await deleteNetworkApplication(data.id);
     return { ok: true as const };
   });
@@ -91,6 +147,14 @@ export const adminGetHealth = createServerFn({ method: "GET" })
     assertAdminWallet(data.wallet);
 
     try {
+      if (isRemoteAdminDataApiEnabled()) {
+        const health = await callRemoteAdminDataApi<{
+          connected: true;
+          taxonomyTerms: number;
+        }>("admin.health");
+        return health;
+      }
+
       const health = await checkDatabaseHealth();
       return { connected: true as const, taxonomyTerms: health.taxonomyTerms };
     } catch (error) {
@@ -106,6 +170,22 @@ export const adminGetReflectionPreferences = createServerFn({ method: "GET" })
   .inputValidator(adminWalletSchema)
   .handler(async ({ data }) => {
     assertAdminWallet(data.wallet);
+
+    if (isRemoteAdminDataApiEnabled()) {
+      return callRemoteAdminDataApi<
+        Array<{
+          walletAddress: string | null;
+          email: string | null;
+          displayName: string | null;
+          lastGaineBalance: string | null;
+          directionLabel: string | null;
+          directionSlug: string | null;
+          projectName: string | null;
+          projectSlug: string | null;
+          reflectionUpdatedAt: string | null;
+        }>
+      >("admin.reflections");
+    }
 
     const rows = await listReflectionPreferencesForAdmin();
     return rows.map((row) => ({

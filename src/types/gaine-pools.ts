@@ -5,6 +5,12 @@ export type GainePoolToken = {
   decimals: number;
 };
 
+export type GaineOtherPoolsGroup = {
+  totalUsd: string;
+  symbols: string;
+  pools: GainePoolRow[];
+};
+
 export type GainePoolRow = {
   address: string;
   priceUsd: string;
@@ -48,6 +54,7 @@ export type GainePoolsSummary = {
 
 export type GainePoolsPayload = {
   pools: GainePoolRow[];
+  otherPools: GaineOtherPoolsGroup | null;
   summary: GainePoolsSummary;
   totalCount: number;
   expectedMinCount: number;

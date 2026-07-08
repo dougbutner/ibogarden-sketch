@@ -1,4 +1,5 @@
-import { ExternalLink, Loader2, AlertCircle, RefreshCw } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, ExternalLink, Loader2, AlertCircle, RefreshCw } from "lucide-react";
 
 import {
   Table,
@@ -11,7 +12,7 @@ import {
 import { GAINE_PROJECT_WALLET, GAINE_TOKEN_IMAGE } from "@/data/gaine";
 import { useGainePools } from "@/hooks/useGainePools";
 import { getStablecoinTextColor } from "@/lib/gaine-quote-tokens";
-import type { GainePoolsSummary } from "@/types/gaine-pools";
+import type { GaineOtherPoolsGroup, GainePoolRow, GainePoolsSummary } from "@/types/gaine-pools";
 import { GainePoolShareRing } from "./gaine-pool-share-ring";
 
 function truncateAddress(value: string) {
@@ -86,8 +87,106 @@ function PoolsSummaryBar({ summary }: { summary: GainePoolsSummary }) {
   );
 }
 
+function PoolTableRow({ pool }: { pool: GainePoolRow }) {
+  const quoteColor = getStablecoinTextColor(pool.quoteIsStablecoin);
+
+  return (
+    <TableRow
+      className="iboga-surface-row border-b hover:bg-white/[0.02]"
+      style={{ borderColor: "var(--gaine-border)" }}
+    >
+      <TableCell>
+        <div className="flex flex-col">
+          <span className="font-mono text-sm tabular-nums">{pool.priceUsd}</span>
+          {pool.priceNative ? (
+            <span className="text-[11px] font-mono" style={{ color: "var(--gaine-muted)" }}>
+              {pool.priceNative}
+            </span>
+          ) : null}
+        </div>
+      </TableCell>
+      <TableCell>
+        <div className="flex items-start gap-2">
+          {pool.quoteCountryEmoji ? (
+            <span className="text-base leading-none mt-0.5" aria-hidden>
+              {pool.quoteCountryEmoji}
+            </span>
+          ) : null}
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm font-medium truncate">{pool.pairLabel}</span>
+            <span className="text-[11px]" style={{ color: "var(--gaine-muted)" }}>
+              {pool.feePercent}
+            </span>
+          </div>
+        </div>
+      </TableCell>
+      <TableCell className="text-right font-mono text-sm tabular-nums">{pool.balanceA}</TableCell>
+      <TableCell className="text-right">
+        <div className="flex flex-col items-end">
+          <span className="font-mono text-sm tabular-nums" style={{ color: quoteColor }}>
+            {pool.balanceB}
+          </span>
+          <span className="text-[11px]" style={{ color: quoteColor ?? "var(--gaine-muted)" }}>
+            {pool.quoteSymbol}
+          </span>
+        </div>
+      </TableCell>
+      <TableCell className="text-center">
+        <GainePoolShareRing percent={pool.projectSharePercent} />
+      </TableCell>
+      <TableCell>
+        <a
+          href={pool.orcaUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex p-1 rounded-md transition-colors hover:bg-white/5"
+          style={{ color: "var(--gaine-muted)" }}
+          title="View on Orca"
+        >
+          <ExternalLink className="size-4" />
+        </a>
+      </TableCell>
+    </TableRow>
+  );
+}
+
+function OtherPoolsRow({
+  group,
+  expanded,
+  onToggle,
+}: {
+  group: GaineOtherPoolsGroup;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <TableRow
+      className="iboga-surface-row border-b hover:bg-white/[0.02] cursor-pointer"
+      style={{ borderColor: "var(--gaine-border)" }}
+      onClick={onToggle}
+    >
+      <TableCell className="font-mono text-sm tabular-nums">{group.totalUsd}</TableCell>
+      <TableCell colSpan={4}>
+        <span className="text-sm" style={{ color: "var(--gaine-muted)" }}>
+          {group.symbols}
+        </span>
+      </TableCell>
+      <TableCell>
+        <span
+          className="inline-flex items-center gap-1 text-xs uppercase tracking-wide"
+          style={{ color: "var(--gaine-accent)" }}
+        >
+          {expanded ? "Collapse" : "Expand"}
+          <ChevronDown className={`size-3.5 transition-transform ${expanded ? "rotate-180" : ""}`} />
+        </span>
+      </TableCell>
+    </TableRow>
+  );
+}
+
 export function GainePoolsTable() {
   const { data, isLoading, isError, error, isFetching, refetch } = useGainePools();
+  const [otherExpanded, setOtherExpanded] = useState(false);
 
   return (
     <section className="px-6 pb-20 max-w-7xl mx-auto w-full">
@@ -174,74 +273,19 @@ export function GainePoolsTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data?.pools.map((pool) => {
-                const quoteColor = getStablecoinTextColor(pool.quoteIsStablecoin);
-
-                return (
-                  <TableRow
-                    key={pool.address}
-                    className="iboga-surface-row border-b hover:bg-white/[0.02]"
-                    style={{ borderColor: "var(--gaine-border)" }}
-                  >
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span className="font-mono text-sm tabular-nums">{pool.priceUsd}</span>
-                        {pool.priceNative ? (
-                          <span className="text-[11px] font-mono" style={{ color: "var(--gaine-muted)" }}>
-                            {pool.priceNative}
-                          </span>
-                        ) : null}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-start gap-2">
-                        {pool.quoteCountryEmoji ? (
-                          <span className="text-base leading-none mt-0.5" aria-hidden>
-                            {pool.quoteCountryEmoji}
-                          </span>
-                        ) : null}
-                        <div className="flex flex-col min-w-0">
-                          <span className="text-sm font-medium truncate">{pool.pairLabel}</span>
-                          <span className="text-[11px]" style={{ color: "var(--gaine-muted)" }}>
-                            {pool.feePercent}
-                          </span>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right font-mono text-sm tabular-nums">
-                      {pool.balanceA}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex flex-col items-end">
-                        <span
-                          className="font-mono text-sm tabular-nums"
-                          style={{ color: quoteColor }}
-                        >
-                          {pool.balanceB}
-                        </span>
-                        <span className="text-[11px]" style={{ color: quoteColor ?? "var(--gaine-muted)" }}>
-                          {pool.quoteSymbol}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <GainePoolShareRing percent={pool.projectSharePercent} />
-                    </TableCell>
-                    <TableCell>
-                      <a
-                        href={pool.orcaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex p-1 rounded-md transition-colors hover:bg-white/5"
-                        style={{ color: "var(--gaine-muted)" }}
-                        title="View on Orca"
-                      >
-                        <ExternalLink className="size-4" />
-                      </a>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+              {data?.pools.map((pool) => (
+                <PoolTableRow key={pool.address} pool={pool} />
+              ))}
+              {data?.otherPools ? (
+                <OtherPoolsRow
+                  group={data.otherPools}
+                  expanded={otherExpanded}
+                  onToggle={() => setOtherExpanded((value) => !value)}
+                />
+              ) : null}
+              {otherExpanded
+                ? data?.otherPools?.pools.map((pool) => <PoolTableRow key={pool.address} pool={pool} />)
+                : null}
             </TableBody>
           </Table>
         )}
