@@ -12,6 +12,7 @@ import { communityMemberships } from "@/server/db/schema/community";
 import { normalizeEmail } from "@/server/lib/crypto";
 import { linkWaitlistEmail } from "@/server/services/waitlist.service";
 import { trackEvent } from "@/server/services/journey.service";
+import { callDataApi, remoteDb } from "@/server/services/data-api.server";
 
 export type VerifyHolderInput = {
   address: string;
@@ -30,6 +31,7 @@ export async function requireWalletHolder(address: string): Promise<{ userId: nu
 
 export async function verifyHolderLogin(input: VerifyHolderInput) {
   const balance = await fetchGaineBalance(input.address);
+  if (remoteDb()) return callDataApi("holder.verifyLogin", { ...input, balance });
   const db = await getDb();
   const now = new Date();
   const isHolder = balance > 0;
@@ -182,6 +184,7 @@ export async function upsertGoogleUser(profile: {
   displayName: string;
   avatarUrl?: string;
 }) {
+  if (remoteDb()) return callDataApi("holder.upsertGoogle", profile);
   const db = await getDb();
   const now = new Date();
   const email = normalizeEmail(profile.email);
@@ -261,6 +264,7 @@ export async function upsertGoogleUser(profile: {
 }
 
 export async function getUserById(userId: number) {
+  if (remoteDb()) return callDataApi("holder.getUser", { userId });
   const db = await getDb();
   const [user] = await db.select().from(userAccounts).where(eq(userAccounts.id, userId)).limit(1);
   return user ?? null;

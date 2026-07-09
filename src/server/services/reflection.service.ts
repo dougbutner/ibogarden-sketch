@@ -14,6 +14,7 @@ import { impactProjects } from "@/server/db/schema/reflection";
 import { taxonomyDomains, taxonomyTerms } from "@/server/db/schema/taxonomy";
 import { userAccounts, walletProfiles } from "@/server/db/schema/users";
 import { trackEvent } from "@/server/services/journey.service";
+import { callDataApi, remoteDb } from "@/server/services/data-api.server";
 
 type TermMetadata = {
   solanaWallet?: string;
@@ -31,6 +32,26 @@ function fallbackCategory(slug: ReflectionCategorySlug): ReflectionCategory | un
 
 export async function listReflectionCategories(): Promise<ReflectionCategory[]> {
   try {
+    if (remoteDb()) {
+      const rows = await callDataApi<
+        Array<{ slug: string; label: string; metadata: unknown; sortOrder: number }>
+      >("reflection.categories");
+      if (rows.length === 0) return REFLECTION_CATEGORY_FALLBACK;
+      return rows.map((row) => {
+        const slug = row.slug as ReflectionCategorySlug;
+        const fallback = fallbackCategory(slug);
+        return {
+          slug,
+          label: row.label,
+          description: fallback?.description ?? row.label,
+          solanaWallet:
+            slug === "specific_project"
+              ? null
+              : (metadataWallet(row.metadata) ?? fallback?.solanaWallet ?? null),
+        };
+      });
+    }
+
     const db = await getDb();
     const rows = await db
       .select({
@@ -64,6 +85,19 @@ export async function listReflectionCategories(): Promise<ReflectionCategory[]> 
 
 export async function listImpactProjects(): Promise<ImpactProject[]> {
   try {
+    if (remoteDb()) {
+      const rows = await callDataApi<
+        Array<{ slug: string; name: string; description: string | null; solanaWallet: string }>
+      >("reflection.projects");
+      if (rows.length === 0) return IMPACT_PROJECT_FALLBACK;
+      return rows.map((row) => ({
+        slug: row.slug,
+        name: row.name,
+        description: row.description ?? "",
+        solanaWallet: row.solanaWallet,
+      }));
+    }
+
     const db = await getDb();
     const rows = await db
       .select({
@@ -104,6 +138,8 @@ export async function getUserReflectionPreference(userId: number) {
   };
 
   try {
+    if (remoteDb()) return callDataApi("reflection.getPreference", { userId });
+
     const db = await getDb();
     const [row] = await db
       .select({
@@ -162,6 +198,8 @@ export async function saveUserReflectionPreference(input: {
   if (balance < GAINE_REFLECTION_MIN_BALANCE) {
     throw new Error(`Hold at least ${GAINE_REFLECTION_MIN_BALANCE} GAINE to direct rewards.`);
   }
+
+  if (remoteDb()) return callDataApi("reflection.save", { ...input, balance });
 
   const db = await getDb();
   const [wallet] = await db
@@ -246,9 +284,40 @@ export async function listReflectionRouting() {
   const { categories, projects } = await getReflectionDestinations();
 
   try {
+    if (remoteDb()) {
+      const rows = await callDataApi<
+        Array<{
+          userAccountId: number;
+          holderWallet: string;
+          directionSlug: string | null;
+          projectSlug: string | null;
+          lastGaineBalance: string | null;
+          reflectionUpdatedAt: string | null;
+        }>
+      >("reflection.routing");
+      const routing = rows.map((row) => {
+        const directionSlug = (row.directionSlug as ReflectionCategorySlug | null) ?? null;
+        const destination = destinationWalletForPreference(
+          categories,
+          projects,
+          directionSlug,
+          row.projectSlug,
+        );
+        return {
+          userAccountId: row.userAccountId,
+          holderWallet: row.holderWallet,
+          gaineBalance: row.lastGaineBalance,
+          updatedAt: row.reflectionUpdatedAt,
+          ...destination,
+        };
+      });
+      return { categories, projects, routing };
+    }
+
     const db = await getDb();
     const rows = await db
       .select({
+        userAccountId: userAccounts.id,
         holderWallet: walletProfiles.address,
         directionSlug: taxonomyTerms.slug,
         projectSlug: impactProjects.slug,
@@ -272,6 +341,7 @@ export async function listReflectionRouting() {
       );
 
       return {
+        userAccountId: row.userAccountId,
         holderWallet: row.holderWallet,
         gaineBalance: row.lastGaineBalance,
         updatedAt: row.reflectionUpdatedAt?.toISOString() ?? null,
@@ -287,8 +357,10 @@ export async function listReflectionRouting() {
 
 export async function listReflectionPreferencesForAdmin(limit = 200) {
   try {
+    if (remoteDb()) return callDataApi("admin.reflections", { limit });
+
     const db = await getDb();
-    return db
+    const rows = await db
       .select({
         walletAddress: walletProfiles.address,
         email: userAccounts.email,
@@ -307,6 +379,11 @@ export async function listReflectionPreferencesForAdmin(limit = 200) {
       .where(sql`${userAccounts.reflectionDirectionId} IS NOT NULL`)
       .orderBy(desc(userAccounts.reflectionUpdatedAt))
       .limit(limit);
+
+    return rows.map((row) => ({
+      ...row,
+      reflectionUpdatedAt: row.reflectionUpdatedAt?.toISOString() ?? null,
+    }));
   } catch {
     return [];
   }

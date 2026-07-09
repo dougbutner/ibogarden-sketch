@@ -7,6 +7,7 @@ import { normalizeEmail } from "@/server/lib/crypto";
 import { notifyAdminNetworkApplication } from "@/server/services/mail.service";
 import { getTermIdByDomainSlug } from "@/server/services/taxonomy.service";
 import { trackEvent } from "@/server/services/journey.service";
+import { callDataApi, remoteDb } from "@/server/services/data-api.server";
 
 export type SubmitNetworkApplicationInput = {
   organizationName: string;
@@ -20,6 +21,21 @@ export type SubmitNetworkApplicationInput = {
 };
 
 export async function submitNetworkApplication(input: SubmitNetworkApplicationInput) {
+  if (remoteDb()) {
+    const result = await callDataApi<{ ok: true; id: number }>("network.submit", input);
+    await notifyAdminNetworkApplication({
+      applicationId: result.id,
+      organizationName: input.organizationName.trim(),
+      email: normalizeEmail(input.email),
+      country: input.country.trim(),
+      partnerTypeSlug: input.partnerTypeSlug,
+      credentials: input.credentials?.trim() || undefined,
+      gabonFirstSourcing: input.gabonFirstSourcing,
+      southeastAfrica: input.southeastAfrica,
+      solanaWallet: input.solanaWallet?.trim() || undefined,
+    });
+    return result;
+  }
   const db = await getDb();
   const partnerTypeId = await getTermIdByDomainSlug("partner_type", input.partnerTypeSlug);
 
@@ -72,10 +88,11 @@ export async function submitNetworkApplication(input: SubmitNetworkApplicationIn
 }
 
 export async function listNetworkApplications(search?: string, limit = 100) {
+  if (remoteDb()) return callDataApi("admin.applications", { search: search?.trim() || null, limit });
   const db = await getDb();
   const term = search?.trim();
 
-  return db
+  const rows = await db
     .select({
       id: networkApplications.id,
       organizationName: networkApplications.organizationName,
@@ -102,9 +119,17 @@ export async function listNetworkApplications(search?: string, limit = 100) {
     )
     .orderBy(desc(networkApplications.createdAt))
     .limit(limit);
+
+  return rows.map((row) => ({
+    ...row,
+    gabonFirstSourcing: Boolean(row.gabonFirstSourcing),
+    southeastAfrica: Boolean(row.southeastAfrica),
+    createdAt: row.createdAt?.toISOString() ?? null,
+  }));
 }
 
 export async function deleteNetworkApplication(id: number) {
+  if (remoteDb()) return callDataApi("admin.deleteApplication", { id });
   const db = await getDb();
   await db.delete(networkApplications).where(eq(networkApplications.id, id));
   return { ok: true as const };

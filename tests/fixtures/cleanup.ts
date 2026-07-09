@@ -32,3 +32,11 @@ export async function cleanupWaitlistEmail(email: string) {
   const db = await getDb();
   await db.delete(communityWaitlist).where(eq(communityWaitlist.email, email));
 }
+
+export async function cleanupReflectionTestHolders(
+  holders: ReadonlyArray<{ address: string; email: string }>,
+) {
+  for (const holder of holders) {
+    await cleanupTestHolder(holder.address, holder.email);
+  }
+}

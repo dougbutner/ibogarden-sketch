@@ -1,6 +1,10 @@
 -- ibo.garden MariaDB schema
 -- Canonical source of truth. Update this file whenever the data model changes.
--- Apply: mysql -u USER -p DATABASE < database/schema.sql
+--
+-- Fresh database setup (run in order):
+--   mysql -u USER -p DATABASE < database/schema.sql
+--   mysql -u USER -p DATABASE < database/seeds.sql
+--
 -- Charset: utf8mb4 · Engine: InnoDB
 
 SET NAMES utf8mb4;

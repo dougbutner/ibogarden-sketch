@@ -1,5 +1,8 @@
--- ibo.garden taxonomy seed data
--- Run after schema.sql: mysql -u USER -p DATABASE < database/seeds.sql
+-- ibo.garden reference data (taxonomy, impact projects)
+-- Run after schema.sql on a fresh database:
+--   mysql -u USER -p DATABASE < database/seeds.sql
+--
+-- Idempotent: safe to re-run (ON DUPLICATE KEY UPDATE).
 
 SET NAMES utf8mb4;
 

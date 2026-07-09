@@ -20,8 +20,6 @@ dist-ssr
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
-namecheap-data-api/config.php
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

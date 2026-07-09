@@ -1,6 +1,7 @@
 import { getServerConfig } from "@/lib/config.server";
 import { getDb } from "@/server/db/client";
 import { safeEqual } from "@/server/lib/crypto";
+import { callDataApi, remoteDb } from "@/server/services/data-api.server";
 import { sql } from "drizzle-orm";
 
 export function isAdminDevWallet(address: string): boolean {
@@ -33,6 +34,10 @@ export function formatDatabaseError(error: unknown): string {
 }
 
 export async function checkDatabaseHealth() {
+  if (remoteDb()) {
+    const data = await callDataApi<{ connected: true; taxonomyTerms: number }>("admin.health");
+    return { ok: true as const, taxonomyTerms: data.taxonomyTerms };
+  }
   const db = await getDb();
   const [row] = await db.execute<{ ok: number; taxonomyTerms: number }>(
     sql`SELECT 1 AS ok, (SELECT COUNT(*) FROM taxonomy_terms) AS taxonomyTerms`,

@@ -4,8 +4,10 @@ import { getDb } from "@/server/db/client";
 import { communityMessages } from "@/server/db/schema/community";
 import { userAccounts } from "@/server/db/schema/users";
 import { trackEvent } from "@/server/services/journey.service";
+import { callDataApi, remoteDb } from "@/server/services/data-api.server";
 
 export async function listCommunityMessages(limit = 50) {
+  if (remoteDb()) return callDataApi("community.list", { limit });
   const db = await getDb();
 
   const rows = await db
@@ -27,6 +29,7 @@ export async function listCommunityMessages(limit = 50) {
 }
 
 export async function postCommunityMessage(userAccountId: number, body: string) {
+  if (remoteDb()) return callDataApi("community.post", { userAccountId, body });
   const db = await getDb();
   const trimmed = body.trim();
   if (!trimmed) throw new Error("Message is required");

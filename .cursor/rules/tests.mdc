@@ -1,16 +1,17 @@
 ---
-description: Integration test folder — exactly two test files, always
+description: Integration test folder — holder, waitlist, and reflection tests
 globs: tests/**
 alwaysApply: false
 ---
 
 # tests/ folder
 
-This folder contains **exactly two** integration test files. Do not add a third.
+Integration tests live here. Do not add unrelated test files.
 
 - `holder.test.ts` — GAINE test holder verification against MariaDB
-- `waitlist.test.ts` — community waitlist persistence
+- `waitlist.test.ts` — community waitlist persistence and network applications
+- `reflection.test.ts` — GAINE reflection preference save and routing API (holder → beneficiary)
 
-Shared fixtures live in `tests/fixtures/`. When adding coverage, extend one of the two files above — never create new `*.test.ts` files here.
+Shared fixtures live in `tests/fixtures/`. When adding coverage, extend the relevant file above — avoid scattering new `*.test.ts` files.
 
 Run: `npm test`

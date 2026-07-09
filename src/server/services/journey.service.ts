@@ -2,6 +2,7 @@ import { eq, sql, desc } from "drizzle-orm";
 
 import { getDb } from "@/server/db/client";
 import { userEvents, userJourneyStats, walletProfiles, userAccounts } from "@/server/db/schema/users";
+import { callDataApi, remoteDb } from "@/server/services/data-api.server";
 
 export type TrackEventInput = {
   userAccountId?: number | null;
@@ -23,6 +24,10 @@ export type TrackEventInput = {
 };
 
 export async function trackEvent(input: TrackEventInput) {
+  if (remoteDb()) {
+    await callDataApi("journey.track", input as Record<string, unknown>);
+    return;
+  }
   const db = await getDb();
 
   await db.insert(userEvents).values({
@@ -103,8 +108,9 @@ async function refreshJourneyStats(userAccountId: number, input: TrackEventInput
 }
 
 export async function listVerifiedHolders(limit = 100) {
+  if (remoteDb()) return callDataApi("admin.holders", { limit });
   const db = await getDb();
-  return db
+  const rows = await db
     .select({
       address: walletProfiles.address,
       email: userAccounts.email,
@@ -120,4 +126,10 @@ export async function listVerifiedHolders(limit = 100) {
     .where(sql`CAST(${walletProfiles.lastGaineBalance} AS DECIMAL(24,8)) > 0`)
     .orderBy(desc(walletProfiles.lastVerifiedAt))
     .limit(limit);
+
+  return rows.map((row) => ({
+    ...row,
+    firstVerifiedAt: row.firstVerifiedAt?.toISOString() ?? null,
+    lastVerifiedAt: row.lastVerifiedAt?.toISOString() ?? null,
+  }));
 }

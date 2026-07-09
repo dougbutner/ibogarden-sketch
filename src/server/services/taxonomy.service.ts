@@ -2,8 +2,10 @@ import { and, eq, asc } from "drizzle-orm";
 
 import { getDb } from "@/server/db/client";
 import { taxonomyDomains, taxonomyTerms } from "@/server/db/schema/taxonomy";
+import { callDataApi, remoteDb } from "@/server/services/data-api.server";
 
 export async function getTermIdByDomainSlug(domainSlug: string, termSlug: string) {
+  if (remoteDb()) return callDataApi<number | null>("taxonomy.termId", { domainSlug, termSlug });
   const db = await getDb();
 
   const [domain] = await db
@@ -24,6 +26,7 @@ export async function getTermIdByDomainSlug(domainSlug: string, termSlug: string
 }
 
 export async function listTermsByDomainSlug(domainSlug: string) {
+  if (remoteDb()) return callDataApi("taxonomy.list", { domainSlug });
   const db = await getDb();
 
   const [domain] = await db

@@ -13,7 +13,8 @@ alwaysApply: false
 1. **Update `database/schema.sql` first** — every new/altered table, column, index, or FK.
 2. **Mirror in Drizzle** — update matching files under `src/server/db/schema/`.
 3. **Update seeds if needed** — taxonomy or reference data goes in `database/seeds.sql`.
-4. **Live databases** — add `database/migrations/NNNN_description.sql` for incremental changes; do not re-run full `schema.sql` on production.
+4. **Fresh installs** — run `schema.sql` then `seeds.sql` only. No numbered migration files.
+5. **Live production DBs** — apply equivalent incremental SQL manually; do not re-run full `schema.sql`.
 
 ## Do not
 
