@@ -523,10 +523,10 @@ try {
     case "reflection.getPreference":
       $userId = (int)($body["userId"] ?? 0);
       $stmt = $mysqli->prepare(
-        "SELECT tt.slug AS direction_slug, tt.label AS direction_label, ip.slug AS project_slug, ip.name AS project_name,
-                ua.reflection_updated_at FROM user_accounts ua
+        "SELECT tt.slug AS direction_slug, tt.label AS direction_label,
+                ua.reflection_custom_title, ua.reflection_custom_wallet, ua.reflection_updated_at
+         FROM user_accounts ua
          LEFT JOIN taxonomy_terms tt ON ua.reflection_direction_id = tt.id
-         LEFT JOIN impact_projects ip ON ua.reflection_project_id = ip.id
          WHERE ua.id = ? LIMIT 1"
       );
       $stmt->bind_param("i", $userId);
@@ -535,8 +535,8 @@ try {
       respond(200, ["ok" => true, "data" => [
         "directionSlug" => $row["direction_slug"] ?? null,
         "directionLabel" => $row["direction_label"] ?? null,
-        "projectSlug" => $row["project_slug"] ?? null,
-        "projectName" => $row["project_name"] ?? null,
+        "customTitle" => $row["reflection_custom_title"] ?? null,
+        "customWallet" => $row["reflection_custom_wallet"] ?? null,
         "updatedAt" => toIso($row["reflection_updated_at"] ?? null),
       ]]);
 
@@ -544,7 +544,8 @@ try {
       $userId = (int)($body["userId"] ?? 0);
       $walletAddress = trim((string)($body["walletAddress"] ?? ""));
       $directionSlug = (string)($body["directionSlug"] ?? "");
-      $projectSlug = $body["projectSlug"] ?? null;
+      $customTitle = trim((string)($body["customTitle"] ?? ""));
+      $customWallet = trim((string)($body["customWallet"] ?? ""));
       $balance = (float)($body["balance"] ?? 0);
       if ($balance < REFLECTION_MIN_BALANCE) respond(400, ["ok" => false, "error" => "Insufficient GAINE balance"]);
 
@@ -558,22 +559,36 @@ try {
 
       $directionId = getTermId($mysqli, "reflection_direction", $directionSlug);
       if (!$directionId) respond(400, ["ok" => false, "error" => "Unknown reflection category."]);
-
-      $projectId = null;
-      if ($directionSlug === "specific_project") {
-        if (!$projectSlug) respond(400, ["ok" => false, "error" => "Choose a project to direct rewards."]);
-        $stmt = $mysqli->prepare("SELECT id FROM impact_projects WHERE slug = ? AND is_active = 1 LIMIT 1");
-        $stmt->bind_param("s", $projectSlug);
-        $stmt->execute();
-        $project = $stmt->get_result()->fetch_assoc();
-        if (!$project) respond(400, ["ok" => false, "error" => "Unknown impact project."]);
-        $projectId = (int)$project["id"];
+      $activeCheck = $mysqli->prepare("SELECT is_active FROM taxonomy_terms WHERE id = ? LIMIT 1");
+      $activeCheck->bind_param("i", $directionId);
+      $activeCheck->execute();
+      $activeRow = $activeCheck->get_result()->fetch_assoc();
+      if (!(int)($activeRow["is_active"] ?? 0)) {
+        respond(400, ["ok" => false, "error" => "Unknown reflection category."]);
       }
 
+      $isUnregistered = $directionSlug === "unregistered_project";
+      if ($isUnregistered) {
+        if ($customTitle === "" || mb_strlen($customTitle) > 50) {
+          respond(400, ["ok" => false, "error" => "Enter a project title (1–50 characters)."]);
+        }
+        if (strlen($customWallet) < 32 || strlen($customWallet) > 44) {
+          respond(400, ["ok" => false, "error" => "Enter a valid Solana wallet address."]);
+        }
+      } else {
+        $customTitle = "";
+        $customWallet = "";
+      }
+
+      $titleParam = $isUnregistered ? $customTitle : null;
+      $walletParam = $isUnregistered ? $customWallet : null;
       $stmt = $mysqli->prepare(
-        "UPDATE user_accounts SET reflection_direction_id = ?, reflection_project_id = ?, reflection_updated_at = NOW() WHERE id = ?"
+        "UPDATE user_accounts
+         SET reflection_direction_id = ?, reflection_project_id = NULL,
+             reflection_custom_title = ?, reflection_custom_wallet = ?, reflection_updated_at = NOW()
+         WHERE id = ?"
       );
-      $stmt->bind_param("iii", $directionId, $projectId, $userId);
+      $stmt->bind_param("issi", $directionId, $titleParam, $walletParam, $userId);
       $stmt->execute();
 
       trackEvent($mysqli, [
@@ -582,14 +597,18 @@ try {
         "eventCategory" => "gaine",
         "walletAddress" => $walletAddress,
         "gaineBalanceSnapshot" => $balance,
-        "metadata" => ["directionSlug" => $directionSlug, "projectSlug" => $projectSlug],
+        "metadata" => [
+          "directionSlug" => $directionSlug,
+          "customTitle" => $isUnregistered ? $customTitle : null,
+          "customWallet" => $isUnregistered ? $customWallet : null,
+        ],
       ]);
 
       $stmt = $mysqli->prepare(
-        "SELECT tt.slug AS direction_slug, tt.label AS direction_label, ip.slug AS project_slug, ip.name AS project_name,
-                ua.reflection_updated_at FROM user_accounts ua
+        "SELECT tt.slug AS direction_slug, tt.label AS direction_label,
+                ua.reflection_custom_title, ua.reflection_custom_wallet, ua.reflection_updated_at
+         FROM user_accounts ua
          LEFT JOIN taxonomy_terms tt ON ua.reflection_direction_id = tt.id
-         LEFT JOIN impact_projects ip ON ua.reflection_project_id = ip.id
          WHERE ua.id = ? LIMIT 1"
       );
       $stmt->bind_param("i", $userId);
@@ -598,19 +617,19 @@ try {
       respond(200, ["ok" => true, "data" => [
         "directionSlug" => $row["direction_slug"] ?? null,
         "directionLabel" => $row["direction_label"] ?? null,
-        "projectSlug" => $row["project_slug"] ?? null,
-        "projectName" => $row["project_name"] ?? null,
+        "customTitle" => $row["reflection_custom_title"] ?? null,
+        "customWallet" => $row["reflection_custom_wallet"] ?? null,
         "updatedAt" => toIso($row["reflection_updated_at"] ?? null),
       ]]);
 
     case "reflection.routing":
       $result = $mysqli->query(
         "SELECT ua.id AS user_account_id, wp.address AS holder_wallet, tt.slug AS direction_slug,
-                ip.slug AS project_slug, wp.last_gaine_balance, ua.reflection_updated_at
+                ua.reflection_custom_title, ua.reflection_custom_wallet,
+                wp.last_gaine_balance, ua.reflection_updated_at
          FROM wallet_profiles wp
          INNER JOIN user_accounts ua ON wp.user_account_id = ua.id
          LEFT JOIN taxonomy_terms tt ON ua.reflection_direction_id = tt.id
-         LEFT JOIN impact_projects ip ON ua.reflection_project_id = ip.id
          WHERE CAST(wp.last_gaine_balance AS DECIMAL(24,8)) >= " . REFLECTION_MIN_BALANCE . "
          ORDER BY ua.reflection_updated_at DESC"
       );
@@ -619,7 +638,8 @@ try {
         "userAccountId" => (int)$r["user_account_id"],
         "holderWallet" => $r["holder_wallet"],
         "directionSlug" => $r["direction_slug"],
-        "projectSlug" => $r["project_slug"],
+        "customTitle" => $r["reflection_custom_title"],
+        "customWallet" => $r["reflection_custom_wallet"],
         "lastGaineBalance" => $r["last_gaine_balance"],
         "reflectionUpdatedAt" => toIso($r["reflection_updated_at"]),
       ], $rows);
@@ -724,11 +744,11 @@ try {
       $stmt = $mysqli->prepare(
         "SELECT wp.address AS wallet_address, ua.email, ua.display_name, wp.last_gaine_balance,
                 tt.label AS direction_label, tt.slug AS direction_slug,
-                ip.name AS project_name, ip.slug AS project_slug, ua.reflection_updated_at
+                ua.reflection_custom_title AS custom_title, ua.reflection_custom_wallet AS custom_wallet,
+                ua.reflection_updated_at
          FROM user_accounts ua
          LEFT JOIN wallet_profiles wp ON ua.primary_wallet_id = wp.id
          LEFT JOIN taxonomy_terms tt ON ua.reflection_direction_id = tt.id
-         LEFT JOIN impact_projects ip ON ua.reflection_project_id = ip.id
          WHERE ua.reflection_direction_id IS NOT NULL
          ORDER BY ua.reflection_updated_at DESC LIMIT ?"
       );
@@ -742,8 +762,8 @@ try {
         "lastGaineBalance" => $r["last_gaine_balance"],
         "directionLabel" => $r["direction_label"],
         "directionSlug" => $r["direction_slug"],
-        "projectName" => $r["project_name"],
-        "projectSlug" => $r["project_slug"],
+        "customTitle" => $r["custom_title"],
+        "customWallet" => $r["custom_wallet"],
         "reflectionUpdatedAt" => toIso($r["reflection_updated_at"]),
       ], $rows);
       respond(200, ["ok" => true, "data" => $data]);

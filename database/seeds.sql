@@ -134,62 +134,43 @@ JOIN (
 ) v ON d.slug = 'language'
 ON DUPLICATE KEY UPDATE label = VALUES(label);
 
--- reflection_direction
+-- reflection_direction (GAINE holder fee routing; 100+ GAINE to save)
+-- Registered categories carry a default solanaWallet in metadata.
+-- unregistered_project has no default wallet — holder supplies title + Solana address.
 INSERT INTO taxonomy_terms (domain_id, slug, label, sort_order, metadata) SELECT d.id, v.slug, v.label, v.sort_order, v.metadata FROM taxonomy_domains d
 JOIN (
-  SELECT 'sourcing'           AS slug, 'Sourcing'            AS label, 1 AS sort_order, JSON_OBJECT('solanaWallet', 'PLACEsour1ngWa11etP1aceho1derxxxxxxxxxx1') AS metadata UNION ALL
-  SELECT 'conservation',      'Conservation',                    2, JSON_OBJECT('solanaWallet', 'PLACEconsrvWa11etP1aceho1derxxxxxxxxxx2') UNION ALL
-  SELECT 'gabon_communities', 'Gabon Communities',               3, JSON_OBJECT('solanaWallet', 'PLACEgabonCmWa11etP1aceho1derxxxxxxx3') UNION ALL
-  SELECT 'research',          'Research',                        4, JSON_OBJECT('solanaWallet', 'PLACEresearchWa11etP1aceho1derxxxxxxxx4') UNION ALL
-  SELECT 'subsidized_healing','Subsidized Healing',              5, JSON_OBJECT('solanaWallet', 'PLACEhealingWa11etP1aceho1derxxxxxxx5') UNION ALL
-  SELECT 'developer_fund',      'Developer Fund',                  6, JSON_OBJECT('solanaWallet', 'AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ') UNION ALL
-  SELECT 'microdose_research','Microdose Research',              7, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') UNION ALL
-  SELECT 'specific_project',  'Specific Project',                8, NULL
+  SELECT 'seeding_iboga_farms'       AS slug, 'Seeding Iboga Farms'       AS label, 1 AS sort_order, JSON_OBJECT('solanaWallet', 'PLACEseedFarmWa11etP1aceho1derxxxxxxx01') AS metadata UNION ALL
+  SELECT 'conservation_in_gabon',    'Conservation in Gabon',          2, JSON_OBJECT('solanaWallet', 'PLACEconsGabonWa11etP1aceho1derxxxxxx02') UNION ALL
+  SELECT 'gabon_communities',        'Gabon Communities',              3, JSON_OBJECT('solanaWallet', 'PLACEgabonCmWa11etP1aceho1derxxxxxxx03') UNION ALL
+  SELECT 'healing_access',           'Healing Access',                 4, JSON_OBJECT('solanaWallet', 'PLACEhealingWa11etP1aceho1derxxxxxxx04') UNION ALL
+  SELECT 'tech_innovation',          'Tech Innovation',                5, JSON_OBJECT('solanaWallet', 'AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ') UNION ALL
+  SELECT 'supply_chain_transparency','Supply Chain Transparency',      6, JSON_OBJECT('solanaWallet', 'PLACEsupplyWa11etP1aceho1derxxxxxxxx05') UNION ALL
+  SELECT 'legal_fund',                'Legal Fund',                     7, JSON_OBJECT('solanaWallet', 'PLACElegalWa11etP1aceho1derxxxxxxxxx06') UNION ALL
+  SELECT 'bwiti_house_donation',     'Bwiti House Donation',           8, JSON_OBJECT('solanaWallet', 'PLACEbwitiWa11etP1aceho1derxxxxxxxxx07') UNION ALL
+  SELECT 'education_fund',           'Education Fund',                 9, JSON_OBJECT('solanaWallet', 'PLACEeduWa11etP1aceho1derxxxxxxxxxxx08') UNION ALL
+  SELECT 'research_fund',            'Research Fund',                 10, JSON_OBJECT('solanaWallet', 'PLACEresearchWa11etP1aceho1derxxxxxx09') UNION ALL
+  SELECT 'unregistered_project',     'Unregistered Project',          11, NULL
 ) v ON d.slug = 'reflection_direction'
-ON DUPLICATE KEY UPDATE label = VALUES(label), sort_order = VALUES(sort_order), metadata = VALUES(metadata);
+ON DUPLICATE KEY UPDATE label = VALUES(label), sort_order = VALUES(sort_order), metadata = VALUES(metadata), is_active = 1;
 
-INSERT INTO impact_projects (slug, name, description, solana_wallet, sort_order)
-VALUES
-  (
-    'developer-fund',
-    'Developer Fund',
-    'Protocol development, tooling, and ibo.garden infrastructure.',
-    'AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ',
-    1
-  ),
-  (
-    'microdose-research',
-    'Microdose Research',
-    'Microdose iboga studies, safety data, and formulation research.',
-    'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u',
-    2
-  ),
-  (
-    'ibogabon-farm-network',
-    'Gabon Farm Network',
-    'Direct support for certified Gabon farms and traceable supply chains.',
-    'PLACEprojFarmWa11etP1aceho1derxxxxxxxxxx1',
-    3
-  ),
-  (
-    'decree-0239-community-fund',
-    'Decree 0239 Community Fund',
-    'Benefit-sharing for Bwiti communities under Gabon sovereign iboga policy.',
-    'PLACEproj0239Wa11etP1aceho1derxxxxxxxxxx2',
-    4
-  ),
-  (
-    'clinical-research-pilot',
-    'Clinical Research Pilot',
-    'Early-stage ibogaine research and safety data collection.',
-    'PLACEprojResWa11etP1aceho1derxxxxxxxxxxx3',
-    5
-  )
-ON DUPLICATE KEY UPDATE
-  name = VALUES(name),
-  description = VALUES(description),
-  solana_wallet = VALUES(solana_wallet),
-  sort_order = VALUES(sort_order);
+-- Deactivate retired reflection categories (kept for FK history on existing DBs)
+UPDATE taxonomy_terms t
+JOIN taxonomy_domains d ON d.id = t.domain_id
+SET t.is_active = 0
+WHERE d.slug = 'reflection_direction'
+  AND t.slug IN (
+    'sourcing',
+    'conservation',
+    'research',
+    'subsidized_healing',
+    'developer_fund',
+    'microdose_research',
+    'specific_project'
+  );
+
+-- Curated impact_projects list retired: holders use registered categories or unregistered_project
+-- (custom title + wallet on user_accounts). Soft-disable any prior seed rows.
+UPDATE impact_projects SET is_active = 0;
 
 -- user_intent
 INSERT INTO taxonomy_terms (domain_id, slug, label, sort_order) SELECT d.id, v.slug, v.label, v.sort_order FROM taxonomy_domains d

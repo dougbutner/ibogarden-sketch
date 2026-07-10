@@ -29,7 +29,8 @@ export const saveReflectionPreference = createServerFn({ method: "POST" })
     z.object({
       walletAddress: z.string().min(32).max(44),
       directionSlug: z.enum(REFLECTION_CATEGORY_SLUGS),
-      projectSlug: z.string().min(1).max(96).optional(),
+      customTitle: z.string().min(1).max(50).optional(),
+      customWallet: z.string().min(32).max(44).optional(),
     }),
   )
   .handler(async ({ data }) => {
@@ -42,6 +43,7 @@ export const saveReflectionPreference = createServerFn({ method: "POST" })
       userId: session.data.userId,
       walletAddress: data.walletAddress,
       directionSlug: data.directionSlug,
-      projectSlug: data.projectSlug,
+      customTitle: data.customTitle,
+      customWallet: data.customWallet,
     });
   });

@@ -1,17 +1,22 @@
 export const GAINE_REFLECTION_MIN_BALANCE = 100;
 
 export const REFLECTION_CATEGORY_SLUGS = [
-  "sourcing",
-  "conservation",
+  "seeding_iboga_farms",
+  "conservation_in_gabon",
   "gabon_communities",
-  "research",
-  "subsidized_healing",
-  "developer_fund",
-  "microdose_research",
-  "specific_project",
+  "healing_access",
+  "tech_innovation",
+  "supply_chain_transparency",
+  "legal_fund",
+  "bwiti_house_donation",
+  "education_fund",
+  "research_fund",
+  "unregistered_project",
 ] as const;
 
 export type ReflectionCategorySlug = (typeof REFLECTION_CATEGORY_SLUGS)[number];
+
+export const UNREGISTERED_PROJECT_SLUG = "unregistered_project" as const;
 
 export type ReflectionCategory = {
   slug: ReflectionCategorySlug;
@@ -20,95 +25,73 @@ export type ReflectionCategory = {
   solanaWallet: string | null;
 };
 
-export type ImpactProject = {
-  slug: string;
-  name: string;
-  description: string;
-  solanaWallet: string;
-};
-
-/** Fallback when taxonomy / DB rows are unavailable (dev or pre-migration). */
+/** Fallback when taxonomy / DB rows are unavailable. */
 export const REFLECTION_CATEGORY_FALLBACK: ReflectionCategory[] = [
   {
-    slug: "sourcing",
-    label: "Sourcing",
-    description: "Ethical Gabon farms & supply-chain traceability",
-    solanaWallet: "PLACEsour1ngWa11etP1aceho1derxxxxxxxxxx1",
+    slug: "seeding_iboga_farms",
+    label: "Seeding Iboga Farms",
+    description: "Nursery stock, planting, and farm establishment in Gabon",
+    solanaWallet: "PLACEseedFarmWa11etP1aceho1derxxxxxxx01",
   },
   {
-    slug: "conservation",
-    label: "Conservation",
-    description: "Reforestation & smallholder working capital",
-    solanaWallet: "PLACEconsrvWa11etP1aceho1derxxxxxxxxxx2",
+    slug: "conservation_in_gabon",
+    label: "Conservation in Gabon",
+    description: "Forest protection and habitat stewardship",
+    solanaWallet: "PLACEconsGabonWa11etP1aceho1derxxxxxx02",
   },
   {
     slug: "gabon_communities",
     label: "Gabon Communities",
     description: "Benefit-sharing under Decree 0239",
-    solanaWallet: "PLACEgabonCmWa11etP1aceho1derxxxxxxx3",
+    solanaWallet: "PLACEgabonCmWa11etP1aceho1derxxxxxxx03",
   },
   {
-    slug: "research",
-    label: "Research",
-    description: "Clinical and ethnobotanical ibogaine research",
-    solanaWallet: "PLACEresearchWa11etP1aceho1derxxxxxxxx4",
+    slug: "healing_access",
+    label: "Healing Access",
+    description: "Treatment access for people who cannot afford care",
+    solanaWallet: "PLACEhealingWa11etP1aceho1derxxxxxxx04",
   },
   {
-    slug: "subsidized_healing",
-    label: "Subsidized Healing",
-    description: "Treatment access for holders who cannot afford care",
-    solanaWallet: "PLACEhealingWa11etP1aceho1derxxxxxxx5",
-  },
-  {
-    slug: "developer_fund",
-    label: "Developer Fund",
+    slug: "tech_innovation",
+    label: "Tech Innovation",
     description: "Protocol development, tooling, and ibo.garden infrastructure",
     solanaWallet: "AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ",
   },
   {
-    slug: "microdose_research",
-    label: "Microdose Research",
-    description: "Microdose iboga studies, safety data, and formulation research",
-    solanaWallet: "RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u",
+    slug: "supply_chain_transparency",
+    label: "Supply Chain Transparency",
+    description: "Traceability, sourcing integrity, and compliant export",
+    solanaWallet: "PLACEsupplyWa11etP1aceho1derxxxxxxxx05",
   },
   {
-    slug: "specific_project",
-    label: "Specific Project",
-    description: "USDC sent to an approved project wallet",
+    slug: "legal_fund",
+    label: "Legal Fund",
+    description: "Policy, compliance, and legal defense for the network",
+    solanaWallet: "PLACElegalWa11etP1aceho1derxxxxxxxxx06",
+  },
+  {
+    slug: "bwiti_house_donation",
+    label: "Bwiti House Donation",
+    description: "Support for Bwiti houses and ceremonial community spaces",
+    solanaWallet: "PLACEbwitiWa11etP1aceho1derxxxxxxxxx07",
+  },
+  {
+    slug: "education_fund",
+    label: "Education Fund",
+    description: "Learning, training, and knowledge-sharing initiatives",
+    solanaWallet: "PLACEeduWa11etP1aceho1derxxxxxxxxxxx08",
+  },
+  {
+    slug: "research_fund",
+    label: "Research Fund",
+    description: "Clinical and ethnobotanical ibogaine research",
+    solanaWallet: "PLACEresearchWa11etP1aceho1derxxxxxx09",
+  },
+  {
+    slug: "unregistered_project",
+    label: "Unregistered Project",
+    description: "Send USDC to a Solana address you specify (title + wallet)",
     solanaWallet: null,
-  },
-];
-
-export const IMPACT_PROJECT_FALLBACK: ImpactProject[] = [
-  {
-    slug: "developer-fund",
-    name: "Developer Fund",
-    description: "Protocol development, tooling, and ibo.garden infrastructure.",
-    solanaWallet: "AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ",
-  },
-  {
-    slug: "microdose-research",
-    name: "Microdose Research",
-    description: "Microdose iboga studies, safety data, and formulation research.",
-    solanaWallet: "RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u",
-  },
-  {
-    slug: "ibogabon-farm-network",
-    name: "Gabon Farm Network",
-    description: "Direct support for certified Gabon farms and traceable supply chains.",
-    solanaWallet: "PLACEprojFarmWa11etP1aceho1derxxxxxxxxxx1",
-  },
-  {
-    slug: "decree-0239-community-fund",
-    name: "Decree 0239 Community Fund",
-    description: "Benefit-sharing for Bwiti communities under Gabon sovereign iboga policy.",
-    solanaWallet: "PLACEproj0239Wa11etP1aceho1derxxxxxxxxxx2",
-  },
-  {
-    slug: "clinical-research-pilot",
-    name: "Clinical Research Pilot",
-    description: "Early-stage ibogaine research and safety data collection.",
-    solanaWallet: "PLACEprojResWa11etP1aceho1derxxxxxxxxxxx3",
   },
 ];
 

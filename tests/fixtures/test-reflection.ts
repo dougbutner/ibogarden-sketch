@@ -1,4 +1,4 @@
-import { IMPACT_PROJECT_FALLBACK, REFLECTION_CATEGORY_FALLBACK } from "@/data/reflection-destinations";
+import { REFLECTION_CATEGORY_FALLBACK } from "@/data/reflection-destinations";
 
 /** Holder with 100+ GAINE for save/routing tests. */
 export const TEST_REFLECTION_HOLDER = {
@@ -32,11 +32,13 @@ export const TEST_REFLECTION_OTHER = {
   walletProvider: "vitest",
 } as const;
 
-export const DEVELOPER_FUND_WALLET =
-  REFLECTION_CATEGORY_FALLBACK.find((c) => c.slug === "developer_fund")!.solanaWallet!;
+export const TECH_INNOVATION_WALLET =
+  REFLECTION_CATEGORY_FALLBACK.find((c) => c.slug === "tech_innovation")!.solanaWallet!;
 
-export const MICRODOSE_RESEARCH_WALLET =
-  IMPACT_PROJECT_FALLBACK.find((p) => p.slug === "microdose-research")!.solanaWallet;
+export const TEST_UNREGISTERED = {
+  title: "Community Garden Pilot",
+  wallet: "UnregProj1111111111111111111111111111111",
+} as const;
 
 export const REFLECTION_TEST_HOLDERS = [
   TEST_REFLECTION_HOLDER,

@@ -1,16 +1,14 @@
 import { and, desc, eq, sql } from "drizzle-orm";
 
 import {
-  IMPACT_PROJECT_FALLBACK,
   REFLECTION_CATEGORY_FALLBACK,
-  type ImpactProject,
   type ReflectionCategory,
   type ReflectionCategorySlug,
   GAINE_REFLECTION_MIN_BALANCE,
+  UNREGISTERED_PROJECT_SLUG,
 } from "@/data/reflection-destinations";
 import { fetchGaineBalance } from "@/lib/solana.server";
 import { getDb } from "@/server/db/client";
-import { impactProjects } from "@/server/db/schema/reflection";
 import { taxonomyDomains, taxonomyTerms } from "@/server/db/schema/taxonomy";
 import { userAccounts, walletProfiles } from "@/server/db/schema/users";
 import { trackEvent } from "@/server/services/journey.service";
@@ -30,6 +28,14 @@ function fallbackCategory(slug: ReflectionCategorySlug): ReflectionCategory | un
   return REFLECTION_CATEGORY_FALLBACK.find((category) => category.slug === slug);
 }
 
+function normalizeCustomTitle(title: string | undefined): string {
+  return (title ?? "").trim();
+}
+
+function normalizeCustomWallet(wallet: string | undefined): string {
+  return (wallet ?? "").trim();
+}
+
 export async function listReflectionCategories(): Promise<ReflectionCategory[]> {
   try {
     if (remoteDb()) {
@@ -45,7 +51,7 @@ export async function listReflectionCategories(): Promise<ReflectionCategory[]> 
           label: row.label,
           description: fallback?.description ?? row.label,
           solanaWallet:
-            slug === "specific_project"
+            slug === UNREGISTERED_PROJECT_SLUG
               ? null
               : (metadataWallet(row.metadata) ?? fallback?.solanaWallet ?? null),
         };
@@ -75,7 +81,9 @@ export async function listReflectionCategories(): Promise<ReflectionCategory[]> 
         label: row.label,
         description: fallback?.description ?? row.label,
         solanaWallet:
-          slug === "specific_project" ? null : metadataWallet(row.metadata) ?? fallback?.solanaWallet ?? null,
+          slug === UNREGISTERED_PROJECT_SLUG
+            ? null
+            : (metadataWallet(row.metadata) ?? fallback?.solanaWallet ?? null),
       };
     });
   } catch {
@@ -83,57 +91,17 @@ export async function listReflectionCategories(): Promise<ReflectionCategory[]> 
   }
 }
 
-export async function listImpactProjects(): Promise<ImpactProject[]> {
-  try {
-    if (remoteDb()) {
-      const rows = await callDataApi<
-        Array<{ slug: string; name: string; description: string | null; solanaWallet: string }>
-      >("reflection.projects");
-      if (rows.length === 0) return IMPACT_PROJECT_FALLBACK;
-      return rows.map((row) => ({
-        slug: row.slug,
-        name: row.name,
-        description: row.description ?? "",
-        solanaWallet: row.solanaWallet,
-      }));
-    }
-
-    const db = await getDb();
-    const rows = await db
-      .select({
-        slug: impactProjects.slug,
-        name: impactProjects.name,
-        description: impactProjects.description,
-        solanaWallet: impactProjects.solanaWallet,
-      })
-      .from(impactProjects)
-      .where(eq(impactProjects.isActive, 1))
-      .orderBy(impactProjects.sortOrder);
-
-    if (rows.length === 0) return IMPACT_PROJECT_FALLBACK;
-
-    return rows.map((row) => ({
-      slug: row.slug,
-      name: row.name,
-      description: row.description ?? "",
-      solanaWallet: row.solanaWallet,
-    }));
-  } catch {
-    return IMPACT_PROJECT_FALLBACK;
-  }
-}
-
 export async function getReflectionDestinations() {
-  const [categories, projects] = await Promise.all([listReflectionCategories(), listImpactProjects()]);
-  return { categories, projects };
+  const categories = await listReflectionCategories();
+  return { categories, projects: [] as Array<{ slug: string; name: string; description: string; solanaWallet: string }> };
 }
 
 export async function getUserReflectionPreference(userId: number) {
   const empty = {
     directionSlug: null as ReflectionCategorySlug | null,
     directionLabel: null as string | null,
-    projectSlug: null as string | null,
-    projectName: null as string | null,
+    customTitle: null as string | null,
+    customWallet: null as string | null,
     updatedAt: null as string | null,
   };
 
@@ -145,21 +113,20 @@ export async function getUserReflectionPreference(userId: number) {
       .select({
         directionSlug: taxonomyTerms.slug,
         directionLabel: taxonomyTerms.label,
-        projectSlug: impactProjects.slug,
-        projectName: impactProjects.name,
+        customTitle: userAccounts.reflectionCustomTitle,
+        customWallet: userAccounts.reflectionCustomWallet,
         reflectionUpdatedAt: userAccounts.reflectionUpdatedAt,
       })
       .from(userAccounts)
       .leftJoin(taxonomyTerms, eq(userAccounts.reflectionDirectionId, taxonomyTerms.id))
-      .leftJoin(impactProjects, eq(userAccounts.reflectionProjectId, impactProjects.id))
       .where(eq(userAccounts.id, userId))
       .limit(1);
 
     return {
       directionSlug: (row?.directionSlug as ReflectionCategorySlug | null) ?? null,
       directionLabel: row?.directionLabel ?? null,
-      projectSlug: row?.projectSlug ?? null,
-      projectName: row?.projectName ?? null,
+      customTitle: row?.customTitle ?? null,
+      customWallet: row?.customWallet ?? null,
       updatedAt: row?.reflectionUpdatedAt?.toISOString() ?? null,
     };
   } catch {
@@ -173,17 +140,13 @@ async function resolveDirectionId(directionSlug: ReflectionCategorySlug) {
     .select({ id: taxonomyTerms.id })
     .from(taxonomyTerms)
     .innerJoin(taxonomyDomains, eq(taxonomyTerms.domainId, taxonomyDomains.id))
-    .where(and(eq(taxonomyDomains.slug, "reflection_direction"), eq(taxonomyTerms.slug, directionSlug)))
-    .limit(1);
-  return row?.id ?? null;
-}
-
-async function resolveProjectId(projectSlug: string) {
-  const db = await getDb();
-  const [row] = await db
-    .select({ id: impactProjects.id })
-    .from(impactProjects)
-    .where(and(eq(impactProjects.slug, projectSlug), eq(impactProjects.isActive, 1)))
+    .where(
+      and(
+        eq(taxonomyDomains.slug, "reflection_direction"),
+        eq(taxonomyTerms.slug, directionSlug),
+        eq(taxonomyTerms.isActive, 1),
+      ),
+    )
     .limit(1);
   return row?.id ?? null;
 }
@@ -192,14 +155,34 @@ export async function saveUserReflectionPreference(input: {
   userId: number;
   walletAddress: string;
   directionSlug: ReflectionCategorySlug;
-  projectSlug?: string;
+  customTitle?: string;
+  customWallet?: string;
 }) {
   const balance = await fetchGaineBalance(input.walletAddress);
   if (balance < GAINE_REFLECTION_MIN_BALANCE) {
     throw new Error(`Hold at least ${GAINE_REFLECTION_MIN_BALANCE} GAINE to direct rewards.`);
   }
 
-  if (remoteDb()) return callDataApi("reflection.save", { ...input, balance });
+  const customTitle = normalizeCustomTitle(input.customTitle);
+  const customWallet = normalizeCustomWallet(input.customWallet);
+
+  if (input.directionSlug === UNREGISTERED_PROJECT_SLUG) {
+    if (!customTitle || customTitle.length > 50) {
+      throw new Error("Enter a project title (1–50 characters).");
+    }
+    if (customWallet.length < 32 || customWallet.length > 44) {
+      throw new Error("Enter a valid Solana wallet address.");
+    }
+  }
+
+  if (remoteDb()) {
+    return callDataApi("reflection.save", {
+      ...input,
+      customTitle: input.directionSlug === UNREGISTERED_PROJECT_SLUG ? customTitle : null,
+      customWallet: input.directionSlug === UNREGISTERED_PROJECT_SLUG ? customWallet : null,
+      balance,
+    });
+  }
 
   const db = await getDb();
   const [wallet] = await db
@@ -217,23 +200,15 @@ export async function saveUserReflectionPreference(input: {
     throw new Error("Unknown reflection category.");
   }
 
-  let projectId: number | null = null;
-  if (input.directionSlug === "specific_project") {
-    if (!input.projectSlug) {
-      throw new Error("Choose a project to direct rewards.");
-    }
-    projectId = await resolveProjectId(input.projectSlug);
-    if (!projectId) {
-      throw new Error("Unknown impact project.");
-    }
-  }
-
+  const isUnregistered = input.directionSlug === UNREGISTERED_PROJECT_SLUG;
   const now = new Date();
   await db
     .update(userAccounts)
     .set({
       reflectionDirectionId: directionId,
-      reflectionProjectId: projectId,
+      reflectionProjectId: null,
+      reflectionCustomTitle: isUnregistered ? customTitle : null,
+      reflectionCustomWallet: isUnregistered ? customWallet : null,
       reflectionUpdatedAt: now,
     })
     .where(eq(userAccounts.id, input.userId));
@@ -246,7 +221,8 @@ export async function saveUserReflectionPreference(input: {
     gaineBalanceSnapshot: balance,
     metadata: {
       directionSlug: input.directionSlug,
-      projectSlug: input.projectSlug ?? null,
+      customTitle: isUnregistered ? customTitle : null,
+      customWallet: isUnregistered ? customWallet : null,
     },
   });
 
@@ -255,20 +231,25 @@ export async function saveUserReflectionPreference(input: {
 
 function destinationWalletForPreference(
   categories: ReflectionCategory[],
-  projects: ImpactProject[],
   directionSlug: ReflectionCategorySlug | null,
-  projectSlug: string | null,
+  customTitle: string | null,
+  customWallet: string | null,
 ) {
   if (!directionSlug) {
-    return { destinationType: "balanced" as const, destinationSlug: null, destinationWallet: null };
+    return {
+      destinationType: "balanced" as const,
+      destinationSlug: null,
+      destinationWallet: null,
+      customTitle: null,
+    };
   }
 
-  if (directionSlug === "specific_project") {
-    const project = projects.find((item) => item.slug === projectSlug);
+  if (directionSlug === UNREGISTERED_PROJECT_SLUG) {
     return {
-      destinationType: "project" as const,
-      destinationSlug: project?.slug ?? projectSlug,
-      destinationWallet: project?.solanaWallet ?? null,
+      destinationType: "unregistered" as const,
+      destinationSlug: UNREGISTERED_PROJECT_SLUG,
+      destinationWallet: customWallet && customWallet.length >= 32 ? customWallet : null,
+      customTitle,
     };
   }
 
@@ -277,6 +258,7 @@ function destinationWalletForPreference(
     destinationType: "category" as const,
     destinationSlug: category?.slug ?? directionSlug,
     destinationWallet: category?.solanaWallet ?? null,
+    customTitle: null,
   };
 }
 
@@ -290,7 +272,8 @@ export async function listReflectionRouting() {
           userAccountId: number;
           holderWallet: string;
           directionSlug: string | null;
-          projectSlug: string | null;
+          customTitle: string | null;
+          customWallet: string | null;
           lastGaineBalance: string | null;
           reflectionUpdatedAt: string | null;
         }>
@@ -299,9 +282,9 @@ export async function listReflectionRouting() {
         const directionSlug = (row.directionSlug as ReflectionCategorySlug | null) ?? null;
         const destination = destinationWalletForPreference(
           categories,
-          projects,
           directionSlug,
-          row.projectSlug,
+          row.customTitle,
+          row.customWallet,
         );
         return {
           userAccountId: row.userAccountId,
@@ -320,14 +303,14 @@ export async function listReflectionRouting() {
         userAccountId: userAccounts.id,
         holderWallet: walletProfiles.address,
         directionSlug: taxonomyTerms.slug,
-        projectSlug: impactProjects.slug,
+        customTitle: userAccounts.reflectionCustomTitle,
+        customWallet: userAccounts.reflectionCustomWallet,
         lastGaineBalance: walletProfiles.lastGaineBalance,
         reflectionUpdatedAt: userAccounts.reflectionUpdatedAt,
       })
       .from(walletProfiles)
       .innerJoin(userAccounts, eq(walletProfiles.userAccountId, userAccounts.id))
       .leftJoin(taxonomyTerms, eq(userAccounts.reflectionDirectionId, taxonomyTerms.id))
-      .leftJoin(impactProjects, eq(userAccounts.reflectionProjectId, impactProjects.id))
       .where(sql`CAST(${walletProfiles.lastGaineBalance} AS DECIMAL(24,8)) >= ${GAINE_REFLECTION_MIN_BALANCE}`)
       .orderBy(desc(userAccounts.reflectionUpdatedAt));
 
@@ -335,9 +318,9 @@ export async function listReflectionRouting() {
       const directionSlug = (row.directionSlug as ReflectionCategorySlug | null) ?? null;
       const destination = destinationWalletForPreference(
         categories,
-        projects,
         directionSlug,
-        row.projectSlug,
+        row.customTitle,
+        row.customWallet,
       );
 
       return {
@@ -368,14 +351,13 @@ export async function listReflectionPreferencesForAdmin(limit = 200) {
         lastGaineBalance: walletProfiles.lastGaineBalance,
         directionLabel: taxonomyTerms.label,
         directionSlug: taxonomyTerms.slug,
-        projectName: impactProjects.name,
-        projectSlug: impactProjects.slug,
+        customTitle: userAccounts.reflectionCustomTitle,
+        customWallet: userAccounts.reflectionCustomWallet,
         reflectionUpdatedAt: userAccounts.reflectionUpdatedAt,
       })
       .from(userAccounts)
       .leftJoin(walletProfiles, eq(userAccounts.primaryWalletId, walletProfiles.id))
       .leftJoin(taxonomyTerms, eq(userAccounts.reflectionDirectionId, taxonomyTerms.id))
-      .leftJoin(impactProjects, eq(userAccounts.reflectionProjectId, impactProjects.id))
       .where(sql`${userAccounts.reflectionDirectionId} IS NOT NULL`)
       .orderBy(desc(userAccounts.reflectionUpdatedAt))
       .limit(limit);

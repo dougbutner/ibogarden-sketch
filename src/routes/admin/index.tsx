@@ -220,7 +220,7 @@ function AdminDashboard() {
                 <th className="p-4">Email</th>
                 <th className="p-4">GAINE</th>
                 <th className="p-4">Direction</th>
-                <th className="p-4">Project</th>
+                <th className="p-4">Custom / title</th>
                 <th className="p-4">Saved</th>
               </tr>
             </thead>
@@ -231,7 +231,18 @@ function AdminDashboard() {
                   <td className="p-4">{row.email ?? "—"}</td>
                   <td className="p-4">{row.lastGaineBalance ?? "—"}</td>
                   <td className="p-4">{row.directionLabel ?? row.directionSlug ?? "—"}</td>
-                  <td className="p-4">{row.projectName ?? "—"}</td>
+                  <td className="p-4">
+                    {row.customTitle || row.customWallet ? (
+                      <div className="space-y-1">
+                        <div>{row.customTitle ?? "—"}</div>
+                        {row.customWallet ? (
+                          <div className="font-mono text-xs text-forest/60">{row.customWallet}</div>
+                        ) : null}
+                      </div>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
                   <td className="p-4">
                     {row.reflectionUpdatedAt ? new Date(row.reflectionUpdatedAt).toLocaleString() : "—"}
                   </td>

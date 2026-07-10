@@ -58,6 +58,9 @@ CREATE TABLE IF NOT EXISTS user_accounts (
   holder_status           ENUM('none','active','lapsed') NOT NULL DEFAULT 'none',
   reflection_direction_id BIGINT UNSIGNED NULL,
   reflection_project_id   BIGINT UNSIGNED NULL,
+  -- Custom beneficiary when direction is unregistered_project (100+ GAINE only; enforced in app)
+  reflection_custom_title  VARCHAR(50)     NULL,
+  reflection_custom_wallet VARCHAR(44)     NULL,
   reflection_updated_at   DATETIME        NULL,
   country_code            CHAR(2)         NULL,
   timezone                VARCHAR(64)     NULL,

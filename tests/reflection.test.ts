@@ -4,9 +4,8 @@ import { and, eq } from "drizzle-orm";
 import { GAINE_REFLECTION_MIN_BALANCE } from "@/data/reflection-destinations";
 import { fetchGaineBalance } from "@/lib/solana.server";
 import { getDb } from "@/server/db/client";
-import { impactProjects } from "@/server/db/schema/reflection";
 import { taxonomyDomains, taxonomyTerms } from "@/server/db/schema/taxonomy";
-import { userAccounts, userEvents, walletProfiles } from "@/server/db/schema/users";
+import { userAccounts, userEvents } from "@/server/db/schema/users";
 import { verifyHolderLogin } from "@/server/services/holder.service";
 import {
   listReflectionRouting,
@@ -14,13 +13,13 @@ import {
 } from "@/server/services/reflection.service";
 import { cleanupReflectionTestHolders } from "./fixtures/cleanup";
 import {
-  DEVELOPER_FUND_WALLET,
-  MICRODOSE_RESEARCH_WALLET,
   REFLECTION_TEST_HOLDERS,
+  TECH_INNOVATION_WALLET,
   TEST_REFLECTION_BALANCED,
   TEST_REFLECTION_HOLDER,
   TEST_REFLECTION_LOW,
   TEST_REFLECTION_OTHER,
+  TEST_UNREGISTERED,
 } from "./fixtures/test-reflection";
 
 const balanceByAddress: Record<string, number> = {};
@@ -60,36 +59,65 @@ describe("reflection preference save", () => {
     const result = await saveUserReflectionPreference({
       userId,
       walletAddress: TEST_REFLECTION_HOLDER.address,
-      directionSlug: "developer_fund",
+      directionSlug: "tech_innovation",
     });
 
-    expect(result.directionSlug).toBe("developer_fund");
-    expect(result.projectSlug).toBeNull();
+    expect(result.directionSlug).toBe("tech_innovation");
+    expect(result.customTitle).toBeNull();
+    expect(result.customWallet).toBeNull();
 
     const db = await getDb();
     const [user] = await db.select().from(userAccounts).where(eq(userAccounts.id, userId)).limit(1);
     expect(user?.reflectionDirectionId).not.toBeNull();
-    expect(user?.reflectionProjectId).toBeNull();
+    expect(user?.reflectionCustomTitle).toBeNull();
+    expect(user?.reflectionCustomWallet).toBeNull();
     expect(user?.reflectionUpdatedAt).not.toBeNull();
   });
 
-  it("saves a specific project preference", async () => {
+  it("saves an unregistered project title and wallet", async () => {
     const { userId } = await seedHolder(TEST_REFLECTION_HOLDER);
 
     const result = await saveUserReflectionPreference({
       userId,
       walletAddress: TEST_REFLECTION_HOLDER.address,
-      directionSlug: "specific_project",
-      projectSlug: "microdose-research",
+      directionSlug: "unregistered_project",
+      customTitle: TEST_UNREGISTERED.title,
+      customWallet: TEST_UNREGISTERED.wallet,
     });
 
-    expect(result.directionSlug).toBe("specific_project");
-    expect(result.projectSlug).toBe("microdose-research");
+    expect(result.directionSlug).toBe("unregistered_project");
+    expect(result.customTitle).toBe(TEST_UNREGISTERED.title);
+    expect(result.customWallet).toBe(TEST_UNREGISTERED.wallet);
 
     const db = await getDb();
     const [user] = await db.select().from(userAccounts).where(eq(userAccounts.id, userId)).limit(1);
-    expect(user?.reflectionDirectionId).not.toBeNull();
-    expect(user?.reflectionProjectId).not.toBeNull();
+    expect(user?.reflectionCustomTitle).toBe(TEST_UNREGISTERED.title);
+    expect(user?.reflectionCustomWallet).toBe(TEST_UNREGISTERED.wallet);
+    expect(user?.reflectionProjectId).toBeNull();
+  });
+
+  it("rejects unregistered save without title or wallet", async () => {
+    const { userId } = await seedHolder(TEST_REFLECTION_HOLDER);
+
+    await expect(
+      saveUserReflectionPreference({
+        userId,
+        walletAddress: TEST_REFLECTION_HOLDER.address,
+        directionSlug: "unregistered_project",
+        customTitle: "",
+        customWallet: TEST_UNREGISTERED.wallet,
+      }),
+    ).rejects.toThrow("Enter a project title");
+
+    await expect(
+      saveUserReflectionPreference({
+        userId,
+        walletAddress: TEST_REFLECTION_HOLDER.address,
+        directionSlug: "unregistered_project",
+        customTitle: TEST_UNREGISTERED.title,
+        customWallet: "short",
+      }),
+    ).rejects.toThrow("Enter a valid Solana wallet address");
   });
 
   it(`rejects save when balance is below ${GAINE_REFLECTION_MIN_BALANCE} GAINE`, async () => {
@@ -99,7 +127,7 @@ describe("reflection preference save", () => {
       saveUserReflectionPreference({
         userId,
         walletAddress: TEST_REFLECTION_LOW.address,
-        directionSlug: "developer_fund",
+        directionSlug: "tech_innovation",
       }),
     ).rejects.toThrow(`Hold at least ${GAINE_REFLECTION_MIN_BALANCE} GAINE to direct rewards.`);
   });
@@ -112,7 +140,7 @@ describe("reflection preference save", () => {
       saveUserReflectionPreference({
         userId: other.userId,
         walletAddress: TEST_REFLECTION_HOLDER.address,
-        directionSlug: "developer_fund",
+        directionSlug: "tech_innovation",
       }),
     ).rejects.toThrow("Connected wallet does not match your account.");
 
@@ -127,7 +155,7 @@ describe("reflection preference save", () => {
     await saveUserReflectionPreference({
       userId,
       walletAddress: TEST_REFLECTION_HOLDER.address,
-      directionSlug: "developer_fund",
+      directionSlug: "research_fund",
     });
 
     const db = await getDb();
@@ -156,7 +184,7 @@ describe("reflection routing", () => {
     await saveUserReflectionPreference({
       userId,
       walletAddress: TEST_REFLECTION_HOLDER.address,
-      directionSlug: "developer_fund",
+      directionSlug: "tech_innovation",
     });
 
     const { routing } = await listReflectionRouting();
@@ -165,17 +193,18 @@ describe("reflection routing", () => {
     expect(row).toBeDefined();
     expect(row?.userAccountId).toBe(userId);
     expect(row?.destinationType).toBe("category");
-    expect(row?.destinationSlug).toBe("developer_fund");
-    expect(row?.destinationWallet).toBe(DEVELOPER_FUND_WALLET);
+    expect(row?.destinationSlug).toBe("tech_innovation");
+    expect(row?.destinationWallet).toBe(TECH_INNOVATION_WALLET);
   });
 
-  it("resolves project destination wallet for specific_project", async () => {
+  it("resolves unregistered destination wallet and title", async () => {
     const { userId } = await seedHolder(TEST_REFLECTION_HOLDER);
     await saveUserReflectionPreference({
       userId,
       walletAddress: TEST_REFLECTION_HOLDER.address,
-      directionSlug: "specific_project",
-      projectSlug: "microdose-research",
+      directionSlug: "unregistered_project",
+      customTitle: TEST_UNREGISTERED.title,
+      customWallet: TEST_UNREGISTERED.wallet,
     });
 
     const { routing } = await listReflectionRouting();
@@ -183,9 +212,10 @@ describe("reflection routing", () => {
 
     expect(row).toBeDefined();
     expect(row?.userAccountId).toBe(userId);
-    expect(row?.destinationType).toBe("project");
-    expect(row?.destinationSlug).toBe("microdose-research");
-    expect(row?.destinationWallet).toBe(MICRODOSE_RESEARCH_WALLET);
+    expect(row?.destinationType).toBe("unregistered");
+    expect(row?.destinationSlug).toBe("unregistered_project");
+    expect(row?.destinationWallet).toBe(TEST_UNREGISTERED.wallet);
+    expect(row?.customTitle).toBe(TEST_UNREGISTERED.title);
   });
 
   it("returns balanced routing when holder has no saved preference", async () => {
@@ -210,30 +240,23 @@ describe("reflection routing", () => {
     expect(row).toBeUndefined();
   });
 
-  it("includes categories and projects reference tables", async () => {
-    const { categories, projects } = await listReflectionRouting();
+  it("includes active reflection categories", async () => {
+    const { categories } = await listReflectionRouting();
 
     expect(categories.length).toBeGreaterThan(0);
-    expect(projects.length).toBeGreaterThan(0);
 
     const db = await getDb();
     const [category] = await db
       .select({ slug: taxonomyTerms.slug })
       .from(taxonomyTerms)
       .innerJoin(taxonomyDomains, eq(taxonomyTerms.domainId, taxonomyDomains.id))
-      .where(and(eq(taxonomyDomains.slug, "reflection_direction"), eq(taxonomyTerms.slug, "developer_fund")))
-      .limit(1);
-    const [project] = await db
-      .select({ slug: impactProjects.slug })
-      .from(impactProjects)
-      .where(eq(impactProjects.slug, "microdose-research"))
+      .where(and(eq(taxonomyDomains.slug, "reflection_direction"), eq(taxonomyTerms.slug, "tech_innovation")))
       .limit(1);
 
     if (category) {
-      expect(categories.some((item) => item.slug === "developer_fund")).toBe(true);
-    }
-    if (project) {
-      expect(projects.some((item) => item.slug === "microdose-research")).toBe(true);
+      expect(categories.some((item) => item.slug === "tech_innovation")).toBe(true);
+      expect(categories.some((item) => item.slug === "unregistered_project")).toBe(true);
+      expect(categories.some((item) => item.slug === "microdose_research")).toBe(false);
     }
   });
 });

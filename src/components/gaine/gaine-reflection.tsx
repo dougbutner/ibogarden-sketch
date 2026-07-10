@@ -9,37 +9,31 @@ import {
 } from "@/data/gaine";
 import { useWallet } from "@/contexts/wallet-context";
 import {
-  getReflectionOptions,
   getReflectionPreference,
   saveReflectionPreference,
 } from "@/lib/api/reflection.functions";
 import { getUserSession } from "@/lib/api/auth.functions";
 import type { ReflectionCategorySlug } from "@/data/reflection-destinations";
-import { IMPACT_PROJECT_FALLBACK } from "@/data/reflection-destinations";
-
-type ImpactProjectOption = {
-  slug: string;
-  name: string;
-  description: string;
-};
+import { UNREGISTERED_PROJECT_SLUG } from "@/data/reflection-destinations";
 
 export function GaineReflection() {
   const { address, connected, connect, openPanel, gaineBalance, balanceLoading } = useWallet();
   const [directionSlug, setDirectionSlug] = useState<ReflectionCategorySlug>(
     GAINE_REFLECTION_DIRECTIONS[0].slug,
   );
-  const [projectSlug, setProjectSlug] = useState<string | null>(null);
-  const [projects, setProjects] = useState<ImpactProjectOption[]>([]);
+  const [customTitle, setCustomTitle] = useState("");
+  const [customWallet, setCustomWallet] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [savedDirectionSlug, setSavedDirectionSlug] = useState<ReflectionCategorySlug | null>(null);
-  const [savedProjectSlug, setSavedProjectSlug] = useState<string | null>(null);
+  const [savedCustomTitle, setSavedCustomTitle] = useState<string | null>(null);
+  const [savedCustomWallet, setSavedCustomWallet] = useState<string | null>(null);
   const [loadingPreference, setLoadingPreference] = useState(true);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const eligibleBalance = (gaineBalance ?? 0) >= GAINE_REFLECTION_MIN_BALANCE;
-  const showProjects = directionSlug === "specific_project";
+  const showUnregistered = directionSlug === UNREGISTERED_PROJECT_SLUG;
 
   useEffect(() => {
     let cancelled = false;
@@ -47,17 +41,6 @@ export function GaineReflection() {
     async function load() {
       setLoadingPreference(true);
       setError(null);
-
-      try {
-        const options = await getReflectionOptions();
-        if (!cancelled) {
-          setProjects(options.projects.length > 0 ? options.projects : IMPACT_PROJECT_FALLBACK);
-        }
-      } catch {
-        if (!cancelled) {
-          setProjects(IMPACT_PROJECT_FALLBACK);
-        }
-      }
 
       try {
         const session = await getUserSession();
@@ -74,16 +57,17 @@ export function GaineReflection() {
         const preference = await getReflectionPreference();
         if (!cancelled && preference.authenticated && preference.directionSlug) {
           setDirectionSlug(preference.directionSlug);
-          setProjectSlug(preference.projectSlug);
+          setCustomTitle(preference.customTitle ?? "");
+          setCustomWallet(preference.customWallet ?? "");
           setSavedDirectionSlug(preference.directionSlug);
-          setSavedProjectSlug(preference.projectSlug);
+          setSavedCustomTitle(preference.customTitle);
+          setSavedCustomWallet(preference.customWallet);
         }
       } catch {
-        /* preference unavailable before migration or without session */
+        /* preference unavailable without session */
       }
 
       if (!cancelled) {
-        setProjectSlug((current) => current ?? IMPACT_PROJECT_FALLBACK[0]?.slug ?? null);
         setLoadingPreference(false);
       }
     }
@@ -97,11 +81,11 @@ export function GaineReflection() {
   const selectionUnchanged = useMemo(() => {
     if (!savedDirectionSlug) return false;
     if (savedDirectionSlug !== directionSlug) return false;
-    if (directionSlug === "specific_project") {
-      return savedProjectSlug === projectSlug;
+    if (directionSlug === UNREGISTERED_PROJECT_SLUG) {
+      return savedCustomTitle === customTitle.trim() && savedCustomWallet === customWallet.trim();
     }
     return true;
-  }, [savedDirectionSlug, savedProjectSlug, directionSlug, projectSlug]);
+  }, [savedDirectionSlug, savedCustomTitle, savedCustomWallet, directionSlug, customTitle, customWallet]);
 
   async function handlePrimaryAction() {
     setError(null);
@@ -123,9 +107,17 @@ export function GaineReflection() {
       return;
     }
 
-    if (directionSlug === "specific_project" && !projectSlug) {
-      setError("Choose a project to direct rewards.");
-      return;
+    if (directionSlug === UNREGISTERED_PROJECT_SLUG) {
+      const title = customTitle.trim();
+      const wallet = customWallet.trim();
+      if (!title || title.length > 50) {
+        setError("Enter a project title (1–50 characters).");
+        return;
+      }
+      if (wallet.length < 32 || wallet.length > 44) {
+        setError("Enter a valid Solana wallet address.");
+        return;
+      }
     }
 
     setSaving(true);
@@ -134,12 +126,18 @@ export function GaineReflection() {
         data: {
           walletAddress: address,
           directionSlug,
-          projectSlug: directionSlug === "specific_project" ? (projectSlug ?? undefined) : undefined,
+          customTitle:
+            directionSlug === UNREGISTERED_PROJECT_SLUG ? customTitle.trim() : undefined,
+          customWallet:
+            directionSlug === UNREGISTERED_PROJECT_SLUG ? customWallet.trim() : undefined,
         },
       });
 
-      setSavedDirectionSlug(saved.directionSlug);
-      setSavedProjectSlug(saved.projectSlug);
+      setSavedDirectionSlug(saved.directionSlug as ReflectionCategorySlug | null);
+      setSavedCustomTitle(saved.customTitle);
+      setSavedCustomWallet(saved.customWallet);
+      setCustomTitle(saved.customTitle ?? "");
+      setCustomWallet(saved.customWallet ?? "");
       setStatus("Your reward direction is saved.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not save your direction.");
@@ -211,46 +209,46 @@ export function GaineReflection() {
         })}
       </div>
 
-      {showProjects ? (
-        <div className="mt-8">
-          <h3 className="gaine-display text-xl mb-4">Choose a project</h3>
-          <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
-            {projects.map((project) => {
-              const selected = projectSlug === project.slug;
-              return (
-                <button
-                  key={project.slug}
-                  type="button"
-                  onClick={() => setProjectSlug(project.slug)}
-                  className="gaine-surface-card text-left p-5 transition-all cursor-pointer"
-                  style={
-                    selected
-                      ? {
-                          borderColor: "var(--gaine-accent)",
-                          boxShadow:
-                            "0 0 0 1px var(--gaine-accent), 0 0 20px color-mix(in srgb, var(--gaine-accent) 20%, transparent)",
-                        }
-                      : undefined
-                  }
-                >
-                  <div className="flex justify-between items-start gap-3 mb-2">
-                    <span className="font-semibold text-base">{project.name}</span>
-                    <div
-                      className="size-4 rounded-full border-2 shrink-0 mt-1"
-                      style={
-                        selected
-                          ? { borderColor: "var(--gaine-accent)", background: "var(--gaine-accent)" }
-                          : { borderColor: "var(--gaine-border)" }
-                      }
-                    />
-                  </div>
-                  <p className="text-sm leading-relaxed" style={{ color: "var(--gaine-muted)" }}>
-                    {project.description}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
+      {showUnregistered ? (
+        <div className="mt-8 gaine-surface-card p-5 md:p-6 max-w-xl mx-auto space-y-4">
+          <h3 className="gaine-display text-xl">Unregistered project details</h3>
+          <p className="text-sm" style={{ color: "var(--gaine-muted)" }}>
+            Available when you hold {GAINE_REFLECTION_MIN_BALANCE}+ GAINE. USDC routes to the Solana address you
+            enter.
+          </p>
+          <label className="block space-y-1.5">
+            <span className="text-xs uppercase tracking-widest" style={{ color: "var(--gaine-muted)" }}>
+              Project title
+            </span>
+            <input
+              type="text"
+              value={customTitle}
+              maxLength={50}
+              onChange={(e) => setCustomTitle(e.target.value)}
+              placeholder="Short name (max 50 characters)"
+              className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent"
+              style={{ borderColor: "var(--gaine-border)", color: "inherit" }}
+            />
+            <span className="text-xs" style={{ color: "var(--gaine-muted)" }}>
+              {customTitle.trim().length}/50
+            </span>
+          </label>
+          <label className="block space-y-1.5">
+            <span className="text-xs uppercase tracking-widest" style={{ color: "var(--gaine-muted)" }}>
+              Solana recipient address
+            </span>
+            <input
+              type="text"
+              value={customWallet}
+              maxLength={44}
+              onChange={(e) => setCustomWallet(e.target.value)}
+              placeholder="Solana wallet address"
+              className="w-full rounded-lg border px-3 py-2 text-sm font-mono bg-transparent"
+              style={{ borderColor: "var(--gaine-border)", color: "inherit" }}
+              spellCheck={false}
+              autoComplete="off"
+            />
+          </label>
         </div>
       ) : null}
 

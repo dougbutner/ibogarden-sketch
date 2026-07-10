@@ -12,6 +12,8 @@ export const userAccounts = mysqlTable(
     holderStatus: mysqlEnum("holder_status", ["none", "active", "lapsed"]).notNull().default("none"),
     reflectionDirectionId: bigint("reflection_direction_id", { mode: "number", unsigned: true }),
     reflectionProjectId: bigint("reflection_project_id", { mode: "number", unsigned: true }),
+    reflectionCustomTitle: varchar("reflection_custom_title", { length: 50 }),
+    reflectionCustomWallet: varchar("reflection_custom_wallet", { length: 44 }),
     reflectionUpdatedAt: datetime("reflection_updated_at"),
     countryCode: char("country_code", { length: 2 }),
     timezone: varchar("timezone", { length: 64 }),
