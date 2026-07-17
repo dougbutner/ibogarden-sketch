@@ -8,7 +8,7 @@ const STORAGE_KEY = "ibo-garden-locale";
 type LocaleContextValue = {
   locale: Locale;
   setLocale: (locale: Locale) => void;
-  t: (key: string) => string;
+  t: (key: string, vars?: Record<string, string | number>) => string;
 };
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
@@ -35,7 +35,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     () => ({
       locale,
       setLocale,
-      t: (key: string) => t(locale, key),
+      t: (key: string, vars?: Record<string, string | number>) => t(locale, key, vars),
     }),
     [locale],
   );

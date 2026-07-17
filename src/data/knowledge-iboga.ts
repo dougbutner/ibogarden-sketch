@@ -1,3 +1,6 @@
+import type { Locale } from "@/data/i18n";
+import { KNOWLEDGE_FR_OVERLAY } from "@/data/knowledge-iboga.fr";
+
 export type KnowledgeLink = {
   title: string;
   href: string;
@@ -1097,3 +1100,82 @@ export const TRUNK_COLORS: Record<string, { fill: string; stroke: string; leaf: 
 };
 
 export const GAINE_ICON = "/gaine-token.png";
+
+export function getTopicRoot(locale: Locale = "en") {
+  if (locale === "fr" && KNOWLEDGE_FR_OVERLAY.topicRoot) {
+    return { ...TOPIC_ROOT, ...KNOWLEDGE_FR_OVERLAY.topicRoot };
+  }
+  return TOPIC_ROOT;
+}
+
+export function getTopicMap(locale: Locale = "en"): TopicTrunk[] {
+  if (locale !== "fr") return TOPIC_MAP;
+  return TOPIC_MAP.map((trunk) => {
+    const frTrunk = KNOWLEDGE_FR_OVERLAY.topicMap?.[trunk.id];
+    if (!frTrunk) return trunk;
+    return {
+      ...trunk,
+      label: frTrunk.label ?? trunk.label,
+      tagline: frTrunk.tagline ?? trunk.tagline,
+      description: frTrunk.description ?? trunk.description,
+      leaves: trunk.leaves.map((leaf) => {
+        const frLeaf = frTrunk.leaves?.[leaf.id];
+        if (!frLeaf) return leaf;
+        return {
+          ...leaf,
+          label: frLeaf.label ?? leaf.label,
+          description: frLeaf.description ?? leaf.description,
+        };
+      }),
+    };
+  });
+}
+
+export function getVideoPlaylists(locale: Locale = "en"): VideoPlaylist[] {
+  if (locale !== "fr") return VIDEO_PLAYLISTS;
+  return VIDEO_PLAYLISTS.map((playlist) => {
+    const fr = KNOWLEDGE_FR_OVERLAY.playlists?.[playlist.id];
+    if (!fr) return playlist;
+    return {
+      ...playlist,
+      title: fr.title ?? playlist.title,
+      featuredPlaylist: playlist.featuredPlaylist
+        ? {
+            ...playlist.featuredPlaylist,
+            title: fr.featuredTitle ?? playlist.featuredPlaylist.title,
+          }
+        : undefined,
+      videos: playlist.videos.map((video) => {
+        const frVideo = fr.videos?.[video.href];
+        if (!frVideo) return video;
+        return {
+          ...video,
+          title: frVideo.title ?? video.title,
+          description: frVideo.description ?? video.description,
+        };
+      }),
+    };
+  });
+}
+
+export function getArticleCategories(locale: Locale = "en"): ArticleCategory[] {
+  if (locale !== "fr") return ARTICLE_CATEGORIES;
+  return ARTICLE_CATEGORIES.map((category) => {
+    const fr = KNOWLEDGE_FR_OVERLAY.categories?.[category.id];
+    if (!fr) return category;
+    return {
+      ...category,
+      title: fr.title ?? category.title,
+      header: fr.header ?? category.header,
+      articles: category.articles.map((article) => {
+        const frArticle = fr.articles?.[article.href];
+        if (!frArticle) return article;
+        return {
+          ...article,
+          title: frArticle.title ?? article.title,
+          description: frArticle.description ?? article.description,
+        };
+      }),
+    };
+  });
+}

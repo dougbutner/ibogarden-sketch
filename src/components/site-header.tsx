@@ -42,7 +42,7 @@ export function SiteHeader() {
           <div
             className="flex items-center rounded-full border border-forest/15 bg-bone/80 p-0.5"
             role="group"
-            aria-label="Language"
+            aria-label={t("common.language")}
           >
             {LOCALES.map(({ code, label }) => (
               <button
@@ -62,11 +62,11 @@ export function SiteHeader() {
           </div>
           <WalletButton />
           <button
-            aria-label="Open menu"
+            aria-label={open ? t("common.closeMenu") : t("common.openMenu")}
             onClick={() => setOpen((o) => !o)}
             className="lg:hidden text-xs font-semibold uppercase tracking-widest text-forest"
           >
-            {open ? "Close" : "Menu"}
+            {open ? t("common.close") : t("common.menu")}
           </button>
         </div>
       </div>

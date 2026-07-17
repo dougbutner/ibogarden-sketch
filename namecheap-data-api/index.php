@@ -624,8 +624,8 @@ try {
 
     case "reflection.routing":
       $result = $mysqli->query(
-        "SELECT ua.id AS user_account_id, wp.address AS holder_wallet, tt.slug AS direction_slug,
-                ua.reflection_custom_title, ua.reflection_custom_wallet,
+        "SELECT ua.id AS user_account_id, ua.reflection_direction_id, wp.address AS holder_wallet,
+                tt.slug AS direction_slug, ua.reflection_custom_title, ua.reflection_custom_wallet,
                 wp.last_gaine_balance, ua.reflection_updated_at
          FROM wallet_profiles wp
          INNER JOIN user_accounts ua ON wp.user_account_id = ua.id
@@ -636,6 +636,7 @@ try {
       $rows = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
       $data = array_map(static fn(array $r): array => [
         "userAccountId" => (int)$r["user_account_id"],
+        "reflectionDirectionId" => $r["reflection_direction_id"] !== null ? (int)$r["reflection_direction_id"] : null,
         "holderWallet" => $r["holder_wallet"],
         "directionSlug" => $r["direction_slug"],
         "customTitle" => $r["reflection_custom_title"],
@@ -645,6 +646,119 @@ try {
       ], $rows);
       respond(200, ["ok" => true, "data" => $data]);
 
+    case "reflection.recordDisbursement":
+      $userAccountId = (int)($body["userAccountId"] ?? 0);
+      $reflectionDirectionId = (int)($body["reflectionDirectionId"] ?? 0);
+      $holderWallet = trim((string)($body["holderWallet"] ?? ""));
+      $destinationWallet = trim((string)($body["destinationWallet"] ?? ""));
+      $amountGaine = trim((string)($body["amountGaine"] ?? ""));
+      $solanaTxSignature = trim((string)($body["solanaTxSignature"] ?? ""));
+      $customTitleRaw = $body["customTitle"] ?? null;
+      $customTitle = $customTitleRaw === null || $customTitleRaw === ""
+        ? null
+        : mb_substr(trim((string)$customTitleRaw), 0, 50);
+
+      if ($userAccountId <= 0) respond(422, ["ok" => false, "error" => "Unknown userAccountId."]);
+      if ($reflectionDirectionId <= 0) respond(422, ["ok" => false, "error" => "Unknown reflectionDirectionId."]);
+      if (strlen($holderWallet) < 32 || strlen($holderWallet) > 44) {
+        respond(422, ["ok" => false, "error" => "Invalid holderWallet."]);
+      }
+      if (strlen($destinationWallet) < 32 || strlen($destinationWallet) > 44) {
+        respond(422, ["ok" => false, "error" => "Invalid destinationWallet."]);
+      }
+      if ($amountGaine === "" || !is_numeric($amountGaine) || (float)$amountGaine <= 0) {
+        respond(422, ["ok" => false, "error" => "amountGaine must be a positive number."]);
+      }
+      if (strlen($solanaTxSignature) < 32 || strlen($solanaTxSignature) > 128) {
+        respond(422, ["ok" => false, "error" => "Invalid solanaTxSignature."]);
+      }
+
+      $stmt = $mysqli->prepare("SELECT id FROM user_accounts WHERE id = ? LIMIT 1");
+      $stmt->bind_param("i", $userAccountId);
+      $stmt->execute();
+      if (!$stmt->get_result()->fetch_assoc()) {
+        respond(422, ["ok" => false, "error" => "Unknown userAccountId."]);
+      }
+
+      $stmt = $mysqli->prepare(
+        "SELECT tt.id FROM taxonomy_terms tt
+         INNER JOIN taxonomy_domains td ON tt.domain_id = td.id
+         WHERE td.slug = 'reflection_direction' AND tt.id = ? LIMIT 1"
+      );
+      $stmt->bind_param("i", $reflectionDirectionId);
+      $stmt->execute();
+      if (!$stmt->get_result()->fetch_assoc()) {
+        respond(422, ["ok" => false, "error" => "Unknown reflectionDirectionId."]);
+      }
+
+      $stmt = $mysqli->prepare(
+        "SELECT id FROM reflection_disbursements WHERE solana_tx_signature = ? LIMIT 1"
+      );
+      $stmt->bind_param("s", $solanaTxSignature);
+      $stmt->execute();
+      if ($stmt->get_result()->fetch_assoc()) {
+        respond(409, ["ok" => false, "error" => "Duplicate solanaTxSignature."]);
+      }
+
+      $stmt = $mysqli->prepare(
+        "INSERT INTO reflection_disbursements
+         (user_account_id, reflection_direction_id, holder_wallet, destination_wallet,
+          custom_title, amount_gaine, solana_tx_signature)
+         VALUES (?, ?, ?, ?, ?, ?, ?)"
+      );
+      $stmt->bind_param(
+        "iisssss",
+        $userAccountId,
+        $reflectionDirectionId,
+        $holderWallet,
+        $destinationWallet,
+        $customTitle,
+        $amountGaine,
+        $solanaTxSignature
+      );
+      if (!$stmt->execute()) {
+        if ($mysqli->errno === 1062) {
+          respond(409, ["ok" => false, "error" => "Duplicate solanaTxSignature."]);
+        }
+        respond(500, ["ok" => false, "error" => "Failed to insert disbursement."]);
+      }
+      $disbursementId = (int)$mysqli->insert_id;
+
+      $stmt = $mysqli->prepare(
+        "SELECT id, total_amount_gaine, send_count FROM reflection_disbursement_totals
+         WHERE reflection_direction_id = ? AND destination_wallet = ? LIMIT 1"
+      );
+      $stmt->bind_param("is", $reflectionDirectionId, $destinationWallet);
+      $stmt->execute();
+      $totalRow = $stmt->get_result()->fetch_assoc();
+
+      if ($totalRow) {
+        $nextTotal = number_format(((float)$totalRow["total_amount_gaine"]) + (float)$amountGaine, 8, ".", "");
+        $nextCount = ((int)$totalRow["send_count"]) + 1;
+        $totalId = (int)$totalRow["id"];
+        $stmt = $mysqli->prepare(
+          "UPDATE reflection_disbursement_totals
+           SET total_amount_gaine = ?, send_count = ?,
+               custom_title = COALESCE(?, custom_title), updated_at = NOW()
+           WHERE id = ?"
+        );
+        $stmt->bind_param("sisi", $nextTotal, $nextCount, $customTitle, $totalId);
+        $stmt->execute();
+      } else {
+        $stmt = $mysqli->prepare(
+          "INSERT INTO reflection_disbursement_totals
+           (reflection_direction_id, destination_wallet, custom_title, total_amount_gaine, send_count)
+           VALUES (?, ?, ?, ?, 1)"
+        );
+        $stmt->bind_param("isss", $reflectionDirectionId, $destinationWallet, $customTitle, $amountGaine);
+        $stmt->execute();
+      }
+
+      respond(200, ["ok" => true, "data" => [
+        "id" => $disbursementId,
+        "createdAt" => toIso(date("Y-m-d H:i:s")),
+        "duplicate" => false,
+      ]]);
     case "admin.waitlist":
       $search = trim((string)($body["search"] ?? ""));
       $limit = max(1, min(500, (int)($body["limit"] ?? 100)));

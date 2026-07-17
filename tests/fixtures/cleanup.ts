@@ -2,6 +2,7 @@ import { eq, or } from "drizzle-orm";
 
 import { getDb } from "@/server/db/client";
 import { communityMemberships, communityMessages } from "@/server/db/schema/community";
+import { reflectionDisbursements } from "@/server/db/schema/reflection";
 import { communityWaitlist, userAccounts, userEvents, userJourneyStats, walletProfiles } from "@/server/db/schema/users";
 
 export async function cleanupTestHolder(address: string, email: string) {
@@ -12,6 +13,7 @@ export async function cleanupTestHolder(address: string, email: string) {
   const userId = wallet?.userAccountId ?? user?.id;
 
   if (userId) {
+    await db.delete(reflectionDisbursements).where(eq(reflectionDisbursements.userAccountId, userId));
     await db.delete(communityMessages).where(eq(communityMessages.userAccountId, userId));
     await db.delete(userEvents).where(eq(userEvents.userAccountId, userId));
     await db.delete(communityMemberships).where(eq(communityMemberships.userAccountId, userId));

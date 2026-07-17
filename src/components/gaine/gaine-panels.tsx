@@ -2,6 +2,7 @@
 
 import { useState, type CSSProperties } from "react";
 import type { GainePanel } from "@/data/gaine";
+import { useLocale } from "@/contexts/locale-context";
 import gaineToken from "@/assets/gaine-token.png";
 import ibogaRoot from "@/assets/iboga-root.jpg";
 import gabonFarm from "@/assets/gabon-farm.jpg";
@@ -102,10 +103,14 @@ function GainePanelCard({
   panel,
   open,
   onSelect,
+  expandLabel,
+  collapseLabel,
 }: {
   panel: GainePanel;
   open: boolean;
   onSelect: () => void;
+  expandLabel: (title: string) => string;
+  collapseLabel: (title: string) => string;
 }) {
   const image = PANEL_IMAGES[panel.image] ?? gaineToken;
 
@@ -123,7 +128,7 @@ function GainePanelCard({
         aria-expanded={open}
         className={`absolute inset-0 z-10 ${open ? "pointer-events-none" : ""}`}
       >
-        <span className="sr-only">{open ? panel.title : `Expand ${panel.title}`}</span>
+        <span className="sr-only">{open ? collapseLabel(panel.title) : expandLabel(panel.title)}</span>
       </button>
 
       <div className="absolute inset-0">
@@ -190,6 +195,7 @@ function GainePanelCard({
 }
 
 export function GainePanels({ panels }: { panels: GainePanel[] }) {
+  const { t } = useLocale();
   const [openId, setOpenId] = useState<string | null>(panels[0]?.id ?? null);
 
   return (
@@ -200,6 +206,8 @@ export function GainePanels({ panels }: { panels: GainePanel[] }) {
           panel={panel}
           open={openId === panel.id}
           onSelect={() => setOpenId((current) => (current === panel.id ? current : panel.id))}
+          expandLabel={(title) => t("gaineUi.expand", { title })}
+          collapseLabel={(title) => t("gaineUi.collapse", { title })}
         />
       ))}
     </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { VideoPlaylist } from "@/data/knowledge-iboga";
+import { useLocale } from "@/contexts/locale-context";
 import heroForest from "@/assets/hero-forest.jpg";
 import {
   PLAYLIST_IMAGES,
@@ -14,14 +15,15 @@ type EmbedTarget = {
   src: string;
 };
 
-const PLAYLIST_TAGLINES: Record<string, string> = {
-  "about-iboga": "Origins, science, and the Bwiti tradition.",
-  "iboga-facilitators": "Practitioners in their own words.",
-  "healing-stories": "Recovery from addiction, depression, PTSD.",
-};
-
 export function SacredBroadcastsCarousel({ playlists }: { playlists: VideoPlaylist[] }) {
+  const { t } = useLocale();
   const [embed, setEmbed] = useState<EmbedTarget | null>(null);
+
+  const taglines: Record<string, string> = {
+    "about-iboga": t("knowledgeUi.taglineAbout"),
+    "iboga-facilitators": t("knowledgeUi.taglineFacilitators"),
+    "healing-stories": t("knowledgeUi.taglineHealing"),
+  };
 
   function openPlaylist(playlist: VideoPlaylist) {
     if (!playlist.featuredPlaylist) return;
@@ -38,35 +40,24 @@ export function SacredBroadcastsCarousel({ playlists }: { playlists: VideoPlayli
       <div className="flex gap-6 overflow-x-auto px-6 pb-6 snap-x no-scrollbar">
         {playlists.map((playlist, index) => {
           const image = PLAYLIST_IMAGES[playlist.id] ?? heroForest;
-          const tagline = PLAYLIST_TAGLINES[playlist.id] ?? playlist.videos[0]?.description ?? "";
-          const canEmbed = Boolean(
-            playlist.featuredPlaylist && parseYouTubePlaylistEmbed(playlist.featuredPlaylist.href),
-          );
-
+          const tagline = taglines[playlist.id] ?? "";
           return (
             <button
               key={playlist.id}
               type="button"
               onClick={() => openPlaylist(playlist)}
-              disabled={!canEmbed}
-              className="shrink-0 w-[85vw] md:w-[440px] snap-center group cursor-pointer text-left disabled:cursor-default disabled:opacity-60"
+              className="snap-start shrink-0 w-[min(85vw,22rem)] text-left group"
             >
-              <div className="relative aspect-[3/2] rounded-2xl overflow-hidden ring-1 ring-gold/20 mb-4">
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-4">
                 <img
                   src={image}
-                  alt={playlist.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 group-disabled:group-hover:scale-100"
+                  alt=""
+                  className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/30 to-transparent" />
-                <div className="absolute top-4 right-4 size-12 rounded-full bg-gold/90 text-forest grid place-items-center group-hover:scale-105 transition-transform">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-                <div className="absolute bottom-5 left-5">
-                  <div className="hidden">
-                    Playlist {String(index + 1).padStart(2, "0")}
+                <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/20 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 text-earth">
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-gold mb-1">
+                    {t("knowledgeUi.playlist")} {index + 1}
                   </div>
                   <div className="font-serif text-2xl italic">{playlist.title}</div>
                 </div>
@@ -77,7 +68,11 @@ export function SacredBroadcastsCarousel({ playlists }: { playlists: VideoPlayli
         })}
       </div>
 
-      <PlaylistEmbedDialog embed={embed} onClose={() => setEmbed(null)} />
+      <PlaylistEmbedDialog
+        embed={embed}
+        onClose={() => setEmbed(null)}
+        embeddedLabel={t("knowledgeUi.embeddedPlaylist")}
+      />
     </>
   );
 }

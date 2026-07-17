@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { PageHeader } from "@/components/page-header";
+import { useLocale } from "@/contexts/locale-context";
 import { articlePath, getArticle, getArticleCategory } from "@/lib/knowledge-articles";
 import { absoluteUrl, DEFAULT_OG_IMAGE } from "@/lib/site";
 
@@ -36,51 +37,50 @@ export const Route = createFileRoute("/learn/$categoryId/$articleSlug")({
 
 function LearnArticle() {
   const { article } = Route.useLoaderData();
-  const category = getArticleCategory(article.categoryId);
+  const { t, locale } = useLocale();
+  const localized = getArticle(article.categoryId, article.slug, locale) ?? article;
+  const category = getArticleCategory(article.categoryId, locale);
 
   return (
     <>
       <PageHeader
-        eyebrow={category?.title ?? "Knowledge"}
-        title={article.title}
-        lead={article.description}
+        eyebrow={category?.title ?? t("article.knowledge")}
+        title={localized.title}
+        lead={localized.description}
       />
 
       <section className="px-6 pb-24 max-w-3xl mx-auto">
         <nav className="mb-10 text-sm text-forest/55">
           <Link to="/learn" className="hover:text-gold transition-colors">
-            ← Back to Knowledge
+            {t("article.back")}
           </Link>
         </nav>
 
         <div className="bg-white border border-forest/10 rounded-3xl p-8 md:p-10">
-          {article.source ? (
+          {localized.source ? (
             <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-gold-deep mb-6">
-              {article.source}
+              {localized.source}
             </span>
           ) : null}
 
-          <p className="text-forest/75 leading-relaxed mb-8">{article.description}</p>
+          <p className="text-forest/75 leading-relaxed mb-8">{localized.description}</p>
 
-          <p className="text-sm text-forest/55 mb-8 leading-relaxed">
-            This article is curated by ibo.garden and hosted at the original publisher. Open the source link below
-            to read the full paper or report.
-          </p>
+          <p className="text-sm text-forest/55 mb-8 leading-relaxed">{t("article.hostedNote")}</p>
 
           <a
-            href={article.href}
+            href={localized.href}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center bg-forest text-earth px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-moss transition-colors"
           >
-            Read at source →
+            {t("article.readAtSourceArrow")}
           </a>
         </div>
 
         <p className="mt-8 text-xs text-forest/45 italic leading-relaxed">
-          External link:{" "}
-          <a href={article.href} target="_blank" rel="noopener noreferrer" className="underline hover:text-gold">
-            {article.href}
+          {t("article.externalLink")}:{" "}
+          <a href={localized.href} target="_blank" rel="noopener noreferrer" className="underline hover:text-gold">
+            {localized.href}
           </a>
         </p>
       </section>

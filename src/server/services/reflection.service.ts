@@ -9,6 +9,10 @@ import {
 } from "@/data/reflection-destinations";
 import { fetchGaineBalance } from "@/lib/solana.server";
 import { getDb } from "@/server/db/client";
+import {
+  reflectionDisbursementTotals,
+  reflectionDisbursements,
+} from "@/server/db/schema/reflection";
 import { taxonomyDomains, taxonomyTerms } from "@/server/db/schema/taxonomy";
 import { userAccounts, walletProfiles } from "@/server/db/schema/users";
 import { trackEvent } from "@/server/services/journey.service";
@@ -17,6 +21,16 @@ import { callDataApi, remoteDb } from "@/server/services/data-api.server";
 type TermMetadata = {
   solanaWallet?: string;
 };
+
+export class ReflectionDisbursementError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ReflectionDisbursementError";
+    this.status = status;
+  }
+}
 
 function metadataWallet(metadata: unknown): string | null {
   if (!metadata || typeof metadata !== "object") return null;
@@ -270,6 +284,7 @@ export async function listReflectionRouting() {
       const rows = await callDataApi<
         Array<{
           userAccountId: number;
+          reflectionDirectionId: number | null;
           holderWallet: string;
           directionSlug: string | null;
           customTitle: string | null;
@@ -288,6 +303,7 @@ export async function listReflectionRouting() {
         );
         return {
           userAccountId: row.userAccountId,
+          reflectionDirectionId: row.reflectionDirectionId,
           holderWallet: row.holderWallet,
           gaineBalance: row.lastGaineBalance,
           updatedAt: row.reflectionUpdatedAt,
@@ -301,6 +317,7 @@ export async function listReflectionRouting() {
     const rows = await db
       .select({
         userAccountId: userAccounts.id,
+        reflectionDirectionId: userAccounts.reflectionDirectionId,
         holderWallet: walletProfiles.address,
         directionSlug: taxonomyTerms.slug,
         customTitle: userAccounts.reflectionCustomTitle,
@@ -325,6 +342,7 @@ export async function listReflectionRouting() {
 
       return {
         userAccountId: row.userAccountId,
+        reflectionDirectionId: row.reflectionDirectionId ?? null,
         holderWallet: row.holderWallet,
         gaineBalance: row.lastGaineBalance,
         updatedAt: row.reflectionUpdatedAt?.toISOString() ?? null,
@@ -335,6 +353,169 @@ export async function listReflectionRouting() {
     return { categories, projects, routing };
   } catch {
     return { categories, projects, routing: [] as Array<Record<string, unknown>> };
+  }
+}
+
+function isPositiveGaineAmount(raw: string): boolean {
+  const value = Number(raw);
+  return Number.isFinite(value) && value > 0;
+}
+
+export async function recordReflectionDisbursement(input: {
+  userAccountId: number;
+  reflectionDirectionId: number;
+  holderWallet: string;
+  destinationWallet: string;
+  amountGaine: string;
+  solanaTxSignature: string;
+  customTitle?: string | null;
+  destinationType?: "category" | "unregistered";
+  destinationSlug?: string | null;
+}) {
+  const amountGaine = String(input.amountGaine).trim();
+  if (!isPositiveGaineAmount(amountGaine)) {
+    throw new ReflectionDisbursementError("amountGaine must be a positive number.", 422);
+  }
+
+  const holderWallet = input.holderWallet.trim();
+  const destinationWallet = input.destinationWallet.trim();
+  const solanaTxSignature = input.solanaTxSignature.trim();
+  const customTitle =
+    input.customTitle == null || input.customTitle === ""
+      ? null
+      : String(input.customTitle).trim().slice(0, 50);
+
+  if (holderWallet.length < 32 || holderWallet.length > 44) {
+    throw new ReflectionDisbursementError("Invalid holderWallet.", 422);
+  }
+  if (destinationWallet.length < 32 || destinationWallet.length > 44) {
+    throw new ReflectionDisbursementError("Invalid destinationWallet.", 422);
+  }
+  if (solanaTxSignature.length < 32 || solanaTxSignature.length > 128) {
+    throw new ReflectionDisbursementError("Invalid solanaTxSignature.", 422);
+  }
+
+  if (remoteDb()) {
+    try {
+      return await callDataApi<{
+        id: number;
+        createdAt: string | null;
+        duplicate: boolean;
+      }>("reflection.recordDisbursement", {
+        userAccountId: input.userAccountId,
+        reflectionDirectionId: input.reflectionDirectionId,
+        holderWallet,
+        destinationWallet,
+        amountGaine,
+        solanaTxSignature,
+        customTitle,
+        destinationType: input.destinationType ?? null,
+        destinationSlug: input.destinationSlug ?? null,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to record disbursement.";
+      if (/duplicate/i.test(message)) {
+        throw new ReflectionDisbursementError("Duplicate solanaTxSignature.", 409);
+      }
+      if (/validation|invalid|unknown direction|unknown user/i.test(message)) {
+        throw new ReflectionDisbursementError(message, 422);
+      }
+      throw err;
+    }
+  }
+
+  const db = await getDb();
+
+  const [user] = await db
+    .select({ id: userAccounts.id })
+    .from(userAccounts)
+    .where(eq(userAccounts.id, input.userAccountId))
+    .limit(1);
+  if (!user) {
+    throw new ReflectionDisbursementError("Unknown userAccountId.", 422);
+  }
+
+  const [direction] = await db
+    .select({ id: taxonomyTerms.id })
+    .from(taxonomyTerms)
+    .innerJoin(taxonomyDomains, eq(taxonomyTerms.domainId, taxonomyDomains.id))
+    .where(
+      and(
+        eq(taxonomyDomains.slug, "reflection_direction"),
+        eq(taxonomyTerms.id, input.reflectionDirectionId),
+      ),
+    )
+    .limit(1);
+  if (!direction) {
+    throw new ReflectionDisbursementError("Unknown reflectionDirectionId.", 422);
+  }
+
+  const [existing] = await db
+    .select({ id: reflectionDisbursements.id })
+    .from(reflectionDisbursements)
+    .where(eq(reflectionDisbursements.solanaTxSignature, solanaTxSignature))
+    .limit(1);
+  if (existing) {
+    throw new ReflectionDisbursementError("Duplicate solanaTxSignature.", 409);
+  }
+
+  try {
+    const [inserted] = await db.insert(reflectionDisbursements).values({
+      userAccountId: input.userAccountId,
+      reflectionDirectionId: input.reflectionDirectionId,
+      holderWallet,
+      destinationWallet,
+      customTitle,
+      amountGaine,
+      solanaTxSignature,
+    });
+
+    const [existingTotal] = await db
+      .select({
+        id: reflectionDisbursementTotals.id,
+        totalAmountGaine: reflectionDisbursementTotals.totalAmountGaine,
+        sendCount: reflectionDisbursementTotals.sendCount,
+      })
+      .from(reflectionDisbursementTotals)
+      .where(
+        and(
+          eq(reflectionDisbursementTotals.reflectionDirectionId, input.reflectionDirectionId),
+          eq(reflectionDisbursementTotals.destinationWallet, destinationWallet),
+        ),
+      )
+      .limit(1);
+
+    if (existingTotal) {
+      const nextTotal = (Number(existingTotal.totalAmountGaine ?? 0) + Number(amountGaine)).toFixed(8);
+      await db
+        .update(reflectionDisbursementTotals)
+        .set({
+          totalAmountGaine: nextTotal,
+          sendCount: (existingTotal.sendCount ?? 0) + 1,
+          customTitle: customTitle ?? undefined,
+        })
+        .where(eq(reflectionDisbursementTotals.id, existingTotal.id));
+    } else {
+      await db.insert(reflectionDisbursementTotals).values({
+        reflectionDirectionId: input.reflectionDirectionId,
+        destinationWallet,
+        customTitle,
+        totalAmountGaine: amountGaine,
+        sendCount: 1,
+      });
+    }
+
+    return {
+      id: Number(inserted.insertId),
+      createdAt: new Date().toISOString(),
+      duplicate: false,
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "";
+    if (/duplicate|unique|ER_DUP_ENTRY/i.test(message)) {
+      throw new ReflectionDisbursementError("Duplicate solanaTxSignature.", 409);
+    }
+    throw err;
   }
 }
 

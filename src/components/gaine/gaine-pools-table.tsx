@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { GAINE_PROJECT_WALLET, GAINE_TOKEN_IMAGE } from "@/data/gaine";
 import { useGainePools } from "@/hooks/useGainePools";
+import { useLocale } from "@/contexts/locale-context";
 import { getStablecoinTextColor } from "@/lib/gaine-quote-tokens";
 import type { GaineOtherPoolsGroup, GainePoolRow, GainePoolsSummary } from "@/types/gaine-pools";
 import { GainePoolShareRing } from "./gaine-pool-share-ring";
@@ -31,11 +32,12 @@ function SummaryStat({ label, value }: { label: string; value: string }) {
 }
 
 function PoolsSummaryBar({ summary }: { summary: GainePoolsSummary }) {
+  const { t } = useLocale();
   const parts: Array<{ key: string; label: string; value: string }> = [
-    { key: "markets", label: "Markets", value: String(summary.marketCount) },
-    { key: "gaine", label: "GAINE pooled", value: summary.totalGainePooled },
+    { key: "markets", label: t("gaineUi.markets"), value: String(summary.marketCount) },
+    { key: "gaine", label: t("gaineUi.gainePooled"), value: summary.totalGainePooled },
     { key: "gaine-usd", label: "", value: summary.totalGaineUsd },
-    { key: "usd", label: "USD backing", value: summary.usdBacking },
+    { key: "usd", label: t("gaineUi.usdBacking"), value: summary.usdBacking },
   ];
 
   if (summary.vchfAmount) {
@@ -64,7 +66,7 @@ function PoolsSummaryBar({ summary }: { summary: GainePoolsSummary }) {
 
   parts.push({
     key: "total",
-    label: "total backing",
+    label: t("gaineUi.totalBacking"),
     value: summary.totalBackingUsd,
   });
 
@@ -88,6 +90,7 @@ function PoolsSummaryBar({ summary }: { summary: GainePoolsSummary }) {
 }
 
 function PoolTableRow({ pool }: { pool: GainePoolRow }) {
+  const { t } = useLocale();
   const quoteColor = getStablecoinTextColor(pool.quoteIsStablecoin);
 
   return (
@@ -141,7 +144,7 @@ function PoolTableRow({ pool }: { pool: GainePoolRow }) {
           rel="noopener noreferrer"
           className="inline-flex p-1 rounded-md transition-colors hover:bg-white/5"
           style={{ color: "var(--gaine-muted)" }}
-          title="View on Orca"
+          title={t("gaineUi.viewOnOrca")}
         >
           <ExternalLink className="size-4" />
         </a>
@@ -159,6 +162,7 @@ function OtherPoolsRow({
   expanded: boolean;
   onToggle: () => void;
 }) {
+  const { t } = useLocale();
   return (
     <TableRow
       className="iboga-surface-row border-b hover:bg-white/[0.02] cursor-pointer"
@@ -176,7 +180,7 @@ function OtherPoolsRow({
           className="inline-flex items-center gap-1 text-xs uppercase tracking-wide"
           style={{ color: "var(--gaine-accent)" }}
         >
-          {expanded ? "Collapse" : "Expand"}
+          {expanded ? t("common.collapse") : t("common.expand")}
           <ChevronDown className={`size-3.5 transition-transform ${expanded ? "rotate-180" : ""}`} />
         </span>
       </TableCell>
@@ -185,18 +189,16 @@ function OtherPoolsRow({
 }
 
 export function GainePoolsTable() {
+  const { t } = useLocale();
   const { data, isLoading, isError, error, isFetching, refetch } = useGainePools();
   const [otherExpanded, setOtherExpanded] = useState(false);
 
   return (
     <section className="px-6 pb-20 max-w-7xl mx-auto w-full">
       <div className="mb-8 md:mb-10">
-        <h2 className="gaine-display text-3xl md:text-4xl">Liquidity pools</h2>
+        <h2 className="gaine-display text-3xl md:text-4xl">{t("gaineUi.liquidityPools")}</h2>
         <p className="mt-4 max-w-3xl leading-relaxed" style={{ color: "var(--gaine-muted)" }}>
-          Vault balances on both sides of each GAINE pool. The ring shows what share of each
-          pool&apos;s liquidity is held by the project wallet (
-          <span className="font-mono text-xs">{truncateAddress(GAINE_PROJECT_WALLET)}</span>
-          ).
+          {t("gaineUi.poolsIntro", { wallet: truncateAddress(GAINE_PROJECT_WALLET) })}
         </p>
       </div>
 
@@ -208,12 +210,12 @@ export function GainePoolsTable() {
           {isLoading ? (
             <div className="flex items-center gap-2 text-sm flex-1" style={{ color: "var(--gaine-muted)" }}>
               <Loader2 className="size-4 animate-spin" />
-              Loading pools…
+              {t("gaineUi.loadingPools")}
             </div>
           ) : isError ? (
             <div className="flex items-center gap-2 text-sm flex-1" style={{ color: "var(--gaine-muted)" }}>
               <AlertCircle className="size-4 text-red-400" />
-              Failed to load pools
+              {t("gaineUi.failedPools")}
             </div>
           ) : data?.summary ? (
             <PoolsSummaryBar summary={data.summary} />
@@ -225,8 +227,8 @@ export function GainePoolsTable() {
             disabled={isFetching}
             className="shrink-0 inline-flex items-center justify-center p-1.5 rounded-md transition-colors hover:bg-white/5 disabled:opacity-40"
             style={{ color: "var(--gaine-muted)" }}
-            title="Refresh pool data"
-            aria-label="Refresh pool data"
+            title={t("gaineUi.refreshPoolData")}
+            aria-label={t("gaineUi.refreshPoolData")}
           >
             <RefreshCw className={`size-3.5 opacity-50 ${isFetching ? "animate-spin" : ""}`} />
           </button>
@@ -234,7 +236,7 @@ export function GainePoolsTable() {
 
         {isError ? (
           <div className="px-5 py-10 text-center text-sm" style={{ color: "var(--gaine-muted)" }}>
-            {error instanceof Error ? error.message : "Unable to fetch pool data."}
+            {error instanceof Error ? error.message : t("gaineUi.unableToFetchPools")}
           </div>
         ) : isLoading ? (
           <div className="px-5 py-16 flex justify-center">
@@ -256,18 +258,18 @@ export function GainePoolsTable() {
                       width={20}
                       height={20}
                     />
-                    Price
+                    {t("gaineUi.price")}
                   </span>
                 </TableHead>
-                <TableHead style={{ color: "var(--gaine-muted)" }}>Pair</TableHead>
+                <TableHead style={{ color: "var(--gaine-muted)" }}>{t("gaineUi.pair")}</TableHead>
                 <TableHead className="text-right" style={{ color: "var(--gaine-muted)" }}>
                   GAINE
                 </TableHead>
                 <TableHead className="text-right" style={{ color: "var(--gaine-muted)" }}>
-                  Quote token
+                  {t("gaineUi.quoteToken")}
                 </TableHead>
                 <TableHead className="text-center w-24" style={{ color: "var(--gaine-muted)" }}>
-                  Project
+                  {t("gaineUi.project")}
                 </TableHead>
                 <TableHead className="w-10" />
               </TableRow>

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-
 import { PageHeader } from "@/components/page-header";
 import { CommunityGate } from "@/components/community/community-gate";
+import { useLocale } from "@/contexts/locale-context";
 
 export const Route = createFileRoute("/community")({
   head: () => ({
@@ -22,18 +22,11 @@ export const Route = createFileRoute("/community")({
 });
 
 function Community() {
+  const { t } = useLocale();
+
   return (
     <>
-      <PageHeader
-        eyebrow="Community"
-        title="A forest of voices."
-        lead={
-          <>
-            A space for <span className="gaine-word gaine-word-sm">GAINE</span> holders. Connect your Solana
-            wallet — if you hold GAINE on-chain, you&apos;re in.
-          </>
-        }
-      />
+      <PageHeader eyebrow={t("community.eyebrow")} title={t("community.title")} lead={t("community.lead")} />
 
       <section className="px-6 pb-24">
         <CommunityGate />

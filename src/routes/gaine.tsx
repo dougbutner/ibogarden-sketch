@@ -7,7 +7,8 @@ import { GaineReflection } from "@/components/gaine/gaine-reflection";
 import { GainePoolsTable } from "@/components/gaine/gaine-pools-table";
 import { GaineJupiterSwap } from "@/components/gaine/gaine-jupiter-swap";
 import { GaineStatRow } from "@/components/gaine/gaine-stat-row";
-import { GAINE_INFO_PANELS } from "@/data/gaine";
+import { useLocale } from "@/contexts/locale-context";
+import { getGaineInfoPanels } from "@/data/gaine-copy";
 
 export const Route = createFileRoute("/gaine")({
   head: () => ({
@@ -30,6 +31,9 @@ export const Route = createFileRoute("/gaine")({
 });
 
 function Gaine() {
+  const { t, locale } = useLocale();
+  const panels = getGaineInfoPanels(locale);
+
   return (
     <div className="gaine-page -mt-12 pb-0">
       <GaineHero />
@@ -43,27 +47,16 @@ function Gaine() {
             className="text-[11px] font-semibold uppercase tracking-[0.25em]"
             style={{ color: "var(--gaine-accent)" }}
           >
-            How GAINE is different
+            {t("gaine.howDifferent")}
           </span>
-          <h2 className="gaine-display text-3xl md:text-4xl mt-3">
-            Real financial services, real returns
-          </h2>
+          <h2 className="gaine-display text-3xl md:text-4xl mt-3">{t("gaine.realFinancial")}</h2>
           <div className="mt-4 max-w-3xl space-y-4 leading-relaxed" style={{ color: "var(--gaine-muted)" }}>
-            <p>
-              ibo.garden connects certified Gabon farms to buyers worldwide, while GAINE provides connective
-              financial services in the digital realm.
-            </p>
-            <p>
-              GAINE keeps your investment liquid, no lock-up period, while routing transfer fees to the
-              Iboga-related causes you choose.
-            </p>
-            <p>
-              Revenue from the token economy supports regulated farm production in Gabon and holder-directed
-              impact across the network.
-            </p>
+            <p>{t("gaine.p1")}</p>
+            <p>{t("gaine.p2")}</p>
+            <p>{t("gaine.p3")}</p>
           </div>
         </div>
-        <GainePanels panels={GAINE_INFO_PANELS} />
+        <GainePanels panels={panels} />
       </section>
 
       <section id="jupiter" className="px-6 py-20 max-w-7xl mx-auto w-full space-y-12 scroll-mt-24">
@@ -71,10 +64,9 @@ function Gaine() {
 
         <div className="gaine-surface-card p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
-            <h2 className="gaine-display text-2xl mb-2">Legal framework</h2>
+            <h2 className="gaine-display text-2xl mb-2">{t("gaine.legalFramework")}</h2>
             <p className="text-sm leading-relaxed max-w-xl" style={{ color: "var(--gaine-muted)" }}>
-              GAINE operates under Gabon Decree 0239: supporting traceability, community benefit-sharing, and
-              certified export from legal farms.
+              {t("gaine.legalBody")}
             </p>
           </div>
           <Link
@@ -82,22 +74,16 @@ function Gaine() {
             className="shrink-0 border px-6 py-3 rounded-full font-bold uppercase tracking-widest text-xs transition-colors hover:bg-white/5 text-center"
             style={{ borderColor: "var(--gaine-border)", color: "var(--gaine-text)" }}
           >
-            Read Decree 0239 →
+            {t("gaine.readDecree")}
           </Link>
         </div>
 
         <div>
-          <h2 className="gaine-display text-3xl mb-8">Token Utility</h2>
+          <h2 className="gaine-display text-3xl mb-8">{t("gaine.tokenUtility")}</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {[
-              {
-                title: "Access Chat",
-                body: "Hidden area under the community tab for GAINE holders only. Access stakeholder signals in an intimate way.",
-              },
-              {
-                title: "Support Initiatives",
-                body: "Hold 100+ GAINE to direct your support to unfurl the spirit of Iboga in a way you decide.",
-              },
+              { title: t("gaine.accessChat"), body: t("gaine.accessChatBody") },
+              { title: t("gaine.supportInitiatives"), body: t("gaine.supportInitiativesBody") },
             ].map((item) => (
               <div key={item.title} className="gaine-surface-card p-7">
                 <h3 className="gaine-display text-lg mb-2">{item.title}</h3>

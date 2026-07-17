@@ -139,16 +139,16 @@ ON DUPLICATE KEY UPDATE label = VALUES(label);
 -- unregistered_project has no default wallet — holder supplies title + Solana address.
 INSERT INTO taxonomy_terms (domain_id, slug, label, sort_order, metadata) SELECT d.id, v.slug, v.label, v.sort_order, v.metadata FROM taxonomy_domains d
 JOIN (
-  SELECT 'seeding_iboga_farms'       AS slug, 'Seeding Iboga Farms'       AS label, 1 AS sort_order, JSON_OBJECT('solanaWallet', 'PLACEseedFarmWa11etP1aceho1derxxxxxxx01') AS metadata UNION ALL
-  SELECT 'conservation_in_gabon',    'Conservation in Gabon',          2, JSON_OBJECT('solanaWallet', 'PLACEconsGabonWa11etP1aceho1derxxxxxx02') UNION ALL
-  SELECT 'gabon_communities',        'Gabon Communities',              3, JSON_OBJECT('solanaWallet', 'PLACEgabonCmWa11etP1aceho1derxxxxxxx03') UNION ALL
-  SELECT 'healing_access',           'Healing Access',                 4, JSON_OBJECT('solanaWallet', 'PLACEhealingWa11etP1aceho1derxxxxxxx04') UNION ALL
+  SELECT 'seeding_iboga_farms'       AS slug, 'Seeding Iboga Farms'       AS label, 1 AS sort_order, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') AS metadata UNION ALL
+  SELECT 'conservation_in_gabon',    'Conservation in Gabon',          2, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') UNION ALL
+  SELECT 'gabon_communities',        'Gabon Communities',              3, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') UNION ALL
+  SELECT 'healing_access',           'Healing Access',                 4, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') UNION ALL
   SELECT 'tech_innovation',          'Tech Innovation',                5, JSON_OBJECT('solanaWallet', 'AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ') UNION ALL
-  SELECT 'supply_chain_transparency','Supply Chain Transparency',      6, JSON_OBJECT('solanaWallet', 'PLACEsupplyWa11etP1aceho1derxxxxxxxx05') UNION ALL
-  SELECT 'legal_fund',                'Legal Fund',                     7, JSON_OBJECT('solanaWallet', 'PLACElegalWa11etP1aceho1derxxxxxxxxx06') UNION ALL
-  SELECT 'bwiti_house_donation',     'Bwiti House Donation',           8, JSON_OBJECT('solanaWallet', 'PLACEbwitiWa11etP1aceho1derxxxxxxxxx07') UNION ALL
-  SELECT 'education_fund',           'Education Fund',                 9, JSON_OBJECT('solanaWallet', 'PLACEeduWa11etP1aceho1derxxxxxxxxxxx08') UNION ALL
-  SELECT 'research_fund',            'Research Fund',                 10, JSON_OBJECT('solanaWallet', 'PLACEresearchWa11etP1aceho1derxxxxxx09') UNION ALL
+  SELECT 'supply_chain_transparency','Supply Chain Transparency',      6, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') UNION ALL
+  SELECT 'legal_fund',                'Legal Fund',                     7, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') UNION ALL
+  SELECT 'bwiti_house_donation',     'Bwiti House Donation',           8, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') UNION ALL
+  SELECT 'education_fund',           'Education Fund',                 9, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') UNION ALL
+  SELECT 'research_fund',            'Research Fund',                 10, JSON_OBJECT('solanaWallet', 'RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u') UNION ALL
   SELECT 'unregistered_project',     'Unregistered Project',          11, NULL
 ) v ON d.slug = 'reflection_direction'
 ON DUPLICATE KEY UPDATE label = VALUES(label), sort_order = VALUES(sort_order), metadata = VALUES(metadata), is_active = 1;

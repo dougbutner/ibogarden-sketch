@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import type { ArticleCategory } from "@/data/knowledge-iboga";
+import { useLocale } from "@/contexts/locale-context";
 import { findArticleByHref } from "@/lib/knowledge-articles";
 
 const INITIAL = 3;
 const LOAD_STEP = 5;
 
 function ArticleCategoryBox({ category }: { category: ArticleCategory }) {
+  const { t } = useLocale();
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(INITIAL);
   const total = category.articles.length;
@@ -86,11 +88,13 @@ function ArticleCategoryBox({ category }: { category: ArticleCategory }) {
                   onClick={loadMore}
                   className="text-[11px] text-forest/45 uppercase tracking-widest hover:text-gold transition-colors animate-pulse hover:animate-none"
                 >
-                  Load more
+                  {t("common.loadMore")}
                 </button>
               )}
               {open && atMax && total > INITIAL && (
-                <span className="text-[10px] text-forest/35 uppercase tracking-widest">All {total} links</span>
+                <span className="text-[10px] text-forest/35 uppercase tracking-widest">
+                  {t("common.allLinks", { count: total })}
+                </span>
               )}
             </div>
           </div>

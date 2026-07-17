@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+"use client";
 
+import { useEffect, useMemo, useState } from "react";
+
+import { useLocale } from "@/contexts/locale-context";
 import { getPartnerTypes, submitNetworkApplicationFn } from "@/lib/api/network.functions";
 
-const STEPS = ["Basic info", "Category & credentials", "Gabon-first alignment", "Wallet (USDC payouts)", "Submit"];
+const STEP_KEYS = ["stepProfile", "stepType", "stepAlignment", "stepWallet", "stepReview"] as const;
 
 type PartnerType = { slug: string; label: string };
 
@@ -29,6 +32,8 @@ const INITIAL: FormState = {
 };
 
 export function NetworkApplicationForm({ className = "" }: { className?: string }) {
+  const { t } = useLocale();
+  const steps = useMemo(() => STEP_KEYS.map((key) => t(`formsNetwork.${key}`)), [t]);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(INITIAL);
   const [partnerTypes, setPartnerTypes] = useState<PartnerType[]>([]);
@@ -55,8 +60,8 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
     event.preventDefault();
     if (!canAdvance()) return;
 
-    if (step < STEPS.length - 1) {
-      setStep((s) => Math.min(STEPS.length - 1, s + 1));
+    if (step < steps.length - 1) {
+      setStep((s) => Math.min(steps.length - 1, s + 1));
       return;
     }
 
@@ -82,7 +87,7 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
       });
       setSubmitted(true);
     } catch {
-      setError("Could not submit application. Please try again.");
+      setError(t("formsNetwork.submitError"));
     } finally {
       setSubmitting(false);
     }
@@ -92,9 +97,9 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
     return (
       <div className={`bg-bone border border-forest/10 rounded-3xl p-8 md:p-12 text-center ${className}`.trim()}>
         <div className="text-gold text-5xl mb-4">◆</div>
-        <h2 className="font-serif text-3xl italic text-forest mb-3">Application received</h2>
+        <h2 className="font-serif text-3xl italic text-forest mb-3">{t("formsNetwork.receivedTitle")}</h2>
         <p className="text-forest/65 max-w-md mx-auto">
-          Thank you. Our council reviews network applications within 14 days. We&apos;ll reach you at{" "}
+          {t("formsNetwork.receivedBody")}{" "}
           <strong className="text-forest">{form.email}</strong>.
         </p>
       </div>
@@ -104,15 +109,17 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
   return (
     <div className={`bg-bone border border-forest/10 rounded-3xl p-8 md:p-12 ${className}`.trim()}>
       <div className="flex justify-between items-center mb-2">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-deep">Application</span>
+        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-deep">
+          {t("formsNetwork.applicationEyebrow")}
+        </span>
         <span className="text-xs text-forest/50">
-          Step {step + 1} of {STEPS.length}
+          {t("formsNetwork.stepOf", { current: step + 1, total: steps.length })}
         </span>
       </div>
-      <h2 className="font-serif text-3xl italic text-forest mb-8">{STEPS[step]}</h2>
+      <h2 className="font-serif text-3xl italic text-forest mb-8">{steps[step]}</h2>
 
       <div className="flex gap-1.5 mb-10">
-        {STEPS.map((_, i) => (
+        {steps.map((_, i) => (
           <div key={i} className={`h-1 flex-1 rounded-full ${i <= step ? "bg-gold" : "bg-forest/10"}`} />
         ))}
       </div>
@@ -121,26 +128,31 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
         {step === 0 && (
           <>
             <Field
-              label="Organization or full name"
+              label={t("formsNetwork.orgFullName")}
               value={form.organizationName}
               onChange={(v) => update("organizationName", v)}
               required
             />
             <Field
-              label="Email"
+              label={t("formsNetwork.email")}
               type="email"
               value={form.email}
               onChange={(v) => update("email", v)}
               required
             />
-            <Field label="Country / region" value={form.country} onChange={(v) => update("country", v)} required />
+            <Field
+              label={t("formsNetwork.countryRegion")}
+              value={form.country}
+              onChange={(v) => update("country", v)}
+              required
+            />
           </>
         )}
         {step === 1 && (
           <>
             <label className="block">
               <span className="text-[11px] font-semibold uppercase tracking-widest text-forest/60 block mb-2">
-                Category
+                {t("formsNetwork.category")}
               </span>
               <select
                 required
@@ -148,7 +160,7 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
                 onChange={(e) => update("partnerTypeSlug", e.target.value)}
                 className="w-full bg-white border border-forest/15 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-gold"
               >
-                <option value="">Select…</option>
+                <option value="">{t("formsNetwork.selectPlaceholder")}</option>
                 {partnerTypes.map((type) => (
                   <option key={type.slug} value={type.slug}>
                     {type.label}
@@ -157,7 +169,7 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
               </select>
             </label>
             <Field
-              label="Credentials / lineage / licenses"
+              label={t("formsNetwork.credentials")}
               textarea
               value={form.credentials}
               onChange={(v) => update("credentials", v)}
@@ -166,25 +178,27 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
         )}
         {step === 2 && (
           <>
-            <p className="text-sm text-forest/65 -mt-2 mb-2">
-              ibo.garden partners with Gabon-first compliant iboga sourcing options operating in Southeast Africa.
-            </p>
+            <p className="text-sm text-forest/65 -mt-2 mb-2">{t("formsNetwork.alignmentIntro")}</p>
             <YesNoField
-              label="Do you offer Gabon-first compliant iboga sourcing?"
+              label={t("formsNetwork.gabonFirstQ")}
               value={form.gabonFirstSourcing}
               onChange={(v) => update("gabonFirstSourcing", v)}
+              yesLabel={t("common.yes")}
+              noLabel={t("common.no")}
             />
             <YesNoField
-              label="Do you operate in Southeast Africa?"
+              label={t("formsNetwork.southeastAfricaQ")}
               value={form.southeastAfrica}
               onChange={(v) => update("southeastAfrica", v)}
+              yesLabel={t("common.yes")}
+              noLabel={t("common.no")}
             />
           </>
         )}
         {step === 3 && (
           <Field
-            label="Solana wallet address (for USDC payouts)"
-            placeholder="So1ana..."
+            label={t("formsNetwork.walletPayout")}
+            placeholder={t("formsNetwork.walletPlaceholder")}
             value={form.solanaWallet}
             onChange={(v) => update("solanaWallet", v)}
           />
@@ -192,8 +206,8 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
         {step === 4 && (
           <div className="text-center py-8">
             <div className="text-gold text-5xl mb-4">◆</div>
-            <h3 className="font-serif text-2xl italic text-forest mb-2">Ready to submit</h3>
-            <p className="text-forest/65 mb-8">Our council reviews applications within 14 days.</p>
+            <h3 className="font-serif text-2xl italic text-forest mb-2">{t("formsNetwork.readySubmit")}</h3>
+            <p className="text-forest/65 mb-8">{t("formsNetwork.reviewTimeline")}</p>
           </div>
         )}
 
@@ -206,14 +220,18 @@ export function NetworkApplicationForm({ className = "" }: { className?: string 
             disabled={step === 0 || submitting}
             className="text-xs font-semibold uppercase tracking-widest text-forest/60 disabled:opacity-30"
           >
-            ← Back
+            ← {t("common.back")}
           </button>
           <button
             type="submit"
             disabled={!canAdvance() || submitting}
             className="bg-forest text-earth px-7 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-moss transition-colors disabled:opacity-40"
           >
-            {submitting ? "Submitting…" : step === STEPS.length - 1 ? "Submit application" : "Continue"}
+            {submitting
+              ? t("common.submitting")
+              : step === steps.length - 1
+                ? t("formsNetwork.submitApplication")
+                : t("common.continue")}
           </button>
         </div>
       </form>
@@ -267,10 +285,14 @@ function YesNoField({
   label,
   value,
   onChange,
+  yesLabel,
+  noLabel,
 }: {
   label: string;
   value: boolean | null;
   onChange: (value: boolean) => void;
+  yesLabel: string;
+  noLabel: string;
 }) {
   const id = label.replace(/\W+/g, "-").toLowerCase();
 
@@ -296,7 +318,7 @@ function YesNoField({
               onChange={() => onChange(option === "yes")}
               className="size-4 rounded-full border-forest/30 accent-gold focus:ring-gold"
             />
-            {option === "yes" ? "Yes" : "No"}
+            {option === "yes" ? yesLabel : noLabel}
           </label>
         ))}
       </div>

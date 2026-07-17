@@ -1,3 +1,6 @@
+import { en } from "@/data/locales/en";
+import { fr } from "@/data/locales/fr";
+
 export type Locale = "en" | "fr";
 
 export const LOCALES: { code: Locale; label: string }[] = [
@@ -5,54 +8,9 @@ export const LOCALES: { code: Locale; label: string }[] = [
   { code: "fr", label: "FR" },
 ];
 
-const messages = {
-  en: {
-    nav: {
-      knowledge: "Knowledge",
-      marketplace: "Marketplace",
-      gaine: "GAINE",
-      sourceBulk: "Source Bulk",
-    },
-    home: {
-      badge: "Gabon Decree 0239 Regulated · DeFi Money Model · Network-rooted",
-      heroTitle: "Ethical Iboga sourcing.",
-      heroSubtitle: "Tokenized reciprocity. Rooted in Gabon.",
-      heroLead:
-        "ibo.garden is a Solana powered bridge bringing compliant iboga to buyers worldwide.",
-      heroLeadTail:
-        "powers ethical sourcing, traceability, and reciprocal rewards under Gabon Decree 0239.",
-      buyGaine: "Buy GAINE",
-      exploreMarketplace: "Explore Marketplace",
-      bennyConsult: "Sourcing Consultation with Benny Friedmann →",
-      sacredLabel: "Tabernanthe iboga",
-      sacredTitle: "The Sacred Wood",
-    },
-  },
-  fr: {
-    nav: {
-      knowledge: "Savoir",
-      marketplace: "Marché",
-      gaine: "GAINE",
-      sourceBulk: "Approvisionnement",
-    },
-    home: {
-      badge: "Décret gabonais 0239 · Modèle DeFi · Ancré dans le réseau",
-      heroTitle: "Approvisionnement éthique en iboga.",
-      heroSubtitle: "Réciprocité tokenisée. Enracinée au Gabon.",
-      heroLead:
-        "ibo.garden est un pont alimenté par Solana qui apporte de l'iboga conforme aux acheteurs du monde entier.",
-      heroLeadTail:
-        "alimente un approvisionnement éthique, la traçabilité et des récompenses réciproques sous le décret gabonais 0239.",
-      buyGaine: "Acheter GAINE",
-      exploreMarketplace: "Explorer le marché",
-      bennyConsult: "Consultation d'approvisionnement avec Benny Friedmann →",
-      sacredLabel: "Tabernanthe iboga",
-      sacredTitle: "Le Bois Sacré",
-    },
-  },
-} as const;
+const messages = { en, fr: fr as unknown as typeof en };
 
-type MessageTree = typeof messages.en;
+type MessageTree = typeof en;
 
 function getNestedValue(obj: Record<string, unknown>, path: string): string | undefined {
   const parts = path.split(".");
@@ -64,8 +22,28 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string | un
   return typeof current === "string" ? current : undefined;
 }
 
-export function t(locale: Locale, key: string): string {
-  return getNestedValue(messages[locale] as Record<string, unknown>, key) ?? getNestedValue(messages.en as Record<string, unknown>, key) ?? key;
+function format(template: string, vars?: Record<string, string | number>): string {
+  if (!vars) return template;
+  return template.replace(/\{(\w+)\}/g, (_, key: string) =>
+    vars[key] != null ? String(vars[key]) : `{${key}}`,
+  );
+}
+
+export function t(
+  locale: Locale,
+  key: string,
+  vars?: Record<string, string | number>,
+): string {
+  const raw =
+    getNestedValue(messages[locale] as Record<string, unknown>, key) ??
+    getNestedValue(messages.en as Record<string, unknown>, key) ??
+    key;
+  return format(raw, vars);
+}
+
+/** Pick locale-specific structured data with English fallback. */
+export function pickLocale<T>(locale: Locale, map: { en: T; fr: T }): T {
+  return map[locale] ?? map.en;
 }
 
 export type { MessageTree };

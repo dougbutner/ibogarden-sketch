@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHeader } from "@/components/page-header";
 import { NetworkApplicationForm } from "@/components/network/network-application-form";
+import { useLocale } from "@/contexts/locale-context";
 
 export const Route = createFileRoute("/marketplace")({
   head: () => ({
@@ -14,37 +15,83 @@ export const Route = createFileRoute("/marketplace")({
   component: Marketplace,
 });
 
-const CATEGORIES = [
-  { title: "Treatments", desc: "Clinical programs · verified facilitators", icon: "✦" },
-  { title: "Ceremonies", desc: "Traditional Bwiti · in-person and virtual", icon: "◉" },
-  { title: "Training", desc: <>Facilitation, certification, <span className="gaine-word gaine-word-sm">GAINE</span>-gated</>, icon: "❋" },
-  { title: "Products", desc: "Root bark, extracts, tools, courses", icon: "◈" },
-  { title: "Donations", desc: "General, project-specific, recurring", icon: "♢" },
-  { title: "Community", desc: "Share knowledge · Support a Farm", icon: "✤" },
-];
-
-const LISTINGS = [
-  { title: "Clinical Iboga Protocol: 10 days", cat: "Treatment", price: "$8,400", loc: "Costa Rica", cert: "GAINE" },
-  { title: "Bwiti Initiation Ceremony", cat: "Ceremony", price: "By inquiry", loc: "Gabon", cert: "Decree 0239" },
-  { title: "Facilitator Training · Level 1", cat: "Training", price: "$1,200", loc: "Online", cert: "GAINE" },
-  { title: "Sustainable Root Bark (50g)", cat: "Product", price: "$145", loc: "Direct · Gabon", cert: "Nagoya" },
-  { title: "Share the Iboga Library", cat: "Community", price: "Free", loc: "Invite link", cert: "Open" },
-  { title: "Integration Coaching · 6 sessions", cat: "Treatment", price: "$680", loc: "Remote", cert: "GAINE" },
-];
-
 function Marketplace() {
+  const { t } = useLocale();
+
+  const categories = [
+    { title: t("marketplace.catTreatments"), desc: t("marketplace.catTreatmentsDesc"), icon: "✦" },
+    { title: t("marketplace.catCeremonies"), desc: t("marketplace.catCeremoniesDesc"), icon: "◉" },
+    {
+      title: t("marketplace.catTraining"),
+      desc: t("marketplace.catTrainingDesc"),
+      icon: "❋",
+    },
+    { title: t("marketplace.catProducts"), desc: t("marketplace.catProductsDesc"), icon: "◈" },
+    { title: t("marketplace.catDonations"), desc: t("marketplace.catDonationsDesc"), icon: "♢" },
+    { title: t("marketplace.catCommunity"), desc: t("marketplace.catCommunityDesc"), icon: "✤" },
+  ];
+
+  const listings = [
+    {
+      title: t("marketplace.listing1Title"),
+      cat: t("marketplace.listing1Cat"),
+      price: t("marketplace.listing1Price"),
+      loc: t("marketplace.listing1Loc"),
+      cert: "GAINE",
+    },
+    {
+      title: t("marketplace.listing2Title"),
+      cat: t("marketplace.listing2Cat"),
+      price: t("marketplace.listing2Price"),
+      loc: t("marketplace.listing2Loc"),
+      cert: "Decree 0239",
+    },
+    {
+      title: t("marketplace.listing3Title"),
+      cat: t("marketplace.listing3Cat"),
+      price: t("marketplace.listing3Price"),
+      loc: t("marketplace.listing3Loc"),
+      cert: "GAINE",
+    },
+    {
+      title: t("marketplace.listing4Title"),
+      cat: t("marketplace.listing4Cat"),
+      price: t("marketplace.listing4Price"),
+      loc: t("marketplace.listing4Loc"),
+      cert: "Nagoya",
+    },
+    {
+      title: t("marketplace.listing5Title"),
+      cat: t("marketplace.listing5Cat"),
+      price: t("marketplace.listing5Price"),
+      loc: t("marketplace.listing5Loc"),
+      cert: "Open",
+    },
+    {
+      title: t("marketplace.listing6Title"),
+      cat: t("marketplace.listing6Cat"),
+      price: t("marketplace.listing6Price"),
+      loc: t("marketplace.listing6Loc"),
+      cert: "GAINE",
+    },
+  ];
+
+  function certLabel(cert: string) {
+    if (cert === "GAINE") return t("marketplace.certGaine");
+    if (cert === "Decree 0239") return t("marketplace.certDecree");
+    if (cert === "Nagoya") return t("marketplace.certNagoya");
+    if (cert === "Open") return t("marketplace.certOpen");
+    return cert;
+  }
+
   return (
     <>
-      <PageHeader
-        eyebrow="Marketplace"
-        title="Network-verified, transparently sourced."
-        lead="Only Network-registered partners may list."
-      />
+      <PageHeader eyebrow={t("marketplace.eyebrow")} title={t("marketplace.title")} lead={t("marketplace.lead")} />
 
       <section className="relative px-6 max-w-7xl mx-auto pb-16">
         <div className="blur-[6px] pointer-events-none select-none" aria-hidden="true">
           <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-12">
-            {CATEGORIES.map((c) => (
+            {categories.map((c) => (
               <button key={c.title} className="bg-white border border-forest/10 rounded-2xl p-5 text-left">
                 <div className="text-gold text-2xl mb-3">{c.icon}</div>
                 <div className="font-semibold text-forest text-sm mb-1">{c.title}</div>
@@ -54,24 +101,30 @@ function Marketplace() {
           </div>
 
           <div className="flex justify-between items-end mb-6">
-            <h2 className="font-serif text-3xl italic text-forest">Featured Listings</h2>
-            <div className="text-xs text-forest/50 uppercase tracking-widest">{LISTINGS.length} active</div>
+            <h2 className="font-serif text-3xl italic text-forest">{t("marketplace.featured")}</h2>
+            <div className="text-xs text-forest/50 uppercase tracking-widest">
+              {t("marketplace.activeCount", { count: listings.length })}
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {LISTINGS.map((l) => (
+            {listings.map((l) => (
               <article key={l.title} className="bg-white border border-forest/10 rounded-2xl p-6">
                 <div className="flex justify-between items-start mb-4">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-gold-deep">{l.cat}</span>
                   <span className="text-[10px] px-2 py-0.5 bg-bone rounded text-forest/70 font-semibold uppercase tracking-wider">
-                    {l.cert === "GAINE" ? <span className="gaine-word gaine-word-sm">GAINE</span> : l.cert}
+                    {l.cert === "GAINE" ? (
+                      <span className="gaine-word gaine-word-sm">{certLabel(l.cert)}</span>
+                    ) : (
+                      certLabel(l.cert)
+                    )}
                   </span>
                 </div>
                 <h3 className="font-serif text-xl italic text-forest mb-2 leading-snug">{l.title}</h3>
                 <p className="text-[11px] text-forest/50 uppercase tracking-wider mb-5">{l.loc}</p>
                 <div className="flex justify-between items-center pt-4 border-t border-forest/10">
                   <span className="font-semibold text-forest">{l.price}</span>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gold">View →</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gold">{t("marketplace.viewListing")}</span>
                 </div>
               </article>
             ))}
@@ -79,11 +132,13 @@ function Marketplace() {
 
           <div className="mt-16 bg-forest text-earth rounded-3xl p-10 grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h3 className="font-serif text-3xl italic mb-3">List on the Marketplace</h3>
-              <p className="text-earth/70">Register your facility, practice, or farm in the Network. All listings are reviewed before publishing.</p>
+              <h3 className="font-serif text-3xl italic mb-3">{t("marketplace.listOnMarketplace")}</h3>
+              <p className="text-earth/70">{t("marketplace.listOnMarketplaceBody")}</p>
             </div>
             <div className="md:text-right">
-              <span className="inline-block bg-gold text-forest px-7 py-3 rounded-full text-xs font-bold uppercase tracking-widest">Register in Network</span>
+              <span className="inline-block bg-gold text-forest px-7 py-3 rounded-full text-xs font-bold uppercase tracking-widest">
+                {t("marketplace.registerInNetwork")}
+              </span>
             </div>
           </div>
         </div>
@@ -95,63 +150,53 @@ function Marketplace() {
             className="w-full max-w-3xl rounded-3xl border border-forest/10 bg-earth/95 p-8 md:p-10 shadow-2xl backdrop-blur-md my-auto"
           >
             <div className="text-center mb-8">
-              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold">Coming soon</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold">
+                {t("marketplace.comingSoonTitle")}
+              </span>
               <h2 id="marketplace-inquiry-title" className="font-serif text-3xl italic text-forest mt-3 leading-tight">
-                Iboga producers + healers
+                {t("marketplace.dialogTitle")}
               </h2>
             </div>
 
             <div className="space-y-6 mb-10 text-left">
               <div>
-                <h3 className="font-semibold text-forest mb-2">🇬🇦 Access Markets at scale</h3>
-                <p className="text-sm text-forest/65 leading-relaxed">
-                  As a marketplace member, you open connections to buyers, pathways to legal export and
-                  investment.
-                </p>
+                <h3 className="font-semibold text-forest mb-2">🇬🇦 {t("marketplace.scaleTitle")}</h3>
+                <p className="text-sm text-forest/65 leading-relaxed">{t("marketplace.scaleBody")}</p>
               </div>
               <div>
-                <h3 className="font-semibold text-forest mb-2">🇬🇦 Quality inner root bark and derivatives</h3>
-                <p className="text-sm text-forest/65 leading-relaxed">
-                  As a buyer, you get access to a network of producers, proven sourcing of a high quality product
-                  shipped globally, within legal limits.
-                </p>
+                <h3 className="font-semibold text-forest mb-2">🇬🇦 {t("marketplace.qualityTitle")}</h3>
+                <p className="text-sm text-forest/65 leading-relaxed">{t("marketplace.qualityBody")}</p>
               </div>
               <div>
-                <h3 className="font-semibold text-forest mb-2">🤝 Shake hands</h3>
-                <p className="text-sm text-forest/65 leading-relaxed">
-                  We&apos;re hand-selecting merchants able to comply with the order from May 22, 2026. Buyers need not
-                  apply, click request consultation for info on legal procurement from our network of farmers, farm
-                  investment, and other opportunities in the network.
-                </p>
+                <h3 className="font-semibold text-forest mb-2">🤝 {t("marketplace.shakeTitle")}</h3>
+                <p className="text-sm text-forest/65 leading-relaxed">{t("marketplace.shakeBody")}</p>
               </div>
             </div>
 
             <NetworkApplicationForm className="mb-10" />
 
             <div className="text-center border-t border-forest/10 pt-8 space-y-6">
-              <p className="text-sm text-forest/65 leading-relaxed">
-                Inquire about sourcing Iboga, investing in a farm, listing your iboga offering and more.
-              </p>
+              <p className="text-sm text-forest/65 leading-relaxed">{t("marketplace.inquiryBody")}</p>
               <Link
                 to="/source"
                 className="inline-block bg-forest text-earth px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-moss transition-colors"
               >
-                Request consultation →
+                {t("marketplace.requestConsultation")}
               </Link>
 
               <div className="pt-2 space-y-4">
                 <p className="text-sm text-forest/65 leading-relaxed">
-                  Iboga is closely guarded, and so is our network. Hold{" "}
+                  {t("marketplace.holdGaineBefore")}{" "}
                   <Link to="/gaine" hash="jupiter" className="gaine-word gaine-word-sm text-gold hover:underline">
                     GAINE
                   </Link>{" "}
-                  to access.
+                  {t("marketplace.holdGaineAfter")}
                 </p>
                 <Link
                   to="/community"
                   className="inline-block border border-forest/20 text-forest px-8 py-3.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-forest hover:text-earth transition-colors"
                 >
-                  Enter Community →
+                  {t("marketplace.enterCommunity")} →
                 </Link>
               </div>
             </div>

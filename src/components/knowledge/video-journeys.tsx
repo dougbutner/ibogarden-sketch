@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { KnowledgeLink, VideoPlaylist } from "@/data/knowledge-iboga";
+import { useLocale } from "@/contexts/locale-context";
 import heroForest from "@/assets/hero-forest.jpg";
 import { PLAYLIST_COVER_PHOTOS } from "@/assets/iboga-photos";
 import {
@@ -37,16 +38,18 @@ export function parseYouTubePlaylistEmbed(href: string): string | null {
 export function PlaylistEmbedDialog({
   embed,
   onClose,
+  embeddedLabel,
 }: {
   embed: EmbedTarget | null;
   onClose: () => void;
+  embeddedLabel: string;
 }) {
   return (
     <Dialog open={embed !== null} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-[min(96vw,72rem)] w-full max-h-[min(96vh,100dvh)] p-0 gap-0 overflow-hidden border-forest/20 bg-forest sm:rounded-2xl">
         <DialogHeader className="px-5 pt-5 pb-3 pr-12 shrink-0">
           <DialogTitle className="font-serif italic text-earth text-xl">{embed?.title}</DialogTitle>
-          <DialogDescription className="sr-only">Embedded YouTube playlist</DialogDescription>
+          <DialogDescription className="sr-only">{embeddedLabel}</DialogDescription>
         </DialogHeader>
         {embed && (
           <div className="w-full h-[min(75vh,calc(100dvh-6rem))] bg-black">
@@ -90,11 +93,13 @@ function HorizontalPanel({
   open,
   onSelect,
   onEmbedPlaylist,
+  t,
 }: {
   playlist: VideoPlaylist;
   open: boolean;
   onSelect: () => void;
   onEmbedPlaylist: (target: EmbedTarget) => void;
+  t: (key: string, vars?: Record<string, string | number>) => string;
 }) {
   const image = PLAYLIST_IMAGES[playlist.id] ?? heroForest;
   const featuredSrc = playlist.featuredPlaylist
@@ -114,7 +119,7 @@ function HorizontalPanel({
         aria-expanded={open}
         className={`absolute inset-0 z-10 ${open ? "pointer-events-none" : ""}`}
       >
-        <span className="sr-only">{open ? playlist.title : `Expand ${playlist.title}`}</span>
+        <span className="sr-only">{open ? playlist.title : t("knowledgeUi.expandTitle", { title: playlist.title })}</span>
       </button>
 
       {/* Background */}
@@ -180,12 +185,12 @@ function HorizontalPanel({
                 </div>
                 <div className="min-w-0">
                   <div className="text-[10px] uppercase tracking-widest text-gold/80 mb-0.5">
-                    Featured playlist
+                    {t("knowledgeUi.featuredPlaylist")}
                   </div>
                   <div className="font-serif italic text-lg text-earth truncate">
                     {playlist.featuredPlaylist.title}
                   </div>
-                  <p className="text-xs text-earth/65 mt-1">Watch full playlist</p>
+                  <p className="text-xs text-earth/65 mt-1">{t("knowledgeUi.watchFull")}</p>
                 </div>
               </div>
             </button>
@@ -203,6 +208,7 @@ function HorizontalPanel({
 }
 
 export function VideoJourneys({ playlists }: { playlists: VideoPlaylist[] }) {
+  const { t } = useLocale();
   const [openId, setOpenId] = useState<string | null>(playlists[0]?.id ?? null);
   const [embed, setEmbed] = useState<EmbedTarget | null>(null);
 
@@ -220,11 +226,12 @@ export function VideoJourneys({ playlists }: { playlists: VideoPlaylist[] }) {
             open={openId === playlist.id}
             onSelect={() => select(playlist.id)}
             onEmbedPlaylist={setEmbed}
+            t={t}
           />
         ))}
       </div>
 
-      <PlaylistEmbedDialog embed={embed} onClose={() => setEmbed(null)} />
+      <PlaylistEmbedDialog embed={embed} onClose={() => setEmbed(null)} embeddedLabel={t("knowledgeUi.embeddedPlaylist")} />
     </>
   );
 }

@@ -4,14 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import {
   GAINE_ICON,
-  TOPIC_MAP,
-  TOPIC_ROOT,
+  getTopicMap,
+  getTopicRoot,
   TRUNK_COLORS,
   type NodeShape,
   type TopicLeaf,
   type TopicMapSelection,
   type TopicTrunk,
 } from "@/data/knowledge-iboga";
+import { useLocale } from "@/contexts/locale-context";
 
 const FOREST = "#0a2418";
 const EARTH = "#fdfaf3";
@@ -35,7 +36,7 @@ function diamondPoints(r: number): string {
   return `0,${-r} ${r},0 0,${r} ${-r},0`;
 }
 
-function layoutMap(width: number, height: number) {
+function layoutMap(width: number, height: number, topicMap: TopicTrunk[]) {
   const cx = width / 2;
   const cy = height / 2;
   const rootR = 38;
@@ -53,7 +54,7 @@ function layoutMap(width: number, height: number) {
   const nodes: PlacedNode[] = [{ kind: "root", x: cx, y: cy, r: rootR }];
   const links: PlacedLink[] = [];
 
-  for (const trunk of TOPIC_MAP) {
+  for (const trunk of topicMap) {
     const angle = trunkAngles[trunk.id] ?? 0;
     const tx = cx + Math.cos(angle) * trunkDist;
     const ty = cy + Math.sin(angle) * trunkDist;
@@ -188,19 +189,29 @@ function drawNodeShape(
     .attr("stroke-width", strokeW);
 }
 
-function labelFor(d: PlacedNode): { primary: string; secondary?: string } {
-  if (d.kind === "root") return { primary: TOPIC_ROOT.label, secondary: TOPIC_ROOT.tagline };
+function labelFor(d: PlacedNode, topicRoot: ReturnType<typeof getTopicRoot>): { primary: string; secondary?: string } {
+  if (d.kind === "root") return { primary: topicRoot.label, secondary: topicRoot.tagline };
   if (d.kind === "trunk") return { primary: d.trunk.label, secondary: d.trunk.tagline };
   return { primary: d.leaf.label };
 }
 
-function SelectionPanel({ selection }: { selection: TopicMapSelection }) {
+function SelectionPanel({
+  selection,
+  topicRoot,
+  t,
+}: {
+  selection: TopicMapSelection;
+  topicRoot: ReturnType<typeof getTopicRoot>;
+  t: (key: string, vars?: Record<string, string | number>) => string;
+}) {
   if (selection.kind === "root") {
     return (
       <div className="rounded-xl border border-forest/15 bg-white px-5 py-4">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-gold-deep font-semibold mb-1">Center</p>
-        <h4 className="font-serif text-xl italic text-forest">{TOPIC_ROOT.label}</h4>
-        <p className="text-sm text-forest/70 mt-2 leading-relaxed">{TOPIC_ROOT.description}</p>
+        <p className="text-[11px] uppercase tracking-[0.2em] text-gold-deep font-semibold mb-1">
+          {t("knowledgeUi.centerLabel")}
+        </p>
+        <h4 className="font-serif text-xl italic text-forest">{topicRoot.label}</h4>
+        <p className="text-sm text-forest/70 mt-2 leading-relaxed">{topicRoot.description}</p>
       </div>
     );
   }
@@ -208,12 +219,14 @@ function SelectionPanel({ selection }: { selection: TopicMapSelection }) {
   if (selection.kind === "trunk") {
     return (
       <div className="rounded-xl border border-forest/15 bg-white px-5 py-4">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-gold-deep font-semibold mb-1">Trunk</p>
+        <p className="text-[11px] uppercase tracking-[0.2em] text-gold-deep font-semibold mb-1">
+          {t("knowledgeUi.trunkLabel")}
+        </p>
         <h4 className="font-serif text-xl italic text-forest">{selection.trunk.label}</h4>
         <p className="text-xs text-forest/55 mt-1">{selection.trunk.tagline}</p>
         <p className="text-sm text-forest/75 mt-3 leading-relaxed">{selection.trunk.description}</p>
         <p className="text-xs text-forest/50 mt-3">
-          {selection.trunk.leaves.length} topics · click a leaf to open its article
+          {t("knowledgeUi.topicsCount", { count: selection.trunk.leaves.length })} · {t("knowledgeUi.graphHint")}
         </p>
       </div>
     );
@@ -234,7 +247,7 @@ function SelectionPanel({ selection }: { selection: TopicMapSelection }) {
           rel="noopener noreferrer"
           className="text-[10px] uppercase tracking-widest text-gold-deep font-semibold hover:text-gold"
         >
-          Open article →
+          {t("knowledgeUi.openArticle")} →
         </a>
       </div>
       <p className="text-sm text-forest/75 leading-relaxed">{selection.leaf.description}</p>
@@ -242,13 +255,13 @@ function SelectionPanel({ selection }: { selection: TopicMapSelection }) {
   );
 }
 
-const LEGEND = [
-  { shape: "circle" as const, label: "Tradition" },
-  { shape: "hexagon" as const, label: "Roots" },
-  { shape: "diamond" as const, label: "Medicine" },
-  { shape: "gaine" as const, label: "Economic / GAINE" },
-  { shape: "rect" as const, label: "Legal" },
-];
+const LEGEND_KEYS = [
+  { shape: "circle" as const, labelKey: "knowledgeUi.legendTradition" },
+  { shape: "hexagon" as const, labelKey: "knowledgeUi.legendRoots" },
+  { shape: "diamond" as const, labelKey: "knowledgeUi.legendMedicine" },
+  { shape: "gaine" as const, labelKey: "knowledgeUi.legendEconomy" },
+  { shape: "rect" as const, labelKey: "knowledgeUi.legendLaw" },
+] as const;
 
 function LegendIcon({ shape }: { shape: NodeShape | "circle" }) {
   const size = 14;
@@ -292,6 +305,9 @@ function LegendIcon({ shape }: { shape: NodeShape | "circle" }) {
 }
 
 export function IbogaTopicGraph() {
+  const { t, locale } = useLocale();
+  const topicMap = getTopicMap(locale);
+  const topicRoot = getTopicRoot(locale);
   const [selection, setSelection] = useState<TopicMapSelection>({ kind: "root" });
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -310,7 +326,7 @@ export function IbogaTopicGraph() {
 
       const width = container.clientWidth;
       const height = Math.max(520, Math.min(640, width * 0.72));
-      const { nodes, links } = layoutMap(width, height);
+      const { nodes, links } = layoutMap(width, height, topicMap);
 
       const svg = d3.select(svgEl);
       svg.selectAll("*").remove();
@@ -369,7 +385,7 @@ export function IbogaTopicGraph() {
       redrawNodes();
 
       nodeG.each(function (d) {
-        const { primary, secondary } = labelFor(d);
+        const { primary, secondary } = labelFor(d, topicRoot);
         const labelOffset = d.r + (d.kind === "trunk" ? 18 : 14);
         const textG = d3.select(this).append("g").attr("transform", `translate(0,${labelOffset})`);
 
@@ -408,41 +424,34 @@ export function IbogaTopicGraph() {
     const ro = new ResizeObserver(render);
     ro.observe(container);
     return () => ro.disconnect();
-  }, []);
+  }, [locale, topicMap, topicRoot]);
 
   return (
     <section data-no-texture className="w-full rounded-3xl border border-forest/10 bg-white overflow-hidden">
       <div className="px-6 py-5 md:px-8 md:py-6 border-b border-forest/10 bg-bone/40">
         <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-deep">
-          Before the articles
+          {t("knowledgeUi.beforeArticles")}
         </span>
-        <h3 className="font-serif text-2xl md:text-3xl italic text-forest mt-2">Explore Iboga by topic</h3>
-        <p className="text-sm text-forest/70 mt-2 max-w-3xl leading-relaxed">
-          Five trunks branch from the root: <strong className="font-semibold text-forest">Tradition</strong>,{" "}
-          <strong className="font-semibold text-forest">Roots</strong>,{" "}
-          <strong className="font-semibold text-forest">Medicine</strong>,{" "}
-          <strong className="font-semibold text-forest">Economic</strong>, and{" "}
-          <strong className="font-semibold text-forest">Legal</strong>. Shape tells you which trunk; the GAINE coin
-          marks trade and tokenized reciprocity.
-        </p>
+        <h3 className="font-serif text-2xl md:text-3xl italic text-forest mt-2">{t("knowledgeUi.exploreByTopic")}</h3>
+        <p className="text-sm text-forest/70 mt-2 max-w-3xl leading-relaxed">{t("knowledgeUi.topicIntro")}</p>
         <ul className="flex flex-wrap gap-x-5 gap-y-2 mt-4">
-          {LEGEND.map((item) => (
-            <li key={item.label} className="flex items-center gap-2 text-xs text-forest/80">
+          {LEGEND_KEYS.map((item) => (
+            <li key={item.labelKey} className="flex items-center gap-2 text-xs text-forest/80">
               <LegendIcon shape={item.shape} />
-              <span>{item.label}</span>
+              <span>{t(item.labelKey)}</span>
             </li>
           ))}
         </ul>
       </div>
 
       <div ref={containerRef} className="bg-[#f4eedd] px-2 pt-4 pb-2">
-        <svg ref={svgRef} className="mx-auto w-full block" role="img" aria-label="Iboga topic map" />
+        <svg ref={svgRef} className="mx-auto w-full block" role="img" aria-label={t("knowledgeUi.graphAria")} />
       </div>
 
       <div className="px-4 md:px-6 pb-5 pt-2 border-t border-forest/10 bg-earth/50">
-        <SelectionPanel selection={selection} />
+        <SelectionPanel selection={selection} topicRoot={topicRoot} t={t} />
         <p className="text-center text-[10px] text-forest/50 uppercase tracking-widest mt-4">
-          Hover a node · scroll to zoom · click a leaf to open its article
+          {t("knowledgeUi.hoverHint")}
         </p>
       </div>
     </section>

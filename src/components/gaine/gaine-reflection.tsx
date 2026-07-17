@@ -4,22 +4,24 @@ import { useEffect, useMemo, useState } from "react";
 
 import {
   GAINE_JUPITER_TOKEN_URL,
-  GAINE_REFLECTION_DIRECTIONS,
   GAINE_REFLECTION_MIN_BALANCE,
 } from "@/data/gaine";
 import { useWallet } from "@/contexts/wallet-context";
+import { useLocale } from "@/contexts/locale-context";
 import {
   getReflectionPreference,
   saveReflectionPreference,
 } from "@/lib/api/reflection.functions";
 import { getUserSession } from "@/lib/api/auth.functions";
 import type { ReflectionCategorySlug } from "@/data/reflection-destinations";
-import { UNREGISTERED_PROJECT_SLUG } from "@/data/reflection-destinations";
+import { UNREGISTERED_PROJECT_SLUG, getLocalizedReflectionDirections } from "@/data/reflection-destinations";
 
 export function GaineReflection() {
+  const { t, locale } = useLocale();
+  const directions = useMemo(() => getLocalizedReflectionDirections(locale), [locale]);
   const { address, connected, connect, openPanel, gaineBalance, balanceLoading } = useWallet();
   const [directionSlug, setDirectionSlug] = useState<ReflectionCategorySlug>(
-    GAINE_REFLECTION_DIRECTIONS[0].slug,
+    directions[0]?.slug ?? "seeding_iboga_farms",
   );
   const [customTitle, setCustomTitle] = useState("");
   const [customWallet, setCustomWallet] = useState("");
@@ -103,7 +105,7 @@ export function GaineReflection() {
     }
 
     if (!authenticated) {
-      setError("Verifying wallet session… try again in a moment.");
+      setError(t("gaineUi.reflectionVerifying"));
       return;
     }
 
@@ -111,18 +113,18 @@ export function GaineReflection() {
       const title = customTitle.trim();
       const wallet = customWallet.trim();
       if (!title || title.length > 50) {
-        setError("Enter a project title (1–50 characters).");
+        setError(t("gaineUi.reflectionTitleRequired"));
         return;
       }
       if (wallet.length < 32 || wallet.length > 44) {
-        setError("Enter a valid Solana wallet address.");
+        setError(t("gaineUi.reflectionWalletInvalid"));
         return;
       }
     }
 
     setSaving(true);
     try {
-      const saved = await saveReflectionPreference({
+      const saved = (await saveReflectionPreference({
         data: {
           walletAddress: address,
           directionSlug,
@@ -131,30 +133,34 @@ export function GaineReflection() {
           customWallet:
             directionSlug === UNREGISTERED_PROJECT_SLUG ? customWallet.trim() : undefined,
         },
-      });
+      })) as {
+        directionSlug: ReflectionCategorySlug | null;
+        customTitle: string | null;
+        customWallet: string | null;
+      };
 
-      setSavedDirectionSlug(saved.directionSlug as ReflectionCategorySlug | null);
+      setSavedDirectionSlug(saved.directionSlug);
       setSavedCustomTitle(saved.customTitle);
       setSavedCustomWallet(saved.customWallet);
       setCustomTitle(saved.customTitle ?? "");
       setCustomWallet(saved.customWallet ?? "");
-      setStatus("Your reward direction is saved.");
+      setStatus(t("gaineUi.reflectionSavedStatus"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not save your direction.");
+      setError(err instanceof Error ? err.message : t("gaineUi.reflectionError"));
     } finally {
       setSaving(false);
     }
   }
 
   const primaryLabel = !connected
-    ? "Login with wallet"
+    ? t("gaineUi.reflectionLoginCta")
     : !eligibleBalance
-      ? "You need 100 GAINE"
+      ? t("gaineUi.reflectionNeedGaineCta", { min: GAINE_REFLECTION_MIN_BALANCE })
       : saving
-        ? "Saving…"
+        ? t("gaineUi.reflectionSaving")
         : selectionUnchanged
-          ? "Direction saved"
-          : "Save direction";
+          ? t("gaineUi.reflectionSaved")
+          : t("gaineUi.reflectionSave");
 
   const primaryDisabled =
     connected &&
@@ -164,15 +170,14 @@ export function GaineReflection() {
   return (
     <section className="px-6 py-20 max-w-5xl mx-auto w-full">
       <div className="text-center mb-10">
-        <h2 className="gaine-display text-3xl md:text-4xl">Where does your 2% flow?</h2>
+        <h2 className="gaine-display text-3xl md:text-4xl">{t("gaineUi.reflectionTitle")}</h2>
         <p className="mt-3 text-sm md:text-base max-w-lg mx-auto" style={{ color: "var(--gaine-muted)" }}>
-          Hold {GAINE_REFLECTION_MIN_BALANCE.toLocaleString()} GAINE or more, connect your wallet, and choose where
-          transfer fees convert to USDC and route on-chain.
+          {t("gaineUi.reflectionLead")}
         </p>
       </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-        {GAINE_REFLECTION_DIRECTIONS.map((direction) => {
+        {directions.map((direction) => {
           const selected = directionSlug === direction.slug;
           return (
             <button
@@ -211,21 +216,20 @@ export function GaineReflection() {
 
       {showUnregistered ? (
         <div className="mt-8 gaine-surface-card p-5 md:p-6 max-w-xl mx-auto space-y-4">
-          <h3 className="gaine-display text-xl">Unregistered project details</h3>
+          <h3 className="gaine-display text-xl">{t("gaineUi.reflectionUnregisteredTitle")}</h3>
           <p className="text-sm" style={{ color: "var(--gaine-muted)" }}>
-            Available when you hold {GAINE_REFLECTION_MIN_BALANCE}+ GAINE. USDC routes to the Solana address you
-            enter.
+            {t("gaineUi.reflectionUnregisteredHint", { min: GAINE_REFLECTION_MIN_BALANCE })}
           </p>
           <label className="block space-y-1.5">
             <span className="text-xs uppercase tracking-widest" style={{ color: "var(--gaine-muted)" }}>
-              Project title
+              {t("gaineUi.reflectionCustomTitle")}
             </span>
             <input
               type="text"
               value={customTitle}
               maxLength={50}
               onChange={(e) => setCustomTitle(e.target.value)}
-              placeholder="Short name (max 50 characters)"
+              placeholder={t("gaineUi.reflectionCustomTitlePh")}
               className="w-full rounded-lg border px-3 py-2 text-sm bg-transparent"
               style={{ borderColor: "var(--gaine-border)", color: "inherit" }}
             />
@@ -235,14 +239,14 @@ export function GaineReflection() {
           </label>
           <label className="block space-y-1.5">
             <span className="text-xs uppercase tracking-widest" style={{ color: "var(--gaine-muted)" }}>
-              Solana recipient address
+              {t("gaineUi.reflectionCustomWallet")}
             </span>
             <input
               type="text"
               value={customWallet}
               maxLength={44}
               onChange={(e) => setCustomWallet(e.target.value)}
-              placeholder="Solana wallet address"
+              placeholder={t("gaineUi.reflectionCustomWalletPh")}
               className="w-full rounded-lg border px-3 py-2 text-sm font-mono bg-transparent"
               style={{ borderColor: "var(--gaine-border)", color: "inherit" }}
               spellCheck={false}
@@ -276,7 +280,7 @@ export function GaineReflection() {
       </div>
 
       <p className="mt-6 text-center text-sm" style={{ color: "var(--gaine-muted)" }}>
-        No selection defaults to a balanced project split.
+        {t("gaineUi.reflectionDefaultNote")}
       </p>
     </section>
   );

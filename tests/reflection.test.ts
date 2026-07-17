@@ -9,8 +9,11 @@ import { userAccounts, userEvents } from "@/server/db/schema/users";
 import { verifyHolderLogin } from "@/server/services/holder.service";
 import {
   listReflectionRouting,
+  recordReflectionDisbursement,
+  ReflectionDisbursementError,
   saveUserReflectionPreference,
 } from "@/server/services/reflection.service";
+import { reflectionDisbursementTotals, reflectionDisbursements } from "@/server/db/schema/reflection";
 import { cleanupReflectionTestHolders } from "./fixtures/cleanup";
 import {
   REFLECTION_TEST_HOLDERS,
@@ -192,6 +195,7 @@ describe("reflection routing", () => {
 
     expect(row).toBeDefined();
     expect(row?.userAccountId).toBe(userId);
+    expect(row?.reflectionDirectionId).toEqual(expect.any(Number));
     expect(row?.destinationType).toBe("category");
     expect(row?.destinationSlug).toBe("tech_innovation");
     expect(row?.destinationWallet).toBe(TECH_INNOVATION_WALLET);
@@ -212,6 +216,7 @@ describe("reflection routing", () => {
 
     expect(row).toBeDefined();
     expect(row?.userAccountId).toBe(userId);
+    expect(row?.reflectionDirectionId).toEqual(expect.any(Number));
     expect(row?.destinationType).toBe("unregistered");
     expect(row?.destinationSlug).toBe("unregistered_project");
     expect(row?.destinationWallet).toBe(TEST_UNREGISTERED.wallet);
@@ -226,6 +231,7 @@ describe("reflection routing", () => {
 
     expect(row).toBeDefined();
     expect(row?.userAccountId).toBe(userId);
+    expect(row?.reflectionDirectionId).toBeNull();
     expect(row?.destinationType).toBe("balanced");
     expect(row?.destinationSlug).toBeNull();
     expect(row?.destinationWallet).toBeNull();
@@ -258,6 +264,112 @@ describe("reflection routing", () => {
       expect(categories.some((item) => item.slug === "unregistered_project")).toBe(true);
       expect(categories.some((item) => item.slug === "microdose_research")).toBe(false);
     }
+  });
+});
+
+describe("reflection disbursement recording", () => {
+  beforeEach(async () => {
+    await cleanupReflectionTestHolders(REFLECTION_TEST_HOLDERS);
+  });
+
+  afterEach(async () => {
+    await cleanupReflectionTestHolders(REFLECTION_TEST_HOLDERS);
+  });
+
+  it("records a send and upserts fund totals", async () => {
+    const { userId } = await seedHolder(TEST_REFLECTION_HOLDER);
+    await saveUserReflectionPreference({
+      userId,
+      walletAddress: TEST_REFLECTION_HOLDER.address,
+      directionSlug: "tech_innovation",
+    });
+
+    const { routing } = await listReflectionRouting();
+    const row = routing.find((item) => item.holderWallet === TEST_REFLECTION_HOLDER.address);
+    expect(row?.reflectionDirectionId).toEqual(expect.any(Number));
+
+    const first = await recordReflectionDisbursement({
+      userAccountId: userId,
+      reflectionDirectionId: row!.reflectionDirectionId!,
+      holderWallet: TEST_REFLECTION_HOLDER.address,
+      destinationWallet: TECH_INNOVATION_WALLET,
+      amountGaine: "10.5",
+      solanaTxSignature: "TxSig111111111111111111111111111111111111111111111111111111111",
+      destinationType: "category",
+      destinationSlug: "tech_innovation",
+    });
+    expect(first.id).toBeGreaterThan(0);
+    expect(first.duplicate).toBe(false);
+
+    const db = await getDb();
+    const [disbursement] = await db
+      .select()
+      .from(reflectionDisbursements)
+      .where(eq(reflectionDisbursements.id, first.id))
+      .limit(1);
+    expect(Number(disbursement?.amountGaine)).toBe(10.5);
+
+    const [total] = await db
+      .select()
+      .from(reflectionDisbursementTotals)
+      .where(eq(reflectionDisbursementTotals.destinationWallet, TECH_INNOVATION_WALLET))
+      .limit(1);
+    expect(Number(total?.totalAmountGaine)).toBe(10.5);
+    expect(total?.sendCount).toBe(1);
+
+    await recordReflectionDisbursement({
+      userAccountId: userId,
+      reflectionDirectionId: row!.reflectionDirectionId!,
+      holderWallet: TEST_REFLECTION_HOLDER.address,
+      destinationWallet: TECH_INNOVATION_WALLET,
+      amountGaine: "2.25",
+      solanaTxSignature: "TxSig222222222222222222222222222222222222222222222222222222222",
+      destinationType: "category",
+      destinationSlug: "tech_innovation",
+    });
+
+    const [totalAfter] = await db
+      .select()
+      .from(reflectionDisbursementTotals)
+      .where(eq(reflectionDisbursementTotals.destinationWallet, TECH_INNOVATION_WALLET))
+      .limit(1);
+    expect(Number(totalAfter?.totalAmountGaine)).toBe(12.75);
+    expect(totalAfter?.sendCount).toBe(2);
+  });
+
+  it("rejects duplicate solanaTxSignature with 409 semantics", async () => {
+    const { userId } = await seedHolder(TEST_REFLECTION_HOLDER);
+    await saveUserReflectionPreference({
+      userId,
+      walletAddress: TEST_REFLECTION_HOLDER.address,
+      directionSlug: "tech_innovation",
+    });
+    const { routing } = await listReflectionRouting();
+    const row = routing.find((item) => item.holderWallet === TEST_REFLECTION_HOLDER.address);
+    const signature = "TxDup111111111111111111111111111111111111111111111111111111111";
+
+    await recordReflectionDisbursement({
+      userAccountId: userId,
+      reflectionDirectionId: row!.reflectionDirectionId!,
+      holderWallet: TEST_REFLECTION_HOLDER.address,
+      destinationWallet: TECH_INNOVATION_WALLET,
+      amountGaine: "1",
+      solanaTxSignature: signature,
+    });
+
+    await expect(
+      recordReflectionDisbursement({
+        userAccountId: userId,
+        reflectionDirectionId: row!.reflectionDirectionId!,
+        holderWallet: TEST_REFLECTION_HOLDER.address,
+        destinationWallet: TECH_INNOVATION_WALLET,
+        amountGaine: "1",
+        solanaTxSignature: signature,
+      }),
+    ).rejects.toMatchObject({
+      name: "ReflectionDisbursementError",
+      status: 409,
+    } satisfies Partial<ReflectionDisbursementError>);
   });
 });
 

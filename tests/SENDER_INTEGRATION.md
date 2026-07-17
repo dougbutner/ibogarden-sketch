@@ -1,27 +1,84 @@
 # GAINE Reflection Sender Integration
 
-Instructions for the **separate sender repo** that distributes USDC on Solana based on holder preferences stored in ibogarden-sketch.
+Hand-off for the **sender repo**: pull holder destinations from ibogarden, send **GAINE** on Solana, then register each confirmed send back here.
 
-This ibogarden-sketch repo **does not send transactions**. It stores holder preferences and exposes them via an authenticated read API.
+ibogarden-sketch does **not** send transactions. It stores preferences + disbursement ledgers and exposes authenticated APIs.
 
-## Purpose
+---
 
-GAINE has a 2% transfer fee. Holders with **100+ GAINE** can save a reflection direction on `/gaine` (registered category or unregistered custom Solana address). The sender service reads those preferences and sends each holder's USDC share to the resolved **beneficiary Solana address**.
+## GAINE token (short)
 
-## API
+| | |
+|---|---|
+| Mint | `ibozy4AxS6TdsBDerGJN1ZKFFohEubFdHWGcyLxPLFL` |
+| Program | Token-2022 |
+| Decimals | `6` |
+| Supply | `999,369` |
+| Transfer fee | `2%` |
+| Reflect in | **GAINE** (never convert reflections to USDC) |
+| Jupiter | https://jup.ag/tokens/ibozy4AxS6TdsBDerGJN1ZKFFohEubFdHWGcyLxPLFL |
+| Metadata | https://raw.githubusercontent.com/dougbutner/Bridged-EASY-Contracts/refs/heads/main/metadata-gaine-main.json |
 
 ```
-GET https://ibo.garden/api/reflection/routing
+human_gaine = raw_base_units / 1_000_000
+```
+
+Project liquidity wallet (Orca): `GAinSTufAma6Z53W1EveJPYSXh2bJySw4k2kZ1TMoLF3`
+
+---
+
+## Explicit 2% fee split (sender must follow)
+
+Of every GAINE transfer fee:
+
+| Share | Destination wallet | Notes |
+|---|---|---|
+| **25%** | `AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ` | Gabon farm operations |
+| **25%** | `AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ` | Market making / liquidity pairing |
+| **50%** | Holder-directed via routing API | Default fund wallet below; holders with ≥100 GAINE can override |
+
+Default / most registered-category beneficiary:
+
+- `RAXqakFtzCiyBPCERwQv8w3MMuuPUkZtkTFZh17vk4u`
+
+Exception — category `tech_innovation` routes the holder’s **50% share** to:
+
+- `AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ`
+
+`unregistered_project` → use the holder’s `destinationWallet` from the routing API (custom Solana address).
+
+**v1:** Do **not** POST disbursements for the two fixed 25% legs or for `balanced` leave-in-pool shares. Only POST when you actually send a holder’s **50%** share to a resolved `destinationWallet`.
+
+Holder eligibility to choose a direction: **≥ 100 GAINE**.
+
+---
+
+## Auth (both APIs)
+
+```
 Authorization: Bearer <REFLECTION_API_KEY>
 ```
 
-Alternative header:
+or
 
 ```
 x-reflection-api-key: <REFLECTION_API_KEY>
 ```
 
-## Response shape
+Env: Cloudflare Worker secret `REFLECTION_API_KEY` (see `.env.example`).
+
+---
+
+## 1. GET `/api/reflection/routing` — who gets what
+
+Fetch holders (≥100 GAINE in DB) and their beneficiary mapping before each distribution batch.
+
+```bash
+curl -sS "https://ibo.garden/api/reflection/routing" \
+  -H "Authorization: Bearer $REFLECTION_API_KEY"
+```
+
+### Response
 
 ```json
 {
@@ -37,6 +94,7 @@ x-reflection-api-key: <REFLECTION_API_KEY>
   "routing": [
     {
       "userAccountId": 42,
+      "reflectionDirectionId": 7,
       "holderWallet": "HolderSolanaAddress...",
       "gaineBalance": "1000.00000000",
       "destinationType": "category",
@@ -44,86 +102,132 @@ x-reflection-api-key: <REFLECTION_API_KEY>
       "destinationWallet": "AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ",
       "customTitle": null,
       "updatedAt": "2026-07-08T12:00:00.000Z"
-    },
-    {
-      "userAccountId": 43,
-      "holderWallet": "AnotherHolder...",
-      "gaineBalance": "250.00000000",
-      "destinationType": "unregistered",
-      "destinationSlug": "unregistered_project",
-      "destinationWallet": "CustomRecipientSolanaAddress...",
-      "customTitle": "Community Garden Pilot",
-      "updatedAt": "2026-07-08T12:05:00.000Z"
     }
   ]
 }
 ```
 
-### Field reference
+### `routing[]` fields
 
 | Field | Meaning |
 |---|---|
-| `routing[]` | One row per registered holder wallet with `last_gaine_balance >= 100` |
-| `userAccountId` | Internal account id |
-| `holderWallet` | Solana address of the GAINE holder |
-| `gaineBalance` | Cached balance from last wallet verify |
+| `userAccountId` | Holder account id |
+| `reflectionDirectionId` | Taxonomy term id for the fund option (`null` if balanced / no preference) |
+| `holderWallet` | Holder Solana address |
+| `gaineBalance` | Cached balance (last wallet verify) |
 | `destinationType` | `"category"` \| `"unregistered"` \| `"balanced"` |
 | `destinationSlug` | Category slug; `null` when balanced |
-| `destinationWallet` | Solana address to receive USDC when not null |
-| `customTitle` | Short title when `destinationType` is `"unregistered"`; otherwise `null` |
-| `updatedAt` | When the holder last saved their direction |
-| `categories` | Registered directions with default wallets (`unregistered_project` has `solanaWallet: null`) |
-| `projects` | Always `[]` (curated project list retired) |
+| `destinationWallet` | Where to send the holder’s 50% GAINE share; `null` when balanced |
+| `customTitle` | Set when `unregistered`; otherwise `null` |
+| `updatedAt` | Last preference save |
 
-### `destinationType` behavior
+### `destinationType`
 
-| Type | `destinationWallet` | Sender action |
+| Type | Action for the 50% holder share |
+|---|---|
+| `category` | Send GAINE to `destinationWallet` |
+| `unregistered` | Send GAINE to `destinationWallet`; keep `customTitle` for logs |
+| `balanced` | No saved preference — apply sender default policy; **do not POST** a disbursement in v1 |
+
+Always prefer `reflectionDirectionId` from this payload when recording sends (do not guess ids).
+
+---
+
+## 2. POST `/api/reflection/disbursements` — register a successful send
+
+Call **once per confirmed on-chain GAINE transfer** of a holder’s directed share.
+
+```bash
+curl -sS -X POST "https://ibo.garden/api/reflection/disbursements" \
+  -H "Authorization: Bearer $REFLECTION_API_KEY" \
+  -H "content-type: application/json" \
+  -d '{
+    "userAccountId": 42,
+    "reflectionDirectionId": 7,
+    "holderWallet": "HolderSolanaAddress...",
+    "destinationWallet": "AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ",
+    "amountGaine": "12.34567800",
+    "solanaTxSignature": "5xyz...",
+    "customTitle": null,
+    "destinationType": "category",
+    "destinationSlug": "tech_innovation"
+  }'
+```
+
+### Body
+
+| Field | Required | Notes |
 |---|---|---|
-| `category` | Category default wallet | Send holder's USDC share there |
-| `unregistered` | Holder-supplied wallet | Send holder's USDC share there; use `customTitle` for logging |
-| `balanced` | `null` | No saved direction — sender decides policy |
+| `userAccountId` | yes | From routing |
+| `reflectionDirectionId` | yes | From routing (never null for recorded sends) |
+| `holderWallet` | yes | 32–44 chars |
+| `destinationWallet` | yes | Where GAINE was sent |
+| `amountGaine` | yes | Positive string or number (human units) |
+| `solanaTxSignature` | yes | Unique; retries return **409** |
+| `customTitle` | no | For unregistered projects |
+| `destinationType` | no | `"category"` \| `"unregistered"` (logging / optional) |
+| `destinationSlug` | no | Optional slug echo |
 
-## Recommended sender algorithm
+Server: inserts `reflection_disbursements`, upserts `reflection_disbursement_totals` for `(reflection_direction_id, destination_wallet)`.
 
-1. Poll `GET /api/reflection/routing` before each distribution batch.
-2. Build a lookup from `holderWallet` → `{ destinationWallet, destinationType, customTitle, updatedAt }`.
-3. For each holder share:
-   - If `destinationWallet` is set → transfer USDC there.
-   - If `destinationType === "balanced"` → apply your default policy.
-4. Use `updatedAt` to detect preference changes between runs.
+One-at-a-time only (no batch endpoint in v1).
 
-## Auth / errors
+### Success
+
+`201` + body:
+
+```json
+{ "id": 123, "createdAt": "2026-07-13T18:00:00.000Z", "duplicate": false }
+```
+
+### Status codes
 
 | Status | Meaning |
 |---|---|
-| `200` | Success; `routing` may be empty |
-| `401` | Invalid or missing API key |
+| `201` | Recorded |
+| `401` | Bad / missing API key |
+| `409` | Duplicate `solanaTxSignature` (safe to retry / ignore) |
+| `422` | Validation error |
 | `503` | `REFLECTION_API_KEY` not configured |
 
-Store `REFLECTION_API_KEY` as a server secret only.
+---
 
-## GAINE constants
+## Recommended sender algorithm
 
-| Constant | Value |
+1. Collect the 2% fee GAINE for the batch.
+2. Split explicitly:
+   - **25% + 25%** → send to `AvsecEzG9ghmzHtb9D1hvmrXomHJRJdHU5aWp4DGjTKZ` (farm + market making). No POST to ibogarden for these.
+   - **50%** → holder-directed pool.
+3. `GET /api/reflection/routing`.
+4. For each holder share of the 50%:
+   - If `destinationWallet` set → transfer GAINE there → `POST /api/reflection/disbursements` with that tx + `reflectionDirectionId`.
+   - If `destinationType === "balanced"` → apply your default (v1: no POST).
+5. On `409`, treat as already recorded.
+6. Use `updatedAt` / re-poll when preferences may have changed.
+
+---
+
+## Ledgers (DB)
+
+| Table | Role |
 |---|---|
-| GAINE mint | `ibozy4AxS6TdsBDerGJN1ZKFFohEubFdHWGcyLxPLFL` |
-| Transfer fee | 2% |
-| Reflection eligibility | 100 GAINE minimum |
+| `reflection_disbursements` | One row per confirmed holder send (`amount_gaine`, `solana_tx_signature` unique) |
+| `reflection_disbursement_totals` | Totals per `(reflection_direction_id, destination_wallet)` |
 
-## What each repo owns
+---
+
+## Repo split
 
 | ibogarden-sketch | Sender repo |
 |---|---|
-| Holder category or custom title+wallet | USDC amount per holder |
-| Resolved `destinationWallet` | Solana USDC transfers |
-| Filters holders with 100+ GAINE in DB | Fee collection / swap |
-| Read-only routing API | Balanced-holder default policy |
+| Preferences + routing GET | Fee collection + GAINE transfers |
+| Disbursement POST + totals | Computes amount per holder |
+| API key gating | Calls GET then POST after confirm |
 
-## Verification
+## Tests
+
+`tests/reflection.test.ts` — preference save, routing (`reflectionDirectionId`), disbursement insert / duplicate 409.
 
 ```bash
-curl -sS "https://ibo.garden/api/reflection/routing" \
-  -H "Authorization: Bearer $REFLECTION_API_KEY" | jq .
+npm test
 ```
-
-Run integration tests: `npm test` (see `tests/reflection.test.ts`).

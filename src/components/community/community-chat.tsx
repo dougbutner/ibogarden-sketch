@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
 import { RefreshCw } from "lucide-react";
 
 import { useWallet } from "@/contexts/wallet-context";
+import { useLocale } from "@/contexts/locale-context";
 import { getCommunityMessages, sendCommunityMessage } from "@/lib/api/community.functions";
 import { GAINE_TOKEN_IMAGE } from "@/data/gaine";
 import { jupiterPortfolioUrl } from "@/lib/solana-wallet";
@@ -15,6 +16,7 @@ type ChatMessage = Awaited<ReturnType<typeof getCommunityMessages>>[number];
 const POLL_MS = 12_000;
 
 export function CommunityChat() {
+  const { t } = useLocale();
   const { address, truncatedAddress, gaineBalance, balanceLoading } = useWallet();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
@@ -45,11 +47,11 @@ export function CommunityChat() {
       setMessages(rows);
       setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not load messages.");
+      setError(err instanceof Error ? err.message : t("communityChat.loadError"));
     } finally {
       if (showLoading) setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!address) {
@@ -88,7 +90,7 @@ export function CommunityChat() {
       setDraft("");
       await loadMessages(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not send message.");
+      setError(err instanceof Error ? err.message : t("communityChat.sendError"));
     } finally {
       setSending(false);
     }
@@ -99,19 +101,19 @@ export function CommunityChat() {
       <div className="flex items-center justify-between gap-4 mb-6">
         <div>
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-deep">
-            Holder chat
+            {t("communityChat.title")}
           </span>
-          <h2 className="font-serif text-3xl italic text-forest mt-2">The inner garden</h2>
+          <h2 className="font-serif text-3xl italic text-forest mt-2">{t("communityChat.innerGarden")}</h2>
         </div>
         <div className="text-right text-xs text-forest/55">
           <button
             type="button"
-            aria-label="Refresh chat"
+            aria-label={t("communityChat.refreshChat")}
             onClick={() => void loadMessages(false)}
             className="inline-flex items-center gap-1 mb-1 text-forest/45 hover:text-forest"
           >
             <RefreshCw className="size-3" />
-            Refresh
+            {t("communityChat.refresh")}
           </button>
           {address ? (
             <a
@@ -134,7 +136,7 @@ export function CommunityChat() {
       <div className="bg-white border border-forest/10 rounded-3xl overflow-hidden min-h-[420px] flex flex-col">
         <div ref={scrollRef} className="flex-1 px-4 py-5 md:px-6 overflow-y-auto max-h-[480px] space-y-4">
           {loading ? (
-            <p className="text-sm text-forest/55 text-center py-16">Loading conversation…</p>
+            <p className="text-sm text-forest/55 text-center py-16">{t("communityChat.loadingConversation")}</p>
           ) : messages.length === 0 ? (
             <div className="text-center py-16 px-4">
               <img
@@ -144,10 +146,8 @@ export function CommunityChat() {
                 width={48}
                 height={48}
               />
-              <p className="font-serif text-xl italic text-forest mb-2">You&apos;re in</p>
-              <p className="text-sm text-forest/60 leading-relaxed">
-                Be the first to say hello to fellow GAINE holders.
-              </p>
+              <p className="font-serif text-xl italic text-forest mb-2">{t("communityChat.youreIn")}</p>
+              <p className="text-sm text-forest/60 leading-relaxed">{t("communityChat.firstHello")}</p>
             </div>
           ) : (
             messages.map((message) => (
@@ -157,7 +157,7 @@ export function CommunityChat() {
               >
                 <div className="flex items-baseline gap-2 mb-1">
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-forest/45">
-                    {message.isMine ? "You" : message.author}
+                    {message.isMine ? t("communityChat.you") : message.author}
                   </span>
                   <time className="text-[10px] text-forest/35">
                     {new Date(message.createdAt).toLocaleString(undefined, {
@@ -188,7 +188,7 @@ export function CommunityChat() {
             <Input
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder={canChat ? "Message the community…" : "Connect a GAINE wallet to send…"}
+              placeholder={canChat ? t("communityChat.messagePlaceholder") : t("communityChat.messageDisabledPlaceholder")}
               disabled={!canChat || sending || balanceLoading}
               maxLength={2000}
               className="border-forest/10 bg-white"
@@ -198,7 +198,7 @@ export function CommunityChat() {
               disabled={!canChat || sending || balanceLoading || !draft.trim()}
               className="bg-forest text-earth shrink-0"
             >
-              {sending ? "…" : "Send"}
+              {sending ? "…" : t("communityChat.send")}
             </Button>
           </div>
         </form>

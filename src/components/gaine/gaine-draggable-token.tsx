@@ -8,6 +8,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useLocale } from "@/contexts/locale-context";
 import { GAINE_TOKEN_IMAGE } from "@/data/gaine";
 
 const TRIPLE_TAP_MS = 550;
@@ -29,6 +30,7 @@ function viewportCenterOffset(rect: DOMRect): Vec2 {
 }
 
 export function GaineDraggableToken() {
+  const { t } = useLocale();
   const anchorRef = useRef<HTMLDivElement>(null);
   const tokenRef = useRef<HTMLImageElement>(null);
   const [bounceMode, setBounceMode] = useState(false);
@@ -280,7 +282,7 @@ export function GaineDraggableToken() {
         <img
         ref={tokenRef}
         src={GAINE_TOKEN_IMAGE}
-        alt="GAINE token"
+        alt={t("gaineUi.tokenAlt")}
         width={TOKEN_SIZE}
         height={TOKEN_SIZE}
         draggable={false}

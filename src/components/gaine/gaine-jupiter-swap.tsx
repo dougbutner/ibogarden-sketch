@@ -2,6 +2,7 @@
 
 import { useEffect, useId } from "react";
 
+import { useLocale } from "@/contexts/locale-context";
 import {
   GAINE_CONTRACT_ADDRESS,
   GAINE_JUPITER_TOKEN_URL,
@@ -38,6 +39,7 @@ function loadJupiterScript() {
 }
 
 export function GaineJupiterSwap() {
+  const { t } = useLocale();
   const targetId = `gaine-jupiter-${useId().replace(/:/g, "")}`;
 
   useEffect(() => {
@@ -85,12 +87,11 @@ export function GaineJupiterSwap() {
             className="text-[11px] font-semibold uppercase tracking-[0.25em]"
             style={{ color: "var(--gaine-accent)" }}
           >
-            Swap on Jupiter
+            {t("gaineUi.swapOnJupiter")}
           </span>
-          <h2 className="gaine-display text-3xl md:text-4xl mt-3">Buy GAINE</h2>
+          <h2 className="gaine-display text-3xl md:text-4xl mt-3">{t("gaineUi.buyGaine")}</h2>
           <p className="mt-3 max-w-xl text-sm leading-relaxed" style={{ color: "var(--gaine-muted)" }}>
-            Swap SOL (or other tokens) for verified GAINE on Jupiter. Chart below; swap without leaving
-            ibo.garden.
+            {t("gaineUi.jupiterIntro")}
           </p>
         </div>
         <div className="flex flex-wrap gap-3 shrink-0">
@@ -102,7 +103,7 @@ export function GaineJupiterSwap() {
             style={{ borderColor: "var(--gaine-border)", color: "var(--gaine-text)" }}
           >
             <img src={GAINE_TOKEN_IMAGE} alt="" className="size-4 rounded-full" width={16} height={16} />
-            Research on Jupiter
+            {t("gaineUi.researchOnJupiter")}
           </a>
           <a
             href={GAINE_JUPITER_TOKEN_URL}
@@ -111,7 +112,7 @@ export function GaineJupiterSwap() {
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-opacity hover:opacity-90"
             style={{ background: "var(--gaine-primary)", color: "var(--gaine-bg)" }}
           >
-            Open full swap →
+            {t("gaineUi.openFullSwap")} →
           </a>
         </div>
       </div>
@@ -126,7 +127,7 @@ export function GaineJupiterSwap() {
             style={{ borderColor: "var(--gaine-border)" }}
           >
             <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--gaine-muted)" }}>
-              GAINE / USD chart
+              {t("gaineUi.chartTitle")}
             </span>
             <a
               href={GAINE_JUPITER_TOKEN_URL}
@@ -135,11 +136,11 @@ export function GaineJupiterSwap() {
               className="text-xs hover:underline"
               style={{ color: "var(--gaine-accent)" }}
             >
-              Verify on Jupiter →
+              {t("gaineUi.verifyOnJupiter")} →
             </a>
           </div>
           <iframe
-            title="GAINE price chart"
+            title={t("gaineUi.chartIframeTitle")}
             src={`https://dexscreener.com/solana/${GAINE_CONTRACT_ADDRESS}?embed=1&theme=dark&trades=0&info=0`}
             className="flex-1 w-full min-h-[360px] border-0"
             allow="clipboard-write"
@@ -154,7 +155,7 @@ export function GaineJupiterSwap() {
             className="px-4 py-3 border-b text-xs font-semibold uppercase tracking-widest"
             style={{ borderColor: "var(--gaine-border)", color: "var(--gaine-muted)" }}
           >
-            Jupiter swap · output locked to GAINE
+            {t("gaineUi.swapPanelHeader")}
           </div>
           <div id={targetId} className="gaine-jupiter-mount h-[min(560px,calc(100vh-12rem))] min-h-[480px]" />
         </div>

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHeader } from "@/components/page-header";
 import { IbogaShareTool } from "@/components/share/iboga-share-tool";
+import { useLocale } from "@/contexts/locale-context";
 
 export const Route = createFileRoute("/share")({
   head: () => ({
@@ -22,26 +23,23 @@ export const Route = createFileRoute("/share")({
 });
 
 function Share() {
+  const { t } = useLocale();
+
   return (
     <>
       <PageHeader
-        eyebrow="Rooted in Connection"
-        title="Share the Root."
+        eyebrow={t("share.eyebrow")}
+        title={t("share.title")}
         lead={
           <>
-            <p className="mb-4">
-              I hope you learned something here. It&apos;s my pleasure to guide you to something that&apos;s healed me
-              and many I love.
-            </p>
-            <p className="mb-4">
-              Now you can easily share this site as a resource for others to learn about Iboga.
-            </p>
+            <p className="mb-4">{t("share.lead1")}</p>
+            <p className="mb-4">{t("share.lead2")}</p>
             <p>
-              If you have purchased GAINE you can access a secret area in{" "}
+              {t("share.lead3Before")}{" "}
               <Link to="/community" className="text-gold underline underline-offset-4 hover:text-gold/80">
-                community
+                {t("share.lead3Link")}
               </Link>{" "}
-              token-gated for holders.
+              {t("share.lead3After")}
             </p>
           </>
         }

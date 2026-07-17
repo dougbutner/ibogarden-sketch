@@ -16,60 +16,69 @@ import { SiteFooter } from "../components/site-footer";
 import { FooterParallax } from "../components/footer-parallax";
 import { IbogaSurfaceTextures } from "../components/iboga-surface-textures";
 import { WalletProvider } from "../contexts/wallet-context";
-import { LocaleProvider } from "../contexts/locale-context";
+import { LocaleProvider, useLocale } from "../contexts/locale-context";
 import { JourneyTracker } from "../components/journey-tracker";
 
-function NotFoundComponent() {
+/** Standalone locale scope so these fallbacks work even if rendered outside RootComponent's LocaleProvider. */
+function withLocaleFallback<P extends object>(Component: (props: P) => ReactNode) {
+  return function WithLocaleFallback(props: P) {
+    return (
+      <LocaleProvider>
+        <Component {...props} />
+      </LocaleProvider>
+    );
+  };
+}
+
+const NotFoundComponent = withLocaleFallback(function NotFoundComponent() {
+  const { t } = useLocale();
   return (
     <div className="flex min-h-screen items-center justify-center bg-earth px-4">
       <div className="max-w-md text-center">
         <h1 className="font-serif text-7xl text-forest">404</h1>
-        <h2 className="mt-4 font-serif italic text-2xl text-forest">Path not found in the garden</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          This page has not yet taken root. Return to the home of ibo.garden.
-        </p>
+        <h2 className="mt-4 font-serif italic text-2xl text-forest">{t("errors.notFoundTitle")}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t("errors.notFoundBody")}</p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-full bg-forest px-6 py-3 text-xs font-semibold uppercase tracking-widest text-earth hover:bg-moss transition-colors"
           >
-            Return home
+            {t("common.returnHome")}
           </Link>
         </div>
       </div>
     </div>
   );
-}
+});
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+const ErrorComponent = withLocaleFallback(function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const { t } = useLocale();
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-earth px-4">
       <div className="max-w-md text-center">
-        <h1 className="font-serif text-2xl italic text-forest">Something disturbed the soil</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          We could not load this page. Try again, or return home.
-        </p>
+        <h1 className="font-serif text-2xl italic text-forest">{t("errors.errorTitle")}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{t("errors.errorBody")}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => { router.invalidate(); reset(); }}
             className="rounded-full bg-forest px-6 py-3 text-xs font-semibold uppercase tracking-widest text-earth hover:bg-moss transition-colors"
           >
-            Try again
+            {t("common.tryAgain")}
           </button>
           <a
             href="/"
             className="rounded-full border border-forest/20 px-6 py-3 text-xs font-semibold uppercase tracking-widest text-forest hover:bg-forest hover:text-earth transition-colors"
           >
-            Go home
+            {t("common.goHome")}
           </a>
         </div>
       </div>
     </div>
   );
-}
+});
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({

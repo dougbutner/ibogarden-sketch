@@ -25,6 +25,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as LearnCategoryIdArticleSlugRouteImport } from './routes/learn/$categoryId/$articleSlug'
 import { Route as ApiReflectionRoutingRouteImport } from './routes/api/reflection/routing'
+import { Route as ApiReflectionDisbursementsRouteImport } from './routes/api/reflection/disbursements'
 import { Route as ApiAuthGoogleRouteImport } from './routes/api/auth/google'
 import { Route as ApiAuthGoogleCallbackRouteImport } from './routes/api/auth/google/callback'
 
@@ -109,6 +110,12 @@ const ApiReflectionRoutingRoute = ApiReflectionRoutingRouteImport.update({
   path: '/api/reflection/routing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiReflectionDisbursementsRoute =
+  ApiReflectionDisbursementsRouteImport.update({
+    id: '/api/reflection/disbursements',
+    path: '/api/reflection/disbursements',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiAuthGoogleRoute = ApiAuthGoogleRouteImport.update({
   id: '/api/auth/google',
   path: '/api/auth/google',
@@ -136,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/source': typeof SourceRoute
   '/admin/': typeof AdminIndexRoute
   '/api/auth/google': typeof ApiAuthGoogleRouteWithChildren
+  '/api/reflection/disbursements': typeof ApiReflectionDisbursementsRoute
   '/api/reflection/routing': typeof ApiReflectionRoutingRoute
   '/learn/$categoryId/$articleSlug': typeof LearnCategoryIdArticleSlugRoute
   '/api/auth/google/callback': typeof ApiAuthGoogleCallbackRoute
@@ -156,6 +164,7 @@ export interface FileRoutesByTo {
   '/source': typeof SourceRoute
   '/admin': typeof AdminIndexRoute
   '/api/auth/google': typeof ApiAuthGoogleRouteWithChildren
+  '/api/reflection/disbursements': typeof ApiReflectionDisbursementsRoute
   '/api/reflection/routing': typeof ApiReflectionRoutingRoute
   '/learn/$categoryId/$articleSlug': typeof LearnCategoryIdArticleSlugRoute
   '/api/auth/google/callback': typeof ApiAuthGoogleCallbackRoute
@@ -177,6 +186,7 @@ export interface FileRoutesById {
   '/source': typeof SourceRoute
   '/admin/': typeof AdminIndexRoute
   '/api/auth/google': typeof ApiAuthGoogleRouteWithChildren
+  '/api/reflection/disbursements': typeof ApiReflectionDisbursementsRoute
   '/api/reflection/routing': typeof ApiReflectionRoutingRoute
   '/learn/$categoryId/$articleSlug': typeof LearnCategoryIdArticleSlugRoute
   '/api/auth/google/callback': typeof ApiAuthGoogleCallbackRoute
@@ -199,6 +209,7 @@ export interface FileRouteTypes {
     | '/source'
     | '/admin/'
     | '/api/auth/google'
+    | '/api/reflection/disbursements'
     | '/api/reflection/routing'
     | '/learn/$categoryId/$articleSlug'
     | '/api/auth/google/callback'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/source'
     | '/admin'
     | '/api/auth/google'
+    | '/api/reflection/disbursements'
     | '/api/reflection/routing'
     | '/learn/$categoryId/$articleSlug'
     | '/api/auth/google/callback'
@@ -239,6 +251,7 @@ export interface FileRouteTypes {
     | '/source'
     | '/admin/'
     | '/api/auth/google'
+    | '/api/reflection/disbursements'
     | '/api/reflection/routing'
     | '/learn/$categoryId/$articleSlug'
     | '/api/auth/google/callback'
@@ -260,6 +273,7 @@ export interface RootRouteChildren {
   SourceRoute: typeof SourceRoute
   AdminIndexRoute: typeof AdminIndexRoute
   ApiAuthGoogleRoute: typeof ApiAuthGoogleRouteWithChildren
+  ApiReflectionDisbursementsRoute: typeof ApiReflectionDisbursementsRoute
   ApiReflectionRoutingRoute: typeof ApiReflectionRoutingRoute
 }
 
@@ -377,6 +391,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiReflectionRoutingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/reflection/disbursements': {
+      id: '/api/reflection/disbursements'
+      path: '/api/reflection/disbursements'
+      fullPath: '/api/reflection/disbursements'
+      preLoaderRoute: typeof ApiReflectionDisbursementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/google': {
       id: '/api/auth/google'
       path: '/api/auth/google'
@@ -432,6 +453,7 @@ const rootRouteChildren: RootRouteChildren = {
   SourceRoute: SourceRoute,
   AdminIndexRoute: AdminIndexRoute,
   ApiAuthGoogleRoute: ApiAuthGoogleRouteWithChildren,
+  ApiReflectionDisbursementsRoute: ApiReflectionDisbursementsRoute,
   ApiReflectionRoutingRoute: ApiReflectionRoutingRoute,
 }
 export const routeTree = rootRouteImport

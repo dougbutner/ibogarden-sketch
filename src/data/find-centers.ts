@@ -1,3 +1,7 @@
+import type { Locale } from "@/data/i18n";
+import { pickLocale } from "@/data/i18n";
+import { FIND_CENTERS_FR } from "@/data/find-centers.fr";
+
 export type CenterCategory = "traditional" | "clinical" | "retreat";
 export type CenterTier = "top" | "verified";
 export type CenterRegion =
@@ -457,3 +461,60 @@ export const FIND_CENTERS: FindCenter[] = [
 export const FIND_CENTER_COUNT = FIND_CENTERS.length;
 
 export const FIND_TOP_TIER_COUNT = FIND_CENTERS.filter((c) => c.tier === "top").length;
+
+export type FindCenterFrOverlay = Partial<
+  Pick<
+    FindCenter,
+    "regionLabel" | "location" | "services" | "cost" | "verification" | "leader" | "medical" | "contact" | "note"
+  >
+>;
+
+function localizeCenter(center: FindCenter, locale: Locale): FindCenter {
+  if (locale === "en") return center;
+  const fr = FIND_CENTERS_FR[center.id];
+  if (!fr) return center;
+  return { ...center, ...fr };
+}
+
+export function getFindCenters(locale: Locale = "en"): FindCenter[] {
+  return FIND_CENTERS.map((center) => localizeCenter(center, locale));
+}
+
+const REGIONS = {
+  en: FIND_REGIONS,
+  fr: FIND_REGIONS.map((r) => {
+    if (r.id === "all") return { ...r, label: "Toutes les régions" };
+    const labels: Record<string, string> = {
+      gabon: "Gabon",
+      mexico: "Mexique",
+      caribbean: "Caraïbes",
+      europe: "Europe",
+      multi: "Multi-sites",
+      asia: "Asie",
+      canada: "Canada",
+      south_america: "Amérique du Sud",
+    };
+    return { ...r, label: labels[r.id] ?? r.label };
+  }),
+};
+
+const CATEGORIES = {
+  en: FIND_CATEGORIES,
+  fr: FIND_CATEGORIES.map((c) => {
+    if (c.id === "all") return { ...c, label: "Tous les types" };
+    const labels: Record<string, string> = {
+      traditional: "Traditionnel",
+      clinical: "Clinique",
+      retreat: "Retraite",
+    };
+    return { ...c, label: labels[c.id] ?? c.label };
+  }),
+};
+
+export function getFindRegions(locale: Locale = "en") {
+  return pickLocale(locale, REGIONS);
+}
+
+export function getFindCategories(locale: Locale = "en") {
+  return pickLocale(locale, CATEGORIES);
+}

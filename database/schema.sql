@@ -121,6 +121,48 @@ ALTER TABLE user_accounts
     FOREIGN KEY (reflection_project_id) REFERENCES impact_projects (id)
     ON DELETE SET NULL ON UPDATE CASCADE;
 
+-- GAINE reflection disbursements: each GAINE send attributed to a holder + fund option
+CREATE TABLE IF NOT EXISTS reflection_disbursements (
+  id                      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_account_id         BIGINT UNSIGNED NOT NULL,
+  reflection_direction_id BIGINT UNSIGNED NOT NULL,
+  holder_wallet           VARCHAR(44)     NOT NULL,
+  destination_wallet      VARCHAR(44)     NOT NULL,
+  custom_title            VARCHAR(50)     NULL,
+  amount_gaine             DECIMAL(24,8)   NOT NULL,
+  solana_tx_signature     VARCHAR(128)    NOT NULL,
+  created_at              DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_reflection_disbursements_tx (solana_tx_signature),
+  KEY idx_reflection_disbursements_user (user_account_id),
+  KEY idx_reflection_disbursements_direction (reflection_direction_id),
+  KEY idx_reflection_disbursements_dest (destination_wallet),
+  KEY idx_reflection_disbursements_created (created_at),
+  CONSTRAINT fk_reflection_disbursements_user
+    FOREIGN KEY (user_account_id) REFERENCES user_accounts (id)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_reflection_disbursements_direction
+    FOREIGN KEY (reflection_direction_id) REFERENCES taxonomy_terms (id)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Running totals per fund option (direction + destination wallet)
+CREATE TABLE IF NOT EXISTS reflection_disbursement_totals (
+  id                      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  reflection_direction_id BIGINT UNSIGNED NOT NULL,
+  destination_wallet      VARCHAR(44)     NOT NULL,
+  custom_title            VARCHAR(50)     NULL,
+  total_amount_gaine       DECIMAL(24,8)   NOT NULL DEFAULT 0,
+  send_count              INT UNSIGNED    NOT NULL DEFAULT 0,
+  updated_at              DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_reflection_disbursement_totals_fund (reflection_direction_id, destination_wallet),
+  KEY idx_reflection_disbursement_totals_direction (reflection_direction_id),
+  CONSTRAINT fk_reflection_disbursement_totals_direction
+    FOREIGN KEY (reflection_direction_id) REFERENCES taxonomy_terms (id)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS oauth_identities (
   id                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   user_account_id   BIGINT UNSIGNED NOT NULL,

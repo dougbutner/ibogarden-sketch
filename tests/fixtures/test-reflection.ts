@@ -1,4 +1,4 @@
-import { REFLECTION_CATEGORY_FALLBACK } from "@/data/reflection-destinations";
+import { REFLECTION_WALLET_TECH } from "@/data/reflection-destinations";
 
 /** Holder with 100+ GAINE for save/routing tests. */
 export const TEST_REFLECTION_HOLDER = {
@@ -32,8 +32,7 @@ export const TEST_REFLECTION_OTHER = {
   walletProvider: "vitest",
 } as const;
 
-export const TECH_INNOVATION_WALLET =
-  REFLECTION_CATEGORY_FALLBACK.find((c) => c.slug === "tech_innovation")!.solanaWallet!;
+export const TECH_INNOVATION_WALLET = REFLECTION_WALLET_TECH;
 
 export const TEST_UNREGISTERED = {
   title: "Community Garden Pilot",

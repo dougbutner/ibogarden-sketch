@@ -3,15 +3,17 @@ import { useMemo, useState } from "react";
 import { ExternalLink } from "lucide-react";
 
 import { PageHeader } from "@/components/page-header";
+import { useLocale } from "@/contexts/locale-context";
 import {
-  FIND_CATEGORIES,
-  FIND_CENTERS,
-  FIND_REGIONS,
   FIND_CENTER_COUNT,
-  FIND_TOP_TIER_COUNT,
   FIND_REGION_COUNT,
+  FIND_TOP_TIER_COUNT,
+  getFindCategories,
+  getFindCenters,
+  getFindRegions,
   type CenterCategory,
   type CenterRegion,
+  type FindCenter,
 } from "@/data/find-centers";
 
 export const Route = createFileRoute("/find")({
@@ -38,11 +40,16 @@ const CATEGORY_STYLES: Record<CenterCategory, string> = {
   retreat: "bg-clay/15 text-clay",
 };
 
-function categoryLabel(category: CenterCategory) {
-  return category.charAt(0).toUpperCase() + category.slice(1);
+function categoryLabel(category: CenterCategory, t: (key: string) => string) {
+  const map: Record<CenterCategory, string> = {
+    clinical: t("find.catClinical"),
+    traditional: t("find.catTraditional"),
+    retreat: t("find.catRetreat"),
+  };
+  return map[category];
 }
 
-function CenterCard({ center }: { center: (typeof FIND_CENTERS)[number] }) {
+function CenterCard({ center, t }: { center: FindCenter; t: (key: string) => string }) {
   return (
     <article className="bg-white border border-forest/10 p-7 rounded-3xl hover:border-gold/40 transition-colors flex flex-col">
       <div className="flex justify-between items-start gap-3 mb-4">
@@ -50,11 +57,11 @@ function CenterCard({ center }: { center: (typeof FIND_CENTERS)[number] }) {
           <span
             className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full ${CATEGORY_STYLES[center.category]}`}
           >
-            {categoryLabel(center.category)}
+            {categoryLabel(center.category, t)}
           </span>
           {center.tier === "top" ? (
             <span className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full bg-gold/15 text-gold-deep">
-              Top tier
+              {t("find.topTier")}
             </span>
           ) : null}
         </div>
@@ -68,7 +75,7 @@ function CenterCard({ center }: { center: (typeof FIND_CENTERS)[number] }) {
 
       {center.leader ? (
         <p className="text-xs text-forest/55 mb-3">
-          <span className="font-semibold text-forest/70">Leader:</span> {center.leader}
+          <span className="font-semibold text-forest/70">{t("find.leader")}</span> {center.leader}
         </p>
       ) : null}
 
@@ -76,12 +83,12 @@ function CenterCard({ center }: { center: (typeof FIND_CENTERS)[number] }) {
 
       {center.medical ? (
         <p className="text-xs text-forest/60 mb-3 leading-relaxed">
-          <span className="font-semibold text-forest/75">Medical:</span> {center.medical}
+          <span className="font-semibold text-forest/75">{t("find.medical")}</span> {center.medical}
         </p>
       ) : null}
 
       <p className="text-xs text-forest/60 mb-4 leading-relaxed">
-        <span className="font-semibold text-forest/75">Verified:</span> {center.verification}
+        <span className="font-semibold text-forest/75">{t("find.verified")}</span> {center.verification}
       </p>
 
       {center.note ? (
@@ -118,12 +125,12 @@ function CenterCard({ center }: { center: (typeof FIND_CENTERS)[number] }) {
           rel="noopener noreferrer"
           className="w-full py-3 rounded-xl border border-forest/15 text-sm font-semibold hover:bg-forest hover:text-earth transition-colors inline-flex items-center justify-center gap-2"
         >
-          Visit website
+          {t("find.visitWebsite")}
           <ExternalLink className="size-3.5 opacity-60" />
         </a>
       ) : (
         <p className="w-full py-3 rounded-xl border border-dashed border-forest/15 text-sm text-center text-forest/45">
-          Contact via directories
+          {t("find.contactDirectories")}
         </p>
       )}
     </article>
@@ -131,37 +138,43 @@ function CenterCard({ center }: { center: (typeof FIND_CENTERS)[number] }) {
 }
 
 function Find() {
+  const { t, locale } = useLocale();
   const [region, setRegion] = useState<CenterRegion | "all">("all");
   const [category, setCategory] = useState<CenterCategory | "all">("all");
 
+  const centers = getFindCenters(locale);
+  const regions = getFindRegions(locale);
+  const categories = getFindCategories(locale);
+
   const filtered = useMemo(() => {
-    return FIND_CENTERS.filter((center) => {
+    return centers.filter((center) => {
       if (region !== "all" && center.region !== region) return false;
       if (category !== "all" && center.category !== category) return false;
       return true;
     });
-  }, [region, category]);
+  }, [centers, region, category]);
+
+  const resultLabel =
+    filtered.length === 1
+      ? t("find.resultSingular", { count: filtered.length })
+      : t("find.resultCount", { count: filtered.length });
+
+  const safetyItems = ["safety1", "safety2", "safety3", "safety4", "safety5", "safety6"] as const;
 
   return (
     <>
       <PageHeader
-        eyebrow="Find a Facilitator"
-        title="Verified Iboga & Ibogaine specialists."
-        lead={
-          <>
-            {FIND_CENTER_COUNT} verified centers globally — Gabon Bwiti roots, Mexico clinical clinics, and
-            retreat programs across Europe, the Caribbean, Asia, and Canada. Due diligence is always yours; we
-            surface documented protocols, reviews, and operational status as of 2026.
-          </>
-        }
+        eyebrow={t("find.eyebrow")}
+        title={t("find.title")}
+        lead={t("find.leadStats", { count: FIND_CENTER_COUNT })}
       />
 
       <section className="px-6 max-w-7xl mx-auto pb-24">
         <div className="mb-10 grid md:grid-cols-3 gap-3 text-center">
           {[
-            { n: String(FIND_CENTER_COUNT), l: "Verified centers" },
-            { n: String(FIND_TOP_TIER_COUNT), l: "Top-tier picks" },
-            { n: String(FIND_REGION_COUNT), l: "Regions" },
+            { n: String(FIND_CENTER_COUNT), l: t("find.verifiedCenters") },
+            { n: String(FIND_TOP_TIER_COUNT), l: t("find.topTierPicks") },
+            { n: String(FIND_REGION_COUNT), l: t("find.regionsStat") },
           ].map((stat) => (
             <div key={stat.l} className="bg-bone border border-forest/10 rounded-2xl px-4 py-5">
               <p className="font-serif text-3xl italic text-forest">{stat.n}</p>
@@ -171,9 +184,9 @@ function Find() {
         </div>
 
         <div className="mb-6">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-forest/45 mb-3">Region</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-forest/45 mb-3">{t("find.region")}</p>
           <div className="flex flex-wrap gap-2">
-            {FIND_REGIONS.map((r) => (
+            {regions.map((r) => (
               <button
                 key={r.id}
                 type="button"
@@ -192,9 +205,9 @@ function Find() {
 
         <div className="flex flex-wrap items-center gap-3 mb-10">
           <p className="text-[10px] font-bold uppercase tracking-widest text-forest/45 w-full sm:w-auto sm:mb-0">
-            Type
+            {t("find.type")}
           </p>
-          {FIND_CATEGORIES.map((c) => (
+          {categories.map((c) => (
             <button
               key={c.id}
               type="button"
@@ -208,58 +221,43 @@ function Find() {
               {c.label}
             </button>
           ))}
-          <span className="sm:ml-auto text-xs text-forest/50 uppercase tracking-widest">
-            {filtered.length} result{filtered.length === 1 ? "" : "s"}
-          </span>
+          <span className="sm:ml-auto text-xs text-forest/50 uppercase tracking-widest">{resultLabel}</span>
         </div>
 
         {filtered.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((center) => (
-              <CenterCard key={center.id} center={center} />
+              <CenterCard key={center.id} center={center} t={t} />
             ))}
           </div>
         ) : (
-          <p className="text-center text-forest/55 py-16">No centers match these filters.</p>
+          <p className="text-center text-forest/55 py-16">{t("find.noResults")}</p>
         )}
 
         <div className="mt-16 bg-bone border border-forest/10 rounded-3xl p-8 md:p-10">
-          <h3 className="font-serif text-2xl italic text-forest mb-3 text-center">Safety baseline</h3>
-          <p className="text-sm text-forest/65 text-center max-w-2xl mx-auto mb-6 leading-relaxed">
-            These are some known centers with roots. It is your responsibility to verify each center, and contact
-            multiple as they are very different. You can add reputable centers to our directory. It may be beneficial
-            to leave your country or culture to allow changes to take root.
-          </p>
+          <h3 className="font-serif text-2xl italic text-forest mb-3 text-center">{t("find.safetyTitle")}</h3>
+          <p className="text-sm text-forest/65 text-center max-w-2xl mx-auto mb-6 leading-relaxed">{t("find.safetyLead")}</p>
           <p className="text-xs text-forest/55 text-center max-w-2xl mx-auto mb-4 uppercase tracking-widest font-semibold">
-            Check for these things:
+            {t("find.safetyChecklist")}
           </p>
           <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs text-forest/70 max-w-4xl mx-auto">
-            {[
-              "Pre-treatment screening (ECG, electrolytes, liver panel)",
-              "Continuous cardiac monitoring during dosing",
-              "Licensed medical doctors on-site",
-              "24/7 nursing or staff coverage",
-              "Emergency response protocol",
-              "Hospital partnerships or advanced life support",
-            ].map((item) => (
-              <li key={item} className="flex gap-2">
+            {safetyItems.map((key) => (
+              <li key={key} className="flex gap-2">
                 <span className="text-gold shrink-0">✓</span>
-                {item}
+                {t(`find.${key}`)}
               </li>
             ))}
           </ul>
         </div>
 
         <div className="mt-10 bg-white border border-forest/10 rounded-3xl p-8 md:p-10 text-center">
-          <h3 className="font-serif text-2xl italic text-forest mb-2">Can&apos;t find the right fit?</h3>
-          <p className="text-forest/70 mb-6 max-w-xl mx-auto">
-            We hand-match seekers with vetted facilitators based on need, language, and location.
-          </p>
+          <h3 className="font-serif text-2xl italic text-forest mb-2">{t("find.noFitTitle")}</h3>
+          <p className="text-forest/70 mb-6 max-w-xl mx-auto">{t("find.noFitBody")}</p>
           <Link
             to="/source"
             className="inline-block bg-forest text-earth px-7 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-moss transition-colors"
           >
-            Request a consultation →
+            {t("find.noFitCta")}
           </Link>
         </div>
       </section>

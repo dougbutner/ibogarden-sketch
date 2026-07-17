@@ -3,7 +3,8 @@ import { PageHeader } from "@/components/page-header";
 import { ArticleCategoryList } from "@/components/knowledge/article-category-list";
 import { IbogaTopicGraph } from "@/components/knowledge/iboga-topic-graph";
 import { VideoJourneys } from "@/components/knowledge/video-journeys";
-import { ARTICLE_CATEGORIES, VIDEO_PLAYLISTS } from "@/data/knowledge-iboga";
+import { useLocale } from "@/contexts/locale-context";
+import { getArticleCategories, getVideoPlaylists } from "@/data/knowledge-iboga";
 
 export const Route = createFileRoute("/learn")({
   head: () => ({
@@ -25,17 +26,20 @@ export const Route = createFileRoute("/learn")({
 });
 
 function Learn() {
+  const { t, locale } = useLocale();
+  const playlists = getVideoPlaylists(locale);
+  const categories = getArticleCategories(locale);
+
   return (
     <>
-      <PageHeader eyebrow="Knowledge" title="Iboga">
+      <PageHeader eyebrow={t("learn.eyebrow")} title={t("learn.title")}>
         <p className="text-lg md:text-xl text-forest/80 leading-relaxed font-serif italic mt-6 max-w-2xl">
-          Steeped in tradition, strong with the power of the forrest, Iboga stands poised and ready to enter the
-          western consciousness
+          {t("learn.intro")}
         </p>
       </PageHeader>
 
       <section className="px-6 max-w-7xl mx-auto pb-20">
-        <VideoJourneys playlists={VIDEO_PLAYLISTS} />
+        <VideoJourneys playlists={playlists} />
       </section>
 
       <section className="px-6 max-w-7xl mx-auto pb-12">
@@ -43,13 +47,9 @@ function Learn() {
       </section>
 
       <section className="px-6 max-w-7xl mx-auto pb-24">
-        <h2 className="font-serif text-3xl italic text-forest mb-8">Iboga Articles</h2>
-        <ArticleCategoryList categories={ARTICLE_CATEGORIES} />
-        <p className="mt-10 text-xs text-forest/45 italic max-w-2xl leading-relaxed">
-          Even with recent microdosing papers, rigorous iboga and ibogaine microdosing trials remain scarce.
-          Peer-reviewed evidence today centers on single flood-dose protocols. Funding the research drug companies
-          won't is a genuine open frontier: not settled science.
-        </p>
+        <h2 className="font-serif text-3xl italic text-forest mb-8">{t("learn.articlesTitle")}</h2>
+        <ArticleCategoryList categories={categories} />
+        <p className="mt-10 text-xs text-forest/45 italic max-w-2xl leading-relaxed">{t("learn.caveat")}</p>
       </section>
     </>
   );
