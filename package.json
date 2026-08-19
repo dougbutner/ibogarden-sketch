@@ -13,7 +13,7 @@
     "cf-typegen": "wrangler types",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "db:schema": "mysql -u $DB_USER -p $DB_NAME < database/schema.sql && mysql -u $DB_USER -p $DB_NAME < database/seeds.sql",
+    "db:schema": "mysql -u $DB_USER -p $DB_NAME < database/schema.sql",
     "test": "node --env-file=.env ./node_modules/vitest/vitest.mjs run"
   },
   "dependencies": {

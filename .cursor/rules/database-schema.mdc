@@ -6,19 +6,19 @@ alwaysApply: false
 
 # Database schema source of truth
 
-`database/schema.sql` is the **canonical** MariaDB model for ibo.garden.
+`database/schema.sql` is the **canonical** MariaDB model for ibo.garden (tables and reference data in one file).
 
 ## When changing the data model
 
-1. **Update `database/schema.sql` first** — every new/altered table, column, index, or FK.
+1. **Update `database/schema.sql` first** — every new/altered table, column, index, FK, and seed row.
 2. **Mirror in Drizzle** — update matching files under `src/server/db/schema/`.
-3. **Update seeds if needed** — taxonomy or reference data goes in `database/seeds.sql`.
-4. **Fresh installs** — run `schema.sql` then `seeds.sql` only. No numbered migration files.
-5. **Live production DBs** — apply equivalent incremental SQL manually; do not re-run full `schema.sql`.
+3. **Fresh installs** — run `schema.sql` only. No numbered migration files and no separate seeds file.
+4. **Live production DBs** — apply equivalent incremental SQL manually; do not re-run the full `CREATE TABLE` section. Seed `INSERT`s are idempotent and may be re-run.
 
 ## Do not
 
 - Add tables only in Drizzle without updating `schema.sql`.
+- Split upgrades into extra `.sql` files under `database/`.
 - Use SQLite or Postgres types — this project is **MariaDB on cPanel**.
 - Store secrets in SQL files.
 

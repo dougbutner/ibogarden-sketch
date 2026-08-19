@@ -17,6 +17,7 @@ dist-ssr
 *.local
 .env
 *.env
+namecheap-data-api/index.php
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
